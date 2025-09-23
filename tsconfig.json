@@ -1,0 +1,23 @@
+{
+  "compilerOptions":{
+    "allowJs":true,
+    "module":"ESNext",
+    "moduleResolution":"Node",
+    "target":"esnext",
+    "jsx":"preserve",
+    "strict":true,
+    "esModuleInterop":true,
+    "skipLibCheck":true,
+    "forceConsistentCasingInFileNames":true,
+    "noEmit":true,
+    "isolatedModules":true,
+    "types": ["vite/client"],
+    "paths": {
+      "@/*": ["./resources/js/*"]
+    }
+  },
+  "include":[
+    "resources/js/**/*.ts",
+    "resources/js/**/*.d.ts",
+  ]
+}
