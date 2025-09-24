@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->integer('year');
             $table->integer('week');
-            $table->foreign('created_by')->references('id')->on('users')->onDelete('nulll')->nullable();
+            $table->foreignId('created_by')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
             $table->json('display_config')->nullable();
             $table->timestamps();
         });
