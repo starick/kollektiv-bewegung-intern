@@ -13,7 +13,8 @@ class CourseController extends Controller
      */
     public function index()
     {
-        //
+        // probably not needed
+        return redirect()->route('not-found');
     }
 
     /**
@@ -21,7 +22,8 @@ class CourseController extends Controller
      */
     public function create()
     {
-        //
+        // probably not needed
+        return redirect()->route('not-found');
     }
 
     /**
@@ -29,7 +31,9 @@ class CourseController extends Controller
      */
     public function store(StoreCourseRequest $request)
     {
-        //
+        $course = Course::create($request->validated());
+        return redirect()->route('time-tables.show', $course->timeTable)
+            ->with('success', 'Course created successfully.');
     }
 
     /**
@@ -37,7 +41,8 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        //
+        // probably not needed
+        return redirect()->route('not-found');
     }
 
     /**
@@ -45,7 +50,8 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        //
+        // probably not needed
+        return redirect()->route('not-found');
     }
 
     /**
@@ -53,7 +59,9 @@ class CourseController extends Controller
      */
     public function update(UpdateCourseRequest $request, Course $course)
     {
-        //
+        $course->update($request->validated());
+        return redirect()->route('time-tables.show', $course->timeTable)
+            ->with('success', 'Course updated successfully.');
     }
 
     /**
@@ -61,6 +69,8 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
-        //
+        $course->delete();
+        return redirect()->route('time-tables.show', $course->timeTable)
+            ->with('success', 'Course deleted successfully.');
     }
 }

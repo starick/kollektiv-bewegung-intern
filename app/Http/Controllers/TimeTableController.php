@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTimeTableRequest;
 use App\Http\Requests\UpdateTimeTableRequest;
 use App\Models\TimeTable;
+use Inertia\Inertia;
 
 class TimeTableController extends Controller
 {
@@ -13,7 +14,9 @@ class TimeTableController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('TimeTables/Index', [
+            'timeTables' => TimeTable::with('creator')->get(),
+        ]);
     }
 
     /**
@@ -21,7 +24,7 @@ class TimeTableController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('TimeTables/Create');
     }
 
     /**
@@ -29,7 +32,8 @@ class TimeTableController extends Controller
      */
     public function store(StoreTimeTableRequest $request)
     {
-        //
+        $timeTable = TimeTable::create($request->validated());
+        return redirect()->route('time-tables.show', $timeTable)->with('success', 'Time table created successfully.');
     }
 
     /**
@@ -37,7 +41,10 @@ class TimeTableController extends Controller
      */
     public function show(TimeTable $timeTable)
     {
-        //
+        return Inertia::render('TimeTables/Show', [
+            'timeTable' => $timeTable->load('courses', 'creator'),
+            'editing' => false,
+        ]);
     }
 
     /**
@@ -45,7 +52,10 @@ class TimeTableController extends Controller
      */
     public function edit(TimeTable $timeTable)
     {
-        //
+        return Inertia::render('TimeTables/Show', [
+            'timeTable' => $timeTable->load('courses', 'creator'),
+            'editing' => true,
+        ]);
     }
 
     /**
@@ -53,7 +63,9 @@ class TimeTableController extends Controller
      */
     public function update(UpdateTimeTableRequest $request, TimeTable $timeTable)
     {
-        //
+        $timeTable->update($request->validated());
+        return redirect()->route('time-tables.show', $timeTable)
+            ->with('success', 'Time table updated successfully.');
     }
 
     /**
@@ -61,6 +73,7 @@ class TimeTableController extends Controller
      */
     public function destroy(TimeTable $timeTable)
     {
-        //
+        $timeTable->delete();
+        return redirect()->route('time-tables.index')->with('success', 'Time table deleted successfully.');
     }
 }

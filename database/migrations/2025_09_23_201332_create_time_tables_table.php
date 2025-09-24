@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('time_tables', function (Blueprint $table) {
             $table->id();
+            $table->integer('year');
+            $table->integer('week');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('nulll')->nullable();
+            $table->json('display_config')->nullable();
             $table->timestamps();
         });
     }

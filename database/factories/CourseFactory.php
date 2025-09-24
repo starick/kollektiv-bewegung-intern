@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,14 @@ class CourseFactory extends Factory
      */
     public function definition(): array
     {
+        $startTime = Carbon::instance($this->faker->dateTimeBetween('-1 week', '+1 week'));
+
         return [
-            //
+            'name' => $this->faker->sentence(3),
+            'instructor' => $this->faker->name() + ' (' + $this->faker->phoneNumber() + ')',
+            'location' => $this->faker->optional(0.1)->word(),
+            'start_time' => $startTime,
+            'end_time' =>  $startTime->copy()->addMinutes($this->faker->randomElement([60, 90, 120])),
         ];
     }
 }
