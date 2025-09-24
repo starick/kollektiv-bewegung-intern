@@ -27,7 +27,7 @@ class TimeTableFactory extends Factory
         return [
             'year' => Carbon::now()->year,
             'week' => Carbon::now()->weekOfYear,
-            'created_by' => User::random()->first()->id,
+            'created_by' => $this->faker->randomElement(User::all())->id,
         ];
     }
 
@@ -35,28 +35,34 @@ class TimeTableFactory extends Factory
     {
         return $this->afterCreating(function (TimeTable $timeTable) use ($min, $max) {
 
-            $start = Carbon::now()->setISODate($timeTable->year, $timeTable->week);
+            $start = Carbon::now()->setISODate($timeTable->year, $timeTable->week)->setTime(3, 0);
             $end = $start->copy()->addDays(6);
 
             $period = CarbonPeriod::create($start, $end);
 
-            foreach ($period as $date) {
 
-                $count = $this->faker()->rand($min, $max);
+            $date = $start->copy();
+
+            while ($date <= $end) {
+
+                $count = $this->faker->numberBetween($min, $max);
 
                 if ($count <= 0) {
                     continue;
                 }
 
                 $randomTime = $date->copy()
-                    ->setHour($this->faker()->numberBetween(8, 18))
-                    ->setMinute($this->faker()->randomElement([0, 15, 30, 45]));
+                    ->setHour($this->faker->numberBetween(8, 18))
+                    ->setMinute($this->faker->randomElement([0, 15, 30, 45]));
+
 
                 Course::factory()->count($count)->create([
                     'time_table_id' => $timeTable->id,
                     'start_time' => $randomTime,
-                    'end_time' => $randomTime->copy()->addMinutes($this->faker()->randomElment([60, 90, 120])),
+                    'end_time' => $randomTime->copy()->addMinutes($this->faker->randomElement([60, 90, 120])),
                 ]);
+
+                $date->addDay();
             }
         });
     }

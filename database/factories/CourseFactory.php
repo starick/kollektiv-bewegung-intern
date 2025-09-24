@@ -21,7 +21,7 @@ class CourseFactory extends Factory
 
         return [
             'name' => $this->faker->sentence(3),
-            'instructor' => $this->faker->name() + ' (' + $this->faker->phoneNumber() + ')',
+            'instructor' => $this->faker->name() . ' (' . $this->faker->phoneNumber() . ')',
             'location' => $this->faker->optional(0.1)->word(),
             'start_time' => $startTime,
             'end_time' =>  $startTime->copy()->addMinutes($this->faker->randomElement([60, 90, 120])),

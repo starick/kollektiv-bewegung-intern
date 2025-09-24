@@ -22,7 +22,9 @@ class UpdateTimeTableRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'year' => ['required', 'integer', 'min:2000', 'max:2100'],
+            'week' => ['required', 'integer', 'min:1', 'max:53'],
+            'display_config' => ['nullable', 'json'],
         ];
     }
 }
