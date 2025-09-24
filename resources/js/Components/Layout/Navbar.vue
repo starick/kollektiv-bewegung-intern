@@ -25,9 +25,11 @@ const logout = () => {
 };
 
 const goToDashboard = () => router.get(route('dashboard'));
+const goToTimetables = () => router.get(route('time-tables.index'));
 
 const menuItems = [
-  // { label: 'Dashboard', icon: 'pi pi-home', command: goToDashboard },
+  { label: 'Dashboard', icon: 'pi pi-home', command: goToDashboard },
+  { label: 'Timetables', icon: 'pi pi-table', command: goToTimetables }
 ];
 
 const items = [
