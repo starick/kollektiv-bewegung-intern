@@ -7,7 +7,7 @@ import ApplicationLogo from '@/Components/General/ApplicationLogo.vue';
 import ResponsiveNavLink from '@/Components/General/ResponsiveNavLink.vue';
 import TeamSwitchModal from '@/Components/Layout/TeamSwitchModal.vue';
 
-const pageProps = usePage().props;
+const pageProps = usePage().props as any;
 
 const menu = ref();
 const showTeamModal = ref(false);
@@ -79,7 +79,7 @@ const items = [
 
 <template>
   <div>
-    <Menubar :model="menuItems">
+    <Menubar :model="menuItems" class="bg-white dark:bg-gray-800 -mt-1 -mx-1 p-2">
       <template #start>
         <ResponsiveNavLink @click="goToDashboard">
           <ApplicationLogo class="block h-12 w-auto" />

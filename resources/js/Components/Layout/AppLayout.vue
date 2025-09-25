@@ -27,7 +27,7 @@ const logout = () => {
   router.post(route('logout'));
 };
 
-const pageProps = usePage().props;
+const pageProps = usePage().props as any;
 
 const menuItems = [
   { label: 'Dashboard', icon: 'pi pi-home', command: () => router.get(route('dashboard')) }
@@ -89,7 +89,7 @@ const toggle = (event) => {
 </script>
 
 <template>
-  <div>
+  <div class="bg-slate-50 min-h-screen">
     <Head :title="title" />
     <div>
       <Navbar />
@@ -99,7 +99,11 @@ const toggle = (event) => {
         </div>
       </header>
       <main>
-        <slot />
+        <div class="py-12">
+          <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <slot />
+          </div>
+        </div>
       </main>
     </div>
   </div>
