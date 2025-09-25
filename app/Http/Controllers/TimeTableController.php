@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTimeTableRequest;
 use App\Http\Requests\UpdateTimeTableRequest;
+use App\Http\Resources\TimeTableResource;
 use App\Models\TimeTable;
 use Inertia\Inertia;
 
@@ -15,7 +16,7 @@ class TimeTableController extends Controller
     public function index()
     {
         return Inertia::render('TimeTables/Index', [
-            'timeTables' => TimeTable::with('creator')->get(),
+            'timeTables' => TimeTableResource::collection(TimeTable::with('creator')->get()),
         ]);
     }
 

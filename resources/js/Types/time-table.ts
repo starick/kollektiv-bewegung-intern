@@ -4,12 +4,13 @@ export interface TimeTable {
   id: number;
   year: number;
   week: number;
-  creator: {
+  coursesCount: number;
+  createdAt: Date;
+  updatedAt: Date;
+  creator?: {
     id: number;
     name: string;
     email: string;
   };
-  courses: Course[];
-  createdAt: Date;
-  updatedAt: Date;
+  courses?: Course[];
 }

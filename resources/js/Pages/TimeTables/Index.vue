@@ -3,20 +3,39 @@ import Card from '@/Components/General/Card.vue';
 import AppLayout from '@/Components/Layout/AppLayout.vue';
 import { route } from 'ziggy-js';
 import { router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { toRef } from 'vue';
 import { Column, DataTable } from 'primevue';
 import { MenuItem } from 'primevue/menuitem';
 import { TimeTable } from '@/Types/time-table';
+
+const props = defineProps<{ timeTables: { data: TimeTable[] } }>();
+const timeTables = toRef(props, 'timeTables');
+
+const reload = async () => {
+  router.reload({
+    only: ['timeTables'],
+    preserveState: true,
+    preserveScroll: true,
+    onError: (e) => console.error('Reload error:', e)
+  });
+};
+
+const rowClick = async (e: any) => {
+  router.get(route('time-tables.show', { time_table: e.data.id }));
+};
 
 const menuItems: MenuItem[] = [
   {
     label: 'Create New',
     icon: 'pi pi-plus',
     command: () => router.get(route('time-tables.create'))
+  },
+  {
+    label: 'Refresh',
+    icon: 'pi pi-refresh',
+    command: reload
   }
 ];
-
-const timeTables = ref<TimeTable[]>([]);
 
 const title = 'Timetables Overview';
 </script>
@@ -30,26 +49,32 @@ const title = 'Timetables Overview';
     </template>
 
     <Card :menu-items="menuItems">
-      <DataTable :value="timeTables" responsiveLayout="scroll">
+      <DataTable
+        :value="timeTables.data"
+        responsiveLayout="scroll"
+        sortField="createdAt"
+        selectionMode="single"
+        stripedRows
+        @row-click="rowClick"
+      >
         <Column field="createdAt" header="Created At" sortable>
-          <template #body="slotProps">
-            {{ new Date(slotProps.data.createdAt).toLocaleDateString('de-DE') }}
+          <template #body="{ data }: { data: TimeTable }">
+            {{ new Date(data.createdAt).toLocaleDateString('de-DE') }}
           </template>
         </Column>
-        <Column field="year" header="Year" sortable>
-          <template #body="slotProps">
-            {{ slotProps.data.year }}
+        <Column field="year" header="Year/Week" sortable>
+          <template #body="{ data }: { data: TimeTable }">
+            {{ data.year }} / {{ data.week }}
           </template>
         </Column>
-        <Column field="week" header="Week" sortable>
-          <template #body="slotProps">
-            {{ slotProps.data.week }}
+        <Column field="coursesCount" header="Courses" sortable>
+          <template #body="{ data }: { data: TimeTable }">
+            {{ data.coursesCount }}
           </template>
         </Column>
-
         <Column field="creator" header="Author" sortable>
-          <template #body="slotProps">
-            {{ slotProps.data.creator.name }}
+          <template #body="{ data }: { data: TimeTable }">
+            {{ data.creator?.name }}
           </template>
         </Column>
       </DataTable>
