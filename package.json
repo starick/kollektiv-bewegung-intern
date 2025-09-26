@@ -5,8 +5,9 @@
         "build": "vite build && vite build --ssr",
         "dev": "vite",
         "tsc": "vue-tsc --build --force",
-        "format": "prettier -w $(git diff --name-only --diff-filter=d | grep -E '\\.ts$|\\.vue$' | sed 's|^data/app/||' | xargs)",
-        "format-all": "prettier -w resources/js/"
+        "format": "FILES=\"$(git diff --name-only --diff-filter=d HEAD -- '*.ts' '*.tsx' '*.vue'; git ls-files --others --exclude-standard -- '*.ts' '*.tsx' '*.vue')\"; [ -z \"$FILES\" ] || prettier -w $FILES",
+        "format-all": "prettier -w resources/js/",
+        "format:watch": "npx onchange \"**/*.{js,ts,tsx,vue}\" -- npm run format"
     },
     "devDependencies": {
         "@inertiajs/vue3": "^1.0.14",
@@ -33,6 +34,7 @@
         "sass": "^1.83.1",
         "tailwindcss-primeui": "^0.4.0",
         "vue-tsc": "^2.2.0",
+        "vue-uuid": "^3.0.0",
         "ziggy-js": "github:tightenco/ziggy"
     }
 }

@@ -8,7 +8,7 @@ import InputLabel from '@/Components/General/InputLabel.vue';
 import PrimaryButton from '@/Components/General/PrimaryButton.vue';
 import SecondaryButton from '@/Components/General/SecondaryButton.vue';
 import TextInput from '@/Components/General/TextInput.vue';
-import {route} from "ziggy-js";
+import { route } from 'ziggy-js';
 
 const props = defineProps({
   user: Object
@@ -84,7 +84,10 @@ const clearPhotoFileInput = () => {
 
     <template #form>
       <!-- Profile Photo -->
-      <div v-if="($page.props.jetstream as any).managesProfilePhotos" class="col-span-6 sm:col-span-4">
+      <div
+        v-if="($page.props.jetstream as any).managesProfilePhotos"
+        class="col-span-6 sm:col-span-4"
+      >
         <!-- Profile Photo File Input -->
         <input
           id="photo"
@@ -156,7 +159,11 @@ const clearPhotoFileInput = () => {
         />
         <InputError :message="form.errors.email" class="mt-2" />
 
-        <div v-if="($page.props.jetstream as any).hasEmailVerification && user.email_verified_at === null">
+        <div
+          v-if="
+            ($page.props.jetstream as any).hasEmailVerification && user.email_verified_at === null
+          "
+        >
           <p class="text-sm mt-2 dark:text-white">
             Your email address is unverified.
 

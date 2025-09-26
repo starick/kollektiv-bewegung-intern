@@ -14,12 +14,9 @@ const timeTables = toRef(props, 'timeTables');
 const reload = async () => {
   router.reload({
     only: ['timeTables'],
-    preserveState: true,
-    preserveScroll: true,
     onError: (e) => console.error('Reload error:', e)
   });
 };
-
 const rowClick = async (e: any) => {
   router.get(route('time-tables.show', { time_table: e.data.id }));
 };
@@ -42,12 +39,6 @@ const title = 'Timetables Overview';
 
 <template>
   <AppLayout :title="title">
-    <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-        {{ title }}
-      </h2>
-    </template>
-
     <Card :menu-items="menuItems">
       <DataTable
         :value="timeTables.data"
