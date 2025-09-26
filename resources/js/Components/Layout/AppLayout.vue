@@ -31,14 +31,7 @@ const alert = useAlert();
       </header>
       <main>
         <div class="py-10">
-          <Message
-            v-for="(message, uuid) in alert.messages"
-            :severity="message.severity"
-            @close="() => alert.removeMessage(uuid)"
-            closable
-          >
-            {{ message }}
-          </Message>
+          <Toast class="mt-12" />
           <div class="my-2 max-w-7xl mx-auto sm:px-6 lg:px-8">
             <slot />
           </div>

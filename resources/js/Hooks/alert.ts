@@ -1,19 +1,18 @@
 import { Dictionary } from '@/Types/dictionary';
-import { Message, MessageSeverity } from '@/Types/message';
-import { ref } from 'vue';
-import { uuid } from 'vue-uuid';
+import { Severity } from '@/Types/severity';
+
+import { useToast } from 'primevue';
 
 export default function useAlert() {
-  const alerts = ref<Dictionary<Message>>({});
+  const toast = useToast();
 
-  const addMessage = (text: string, severity: MessageSeverity) => {
-    alerts.value[uuid.v4()] = { text, severity };
+  const add = (text: string, severity: Severity) => {
+    toast.add({ severity, detail: text });
+  };
+  const error = (text: string, e?: Event | Dictionary<string>) => {
+    console.error(text, e);
+    add(text, 'error');
   };
 
-  const removeMessage = (uuid: string | number) => {
-    const { [uuid]: _, ...rest } = alerts.value;
-    alerts.value = rest;
-  };
-
-  return { messages: alerts.value, addMessage, removeMessage };
+  return { add, error };
 }

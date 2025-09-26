@@ -7,14 +7,18 @@ import { toRef } from 'vue';
 import { Column, DataTable } from 'primevue';
 import { MenuItem } from 'primevue/menuitem';
 import { TimeTable } from '@/Types/time-table';
+import useAlert from '@/Hooks/alert';
 
 const props = defineProps<{ timeTables: { data: TimeTable[] } }>();
 const timeTables = toRef(props, 'timeTables');
 
+const alert = useAlert();
+
 const reload = async () => {
   router.reload({
     only: ['timeTables'],
-    onError: (e) => console.error('Reload error:', e)
+    onError: (e) => alert.error('Reload error:', e),
+    onSuccess: () => alert.add('reload successful', 'success')
   });
 };
 const rowClick = async (e: any) => {
