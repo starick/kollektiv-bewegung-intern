@@ -24,12 +24,13 @@ const logout = () => {
   router.post(route('logout'));
 };
 
-const goToDashboard = () => router.get(route('dashboard'));
-const goToTimetables = () => router.get(route('time-tables.index'));
-
 const menuItems = [
-  { label: 'Dashboard', icon: 'pi pi-home', command: goToDashboard },
-  { label: 'Timetables', icon: 'pi pi-table', command: goToTimetables }
+  { label: 'Dashboard', icon: 'pi pi-home', command: () => router.get(route('dashboard')) },
+  {
+    label: 'Timetables',
+    icon: 'pi pi-table',
+    command: () => router.get(route('time-tables.index'))
+  }
 ];
 
 const items = [
@@ -81,7 +82,7 @@ const items = [
   <div>
     <Menubar :model="menuItems" class="bg-white dark:bg-gray-800 -mt-1 -mx-1 p-2">
       <template #start>
-        <ResponsiveNavLink @click="goToDashboard">
+        <ResponsiveNavLink :href="route('dashboard')">
           <ApplicationLogo class="block h-12 w-auto" />
         </ResponsiveNavLink>
       </template>

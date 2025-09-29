@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AppLayout from '@/Components/Layout/AppLayout.vue';
 import Welcome from '@/Components/General/Welcome.vue';
+import Card from '@/Components/General/Card.vue';
 </script>
 
 <template>
