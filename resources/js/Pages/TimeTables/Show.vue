@@ -5,8 +5,10 @@ import { defineProps, defineEmits } from 'vue';
 import { route } from 'ziggy-js';
 import { router } from '@inertiajs/vue3';
 import useAlert from '@/Hooks/alert';
+import AppLayout from '@/Components/Layout/AppLayout.vue';
+import Card from '@/Components/General/Card.vue';
 
-const props = defineProps<{ timeTable: TimeTable; editing: boolean }>();
+const props = defineProps<{ timeTable: { data: TimeTable }; editing: boolean }>();
 
 const emit = defineEmits([]);
 
@@ -41,23 +43,44 @@ const title = 'Show Timetable';
   <AppLayout :title="title">
     <Card :menu-items="menuItems">
       <DataTable
-        :value="timeTable.courses"
+        :value="timeTable.data.courses"
         responsiveLayout="scroll"
         sortField="createdAt"
         selectionMode="single"
         stripedRows
       >
-        <Column field="start_date" header="Start Date" sortable>
+        <Column field="date" header="Date" sortable>
           <template #body="{ data }: { data: any }">
-            {{ new Date(data.start_date).toLocaleString('de-DE') }}
+            {{
+              new Date(data.startTime).toLocaleDateString('de-DE', {
+                weekday: 'short',
+                day: '2-digit',
+                month: 'short'
+              })
+            }}
           </template>
         </Column>
-        <Column field="end_date" header="End Date" sortable>
+        <Column field="startTime" header="Start" sortable>
           <template #body="{ data }: { data: any }">
-            {{ new Date(data.end_date).toLocaleString('de-DE') }}
+            {{
+              new Date(data.startTime).toLocaleTimeString('de-DE', {
+                hour: '2-digit',
+                minute: '2-digit'
+              })
+            }}
           </template>
         </Column>
-        <Column field="title" header="Title" sortable />
+        <Column field="endTime" header="End" sortable>
+          <template #body="{ data }: { data: any }">
+            {{
+              new Date(data.endTime).toLocaleTimeString('de-DE', {
+                hour: '2-digit',
+                minute: '2-digit'
+              })
+            }}
+          </template>
+        </Column>
+        <Column field="name" header="Title" sortable />
         <Column field="instructor" header="Instructor" sortable />
         <Column field="place" header="Place" sortable />
       </DataTable>
