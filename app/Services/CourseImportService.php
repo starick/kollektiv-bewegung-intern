@@ -12,47 +12,52 @@ use App\Models\TimeTable;
 
 class CourseImportService
 {
-    private DateTimeZone $timezone;
-
-    public function __construct()
-    {
-        $this->timezone = new DateTimeZone('Europe/Berlin');
-    }
-
-    public function import($file, TimeTable $timeTable = null)
+    public function import($file, TimeTable $timeTable = null, DateTimeZone $timeZone = null)
     {
         $coursesFromExcel = Excel::toCollection(new CourseImport, $file)->first();
         $courses = new Collection();
+        $timeZone ??= new DateTimeZone('Europe/Berlin');
 
         foreach ($coursesFromExcel as $courseData) {
-            if (!$courseData->has('titel') || $courseData->get('titel') === null || $courseData->get('titel') === '') {
-                continue;
+            if ($course = $this->createCourse($courseData, $timeTable, $timeZone)) {
+                $courses->push($course);
             }
-
-            $instructor = $courseData->get('wer');
-            if ($instructor === null || $instructor === '') {
-                $instructor = $courseData->get('beschreibung');
-            }
-
-            $place = $courseData->get('wo');
-            if (in_array($place, ['', 'Bewegungsraum', 'Freiraum', 'Am Mittelhafen 42'])) {
-                $place = null;
-            }
-
-            $dataMapped = array_filter([
-                    'start_date' => Carbon::createFromFormat('d.m.Y H:i', $courseData->get('start_datum'), $timezone),
-                    'end_date' => Carbon::createFromFormat('d.m.Y H:i', $courseData->get('end_datum'), $timezone),
-                    'title' => $courseData->get('titel'),
-                    'instructor' => $instructor ?? '',
-                    'place' => $place,
-                    'time_table_id' => $timeTable?->id,
-                ], fn($data) => $data !== null);
-
-            $courses->add(Course::create($dataMapped));
         }
 
-        $courses->each(fn() => $course->save());
+        return $courses;
+    }
 
-        return $coursesCollection;
+    public function createCourse(Collection $courseData, TimeTable $timeTable, DateTimeZone $timeZone): Course|null
+    {
+        if (
+            !$courseData->has('titel') ||
+            $courseData->get('titel') === null ||
+            $courseData->get('titel') === ''
+        ) {
+            return null;
+        }
+
+        $instructor = $courseData->get('wer');
+        if ($instructor === null || $instructor === '') {
+            $instructor = $courseData->get('beschreibung');
+        }
+
+        $location = $courseData->get('wo');
+        if (in_array($location, ['', 'Bewegungsraum', 'Freiraum', 'Am Mittelhafen 42'])) {
+            $location = null;
+        }
+
+        $dataMapped = array_filter([
+            'start_time'    => Carbon::createFromFormat('d.m.Y H:i', $courseData->get('start_datum'), $timeZone),
+            'end_time'      => Carbon::createFromFormat('d.m.Y H:i', $courseData->get('end_datum'), $timeZone),
+            'name'          => $courseData->get('titel') ?? '',
+            'instructor'    => $instructor ?? '',
+            'location'      => $location,
+            'time_table_id' => $timeTable?->id,
+        ], fn($data) => $data !== null);
+
+        return $timeTable->isWithinTimeRange($dataMapped['start_time']) 
+            ? Course::create($dataMapped)
+            : null;
     }
 }
