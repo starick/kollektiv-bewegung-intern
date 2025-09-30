@@ -21,6 +21,7 @@ const reload = async () => {
     onSuccess: () => alert.add('reload successful', 'success')
   });
 };
+
 const rowClick = async (e: any) => {
   router.get(route('time-tables.show', { time_table: e.data.id }));
 };

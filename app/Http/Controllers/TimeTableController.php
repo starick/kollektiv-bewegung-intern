@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateTimeTableRequest;
 use App\Http\Resources\TimeTableResource;
 use App\Models\TimeTable;
 use Inertia\Inertia;
+use App\Services\CourseImportService;
 
 class TimeTableController extends Controller
 {
@@ -31,10 +32,18 @@ class TimeTableController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTimeTableRequest $request)
+    public function store(StoreTimeTableRequest $request, CourseImportService $courseImportService)
     {
-        $timeTable = TimeTable::create($request->validated());
-        return redirect()->route('time-tables.show', $timeTable)->with('success', 'Time table created successfully.');
+        $validated = collect($request->validated());
+
+        $timeTable = TimeTable::create($validated->except('file')->toArray());
+
+        if ($request->hasFile('file')) {
+            $courses = $courseImportService->import($validated['file'], $timeTable);
+        }
+
+        return redirect()->route('time-tables.show', $timeTable)
+            ->with('success', 'Time table created successfully.');
     }
 
     /**
@@ -43,7 +52,7 @@ class TimeTableController extends Controller
     public function show(TimeTable $timeTable)
     {
         return Inertia::render('TimeTables/Show', [
-            'timeTable' => $timeTable->load('courses', 'creator'),
+            'timeTable' => new TimeTableResource($timeTable->load('creator', 'courses')),
             'editing' => false,
         ]);
     }

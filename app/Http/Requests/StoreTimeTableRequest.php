@@ -11,7 +11,7 @@ class StoreTimeTableRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,6 +25,7 @@ class StoreTimeTableRequest extends FormRequest
             'year' => ['required', 'integer', 'min:2000', 'max:2100'],
             'week' => ['required', 'integer', 'min:1', 'max:53'],
             'display_config' => ['nullable', 'json'],
+            'file' => ['nullable', 'file', 'mimes:xlsx,xls,csv'],
         ];
     }
 }
