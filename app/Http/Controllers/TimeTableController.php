@@ -36,7 +36,11 @@ class TimeTableController extends Controller
     {
         $validated = collect($request->validated());
 
-        $timeTable = TimeTable::create($validated->except('file')->toArray());
+        $timeTable = TimeTable::create(
+            $validated->except('file')->merge([
+            'created_by' => auth()->id(),
+            ])->toArray()
+        );
 
         if ($request->hasFile('file')) {
             $courses = $courseImportService->import($validated['file'], $timeTable);
