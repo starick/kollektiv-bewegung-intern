@@ -46,7 +46,7 @@ watch(
 </script>
 
 <template>
-  <div class="bg-slate-50 min-h-screen">
+  <div class="bg-slate-50 dark:bg-slate-900 min-h-screen">
     <Head :title="title" />
     <div>
       <Navbar />

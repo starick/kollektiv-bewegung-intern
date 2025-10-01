@@ -13,7 +13,7 @@ const items = [{ label: 'Create New', icon: 'pi pi-plus', command: () => {} }];
 </script>
 
 <template>
-  <div class="bg-white dark:bg-gray-800 overflow-hidden sm:rounded-lg">
+  <div class="bg-default-background overflow-hidden sm:rounded-lg">
     <slot name="header">
       <Menubar
         v-if="menuItems?.length"
