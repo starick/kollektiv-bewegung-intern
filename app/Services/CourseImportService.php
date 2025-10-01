@@ -16,7 +16,7 @@ class CourseImportService
     {
         $coursesFromExcel = Excel::toCollection(new CourseImport, $file)->first();
         $courses = new Collection();
-        $timeZone ??= new DateTimeZone('Europe/Berlin');
+        $timeZone ??= new DateTimeZone('UTC');
 
         foreach ($coursesFromExcel as $courseData) {
             if ($course = $this->createCourse($courseData, $timeTable, $timeZone)) {
@@ -51,7 +51,7 @@ class CourseImportService
             'start_time'    => Carbon::createFromFormat('d.m.Y H:i', $courseData->get('start_datum'), $timeZone),
             'end_time'      => Carbon::createFromFormat('d.m.Y H:i', $courseData->get('end_datum'), $timeZone),
             'name'          => $courseData->get('titel') ?? '',
-            'instructor'    => $instructor ?? '',
+            'instructor'    => $instructor ? mb_strimwidth($instructor,0, 64,'...') : '',
             'location'      => $location,
             'time_table_id' => $timeTable?->id,
         ], fn($data) => $data !== null);
