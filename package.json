@@ -33,6 +33,7 @@
     "dependencies": {
         "@primevue/themes": "^4.2.5",
         "date-fns": "^4.1.0",
+        "html2canvas": "^1.4.1",
         "primeicons": "github:primefaces/primeicons",
         "primevue": "^4.2.5",
         "sass": "^1.83.1",

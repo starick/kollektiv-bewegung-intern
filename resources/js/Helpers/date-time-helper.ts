@@ -8,6 +8,14 @@ export function formatDate(d: Date | string): string {
   return new Date(d).toLocaleDateString('de-DE', { timeZone: 'UTC' });
 }
 
+export function formatInternationalDate(d: Date | string): string {
+  const date = new Date(d);
+
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(
+    date.getDate()
+  ).padStart(2, '0')}`;
+}
+
 export function formatTime(d: Date | string): string {
   return new Date(d).toLocaleTimeString('de-DE', {
     hour: '2-digit',
@@ -35,12 +43,4 @@ export function startOfWeek(year: number, week: number): Date {
 
 export function endOfWeek(year: number, week: number): Date {
   return endOfISOWeek(startOfWeek(year, week));
-}
-
-export function formatInternationalDate(d: Date | string): string {
-  const date = new Date(d);
-
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(
-    date.getDate()
-  ).padStart(2, '0')}`;
 }
