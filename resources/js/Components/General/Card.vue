@@ -6,18 +6,20 @@ defineProps({
   menuItems: {
     type: Array<MenuItem>,
     default: []
-  }
+  },
+  border: { type: Boolean, default: false }
 });
-
-const items = [{ label: 'Create New', icon: 'pi pi-plus', command: () => {} }];
 </script>
 
 <template>
-  <div class="bg-default-background overflow-hidden sm:rounded-lg">
+  <div
+    class="bg-default-background overflow-hidden rounded-lg"
+    :class="{ 'border-border border-l border-y': border }"
+  >
     <slot name="header">
       <Menubar
         v-if="menuItems?.length"
-        :model="menuItems.length ? menuItems : items"
+        :model="menuItems.length ? menuItems : []"
         class="bg-transparent"
         style="border-radius: 0 !important; border-top: none; border-left: none; border-right: none"
       />

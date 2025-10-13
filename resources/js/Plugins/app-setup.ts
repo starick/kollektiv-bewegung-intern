@@ -11,6 +11,7 @@ import {
   FileUpload,
   InputNumber,
   Row,
+  Select,
   Tab,
   TabList,
   TabPanel,
@@ -35,6 +36,7 @@ export function addComponents(app: App): App {
   app.component('Textarea', Textarea);
   app.component('Toast', Toast);
   app.component('Calendar', Calendar);
+  app.component('Select', Select);
 
   return app;
 }
