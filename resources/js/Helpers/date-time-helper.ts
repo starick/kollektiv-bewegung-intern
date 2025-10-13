@@ -1,17 +1,23 @@
 import { addWeeks, endOfISOWeek, startOfISOWeek } from 'date-fns';
 
-export function formatTime(minutes: number): string {
-  const hrs = Math.floor(minutes / 60);
-  const mins = minutes % 60;
-  return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
-}
-
 export function formatDateTime(d: Date | string): string {
   return new Date(d).toLocaleString('de-DE');
 }
 
 export function formatDate(d: Date | string): string {
   return new Date(d).toLocaleDateString('de-DE');
+}
+
+export function formatTime(d: Date | string): string {
+  return new Date(d).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+}
+
+export function formatDayAndMonth(d: Date | string): string {
+  return new Date(d).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' });
+}
+
+export function formatWeekday(d: Date | string): string {
+  return new Date(d).toLocaleDateString('de-DE', { weekday: 'short' });
 }
 
 export function startOfWeek(year: number, week: number): Date {

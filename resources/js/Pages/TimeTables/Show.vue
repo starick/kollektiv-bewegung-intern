@@ -6,7 +6,7 @@ import useAlert from '@/Hooks/alert';
 
 import AppLayout from '@/Components/Layout/AppLayout.vue';
 import TimeTableInfo from './Partials/TimeTableInfo.vue';
-import CourseTable from './Partials/CourseTable.vue';
+import CourseTable from '../../Components/TimeTables/CourseTable.vue';
 import { Course } from '@/Types/course';
 
 const props = defineProps<{
