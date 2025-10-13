@@ -5,6 +5,7 @@ import Dropdown from 'primevue/dropdown';
 import Toast from 'primevue/toast';
 import {
   Button,
+  Calendar,
   Column,
   DataTable,
   FileUpload,
@@ -33,6 +34,7 @@ export function addComponents(app: App): App {
   app.component('Tabs', Tabs);
   app.component('Textarea', Textarea);
   app.component('Toast', Toast);
+  app.component('Calendar', Calendar);
 
   return app;
 }
