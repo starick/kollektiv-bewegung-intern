@@ -1,4 +1,8 @@
+import { SassString } from 'sass';
 import { Course } from './course';
+
+// TODO: Be more specific as soon as type is more fleshed-out / expecations are clear
+export type TimeTableDesignConfig = Record<string, any>;
 
 export interface TimeTable {
   id: number;
@@ -12,5 +16,5 @@ export interface TimeTable {
     name: string;
     email: string;
   };
-  courses?: Course[];
+  designConfig?: TimeTableDesignConfig;
 }

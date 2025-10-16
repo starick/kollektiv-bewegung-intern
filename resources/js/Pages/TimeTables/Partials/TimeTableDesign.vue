@@ -4,9 +4,11 @@ import TimeTableDisplay from '@/Components/TimeTables/TimeTableDisplay.vue';
 import { reactive, ref } from 'vue';
 import html2canvas from 'html2canvas';
 import Card from '@/Components/General/Card.vue';
+import { Course } from '@/Types/course';
 
 const props = defineProps<{
   timeTable: TimeTable;
+  courses: Array<Course>;
 }>();
 
 const timetableRef = ref<HTMLElement | null>(null);
@@ -81,7 +83,7 @@ const menuItems = [
       {{ displayConfig }}
     </Card>
     <div ref="timetableRef" class="flex-1">
-      <TimeTableDisplay :timeTable="timeTable" :config="displayConfig" />
+      <TimeTableDisplay :timeTable="timeTable" :courses="courses" :config="displayConfig" />
     </div>
   </div>
 </template>

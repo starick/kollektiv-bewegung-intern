@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TimeTable } from '@/Types/time-table';
+import { TimeTable, TimeTableDesignConfig } from '@/Types/time-table';
 import { defineProps, computed, toRef } from 'vue';
 import { Course } from '@/Types/course';
 import {
@@ -11,10 +11,9 @@ import {
 import PrimaryButton from '../General/PrimaryButton.vue';
 import html2canvas from 'html2canvas';
 
-const props = defineProps<{ timeTable: TimeTable; config: any }>();
+const props = defineProps<{ courses: Array<Course>; config: TimeTableDesignConfig }>();
 
 const config = toRef(props, 'config');
-const courses = computed(() => props.timeTable.courses || []);
 
 const groupedCourses = computed(() => {
   const map = new Map<
@@ -27,7 +26,7 @@ const groupedCourses = computed(() => {
     }
   >();
 
-  for (const course of courses.value ?? []) {
+  for (const course of props.courses ?? []) {
     const dateKey = formatInternationalDate(course.date);
 
     if (!map.has(dateKey)) {

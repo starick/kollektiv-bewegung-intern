@@ -25,5 +25,5 @@ Route::middleware([
     })->name('dashboard');
 
     Route::resource('time-tables', TimeTableController::class);
-    Route::resource('courses', CourseController::class)->only(['store', 'update', 'destroy']);
+    Route::resource('time-tables.courses', CourseController::class)->only(['store', 'update', 'destroy']);
 });

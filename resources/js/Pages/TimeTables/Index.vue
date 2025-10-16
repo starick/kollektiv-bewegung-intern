@@ -6,7 +6,7 @@ import { router } from '@inertiajs/vue3';
 import { toRef } from 'vue';
 import { MenuItem } from 'primevue/menuitem';
 import { TimeTable } from '@/Types/time-table';
-import useAlert from '@/Hooks/alert';
+import useAlert from '@/Composables/useAlert';
 
 const props = defineProps<{ timeTables: { data: TimeTable[] } }>();
 const timeTables = toRef(props, 'timeTables');
@@ -48,6 +48,7 @@ const title = 'Timetables Overview';
         :value="timeTables.data"
         responsiveLayout="scroll"
         sortField="createdAt"
+        :sort-order="-1"
         selectionMode="single"
         stripedRows
         @row-click="rowClick"

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTimeTableRequest;
 use App\Http\Requests\UpdateTimeTableRequest;
+use App\Http\Resources\CourseResource;
 use App\Http\Resources\TimeTableResource;
 use App\Models\TimeTable;
 use Inertia\Inertia;
@@ -55,9 +56,19 @@ class TimeTableController extends Controller
      */
     public function show(TimeTable $timeTable)
     {
+
+        // $timeTableResource = (new TimeTableResource($timeTable->load('creator')))->resolve();
+
+        // dd($timeTable->relationLoaded('courses'), $timeTableResource);
+
         return Inertia::render('TimeTables/Show', [
-            'timeTable' => new TimeTableResource($timeTable->load('creator', 'courses')),
-            'editing' => false,
+            'timeTable' => (new TimeTableResource($timeTable->load('creator')))->resolve(),
+            // 'courses' => []
+            'courses' => Inertia::lazy(fn () =>
+            CourseResource::collection(
+                $timeTable->courses
+            )->resolve()
+        ),
         ]);
     }
 
