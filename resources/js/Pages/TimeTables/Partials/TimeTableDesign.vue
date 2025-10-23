@@ -5,6 +5,9 @@ import { reactive, ref } from 'vue';
 import html2canvas from 'html2canvas';
 import Card from '@/Components/General/Card.vue';
 import { Course } from '@/Types/course';
+import ColorPickerWrapper from '@/Components/Form/ColorPickerWrapper.vue';
+import InputTextSize from '@/Components/Form/InputTextSize.vue';
+import TimeTableDesignControls from './TimeTableDesignControls.vue';
 
 const props = defineProps<{
   timeTable: TimeTable;
@@ -13,15 +16,24 @@ const props = defineProps<{
 
 const timetableRef = ref<HTMLElement | null>(null);
 
-const displayConfig = reactive({
+const designConfig = reactive({
   background: {
-    image: 'https://wallpapercave.com/wp/wp3272711.jpg'
+    image: '/img/background-01.png'
   },
   body: {
-    color: '#000000',
-    fontFamily: 'Arial, sans-serif',
-    fontSize: '14px',
-    scale: 1
+    fontSize: '1em',
+    color: '#c1c1c1',
+    scale: 1,
+    'line-height': 1.2,
+    'margin-top': '0.5em'
+  },
+  highlight: {
+    color: '#f0f0ff',
+    background: '#679'
+  },
+  header: {
+    color: '#b0e0ff',
+    scale: 1.2
   },
   padding: 20
 });
@@ -62,28 +74,21 @@ const menuItems = [
 
 <template>
   <div class="flex flex-row">
-    <Card class="flex-1 flex-col rounded-r-none" border :menuItems="menuItems">
-      <div class="flex flex-row justify-center">
-        <Select
-          v-model="displayConfig.background.image"
-          :options="[
-            { label: 'Test 1', value: 'https://wallpapercave.com/wp/wp3272711.jpg' },
-            {
-              label: 'Test 2s',
-              value: 'https://cdn.wallpapersafari.com/48/17/0SDb2r.jpg'
-            }
-          ]"
-          optionLabel="label"
-          optionValue="value"
-          placeholder="Background Image"
-          class="w-48"
-          :reduce="(opt) => opt.value"
-        />
-      </div>
-      {{ displayConfig }}
+    <Card
+      class="flex-1 flex-col rounded-r-none overflow-y-scroll h-[800px]"
+      border
+      :menuItems="menuItems"
+    >
+      <TimeTableDesignControls v-model="designConfig" @onSave="onSave" @onDownload="onDownload" />
+      <pre class="mt-4 bg-gray-100 p-2 text-xs">{{ designConfig }}</pre>
     </Card>
     <div ref="timetableRef" class="flex-1">
-      <TimeTableDisplay :timeTable="timeTable" :courses="courses" :config="displayConfig" />
+      <TimeTableDisplay
+        :designConfig="designConfig"
+        :courses="courses"
+        :year="timeTable.year"
+        :week="timeTable.week"
+      />
     </div>
   </div>
 </template>

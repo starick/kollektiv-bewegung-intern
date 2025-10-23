@@ -3,10 +3,10 @@ import { ref } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import AuthenticationCard from '@/Components/General/AuthenticationCard.vue';
 import AuthenticationCardLogo from '@/Components/General/AuthenticationCardLogo.vue';
-import InputError from '@/Components/General/InputError.vue';
-import InputLabel from '@/Components/General/InputLabel.vue';
+import InputError from '@/Components/Form/InputError.vue';
+import InputLabel from '@/Components/Form/InputLabel.vue';
 import PrimaryButton from '@/Components/General/PrimaryButton.vue';
-import TextInput from '@/Components/General/TextInput.vue';
+import TextInput from '@/Components/Form/TextInput.vue';
 import { route } from 'ziggy-js';
 
 const form = useForm({

@@ -1,53 +1,21 @@
 <script setup lang="ts">
-import { TimeTable, TimeTableDesignConfig } from '@/Types/time-table';
 import { defineProps, computed, toRef } from 'vue';
 import { Course } from '@/Types/course';
-import {
-  formatDayAndMonth,
-  formatInternationalDate,
-  formatTime,
-  formatWeekday
-} from '@/Helpers/date-time-helper';
-import PrimaryButton from '../General/PrimaryButton.vue';
-import html2canvas from 'html2canvas';
+import { endOfWeek, formatDate, formatTime, startOfWeek } from '@/Helpers/date-time-helper';
+import { groupCoursesByDay } from '@/Helpers/course-mapper';
+import { TimeTableDesignConfig } from '@/Types/time-table';
 
-const props = defineProps<{ courses: Array<Course>; config: TimeTableDesignConfig }>();
+const props = defineProps<{
+  week: number;
+  year: number;
+  designConfig: TimeTableDesignConfig;
+  courses: Array<Course>;
+}>();
 
-const config = toRef(props, 'config');
-
-const groupedCourses = computed(() => {
-  const map = new Map<
-    string,
-    {
-      day: string;
-      dateLabel: string;
-      dateKey: string; // YYYY-MM-DD for sorting
-      courses: Array<Course>;
-    }
-  >();
-
-  for (const course of props.courses ?? []) {
-    const dateKey = formatInternationalDate(course.date);
-
-    if (!map.has(dateKey)) {
-      map.set(dateKey, {
-        day: formatWeekday(course.date),
-        dateLabel: formatDayAndMonth(course.date),
-        dateKey,
-        courses: [course]
-      });
-    } else {
-      map.get(dateKey).courses.push(course);
-    }
-  }
-
-  return Array.from(map.values()).sort((a, b) =>
-    a.dateKey < b.dateKey ? -1 : a.dateKey > b.dateKey ? 1 : 0
-  );
-});
+const groupedCourses = computed(() => groupCoursesByDay(props.courses));
 
 const backgroundStyle = computed(() => {
-  const bg = config.value?.background ?? {};
+  const bg = props.designConfig.background ?? {};
   return {
     backgroundColor: bg.color ?? 'transparent',
     backgroundImage: bg.image ? `url(${bg.image})` : 'none',
@@ -56,6 +24,11 @@ const backgroundStyle = computed(() => {
     backgroundRepeat: bg.repeat ?? 'no-repeat'
   };
 });
+
+const timeFrame = computed(
+  () =>
+    `${formatDate(startOfWeek(props.year, props.week))} - ${formatDate(endOfWeek(props.year, props.week))}`
+);
 </script>
 
 <template>
@@ -63,22 +36,35 @@ const backgroundStyle = computed(() => {
     class="relative flex flex-col w-[800px] h-[800px] shadow-lg overflow-hidden bg-gray-300"
     :style="backgroundStyle"
   >
-    <h1 class="text-center text-3xl font-bold mb-4 tracking-wider">YOGUERILLAS</h1>
+    <h1 class="text-center text-3xl font-bold tracking-wider" :style="designConfig.header ?? {}">
+      YOGUERILLAS
+    </h1>
+    <h2
+      class="text-center text-xl font-bold mb-4 tracking-wider opacity-80"
+      :style="{ color: designConfig.header.color }"
+    >
+      {{ timeFrame }}
+    </h2>
 
-    <div class="absolute top-8 -right-4 rounded-2xl py-2 px-4 rotate-[30deg]">
+    <div
+      class="absolute top-8 -right-4 rounded-2xl py-2 px-4 rotate-[30deg] opacity-90"
+      :style="designConfig.highlight"
+    >
       <p>Bitte vorher bei den</p>
       <p>Kursleitenden anmelden</p>
     </div>
-    <div class="absolute bottom-2 left-2 text-sm opacity-70">
+    <div
+      class="absolute bottom-2 left-2 text-sm opacity-90"
+      :style="{ color: designConfig.highlight.color }"
+    >
       <p>
         Sofern nicht anders angegeben, finden die Kurse im Bewegungsraum der B-Side (Am Mittelhafen
         42) statt.
       </p>
       <p>Alle Angebote sind auf Pay-What-You-Feel-Basis</p>
-      {{ config.background.image }}
     </div>
 
-    <div class="scale-[86%] origin-top">
+    <div :class="`origin-top`" :style="designConfig.body">
       <div
         v-for="group in groupedCourses"
         :key="group.dateKey"
@@ -99,12 +85,12 @@ const backgroundStyle = computed(() => {
             :key="course.id"
             class="grid grid-cols-12 gap-x-2 py-0.2"
           >
-            <div class="text-[14px] font-medium col-span-2">
+            <div class="font-medium col-span-2">
               {{ formatTime(course.startTime) }} - {{ formatTime(course.endTime) }}
             </div>
             <div class="col-span-9 pl-2">
-              <span class="text-[14px] font-bold mr-4">{{ course.name }}</span>
-              <span class="text-[14px] text-sm">{{ course.instructor }}</span>
+              <span class="font-bold mr-4">{{ course.name }}</span>
+              <span class="text-sm">{{ course.instructor }}</span>
               <span v-if="course.location" class="text-sm ml-4">
                 {{ course.location }}
               </span>

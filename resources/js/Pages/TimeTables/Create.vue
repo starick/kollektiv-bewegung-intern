@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Card from '@/Components/General/Card.vue';
 import FormSection from '@/Components/General/FormSection.vue';
-import InputLabel from '@/Components/General/InputLabel.vue';
+import InputLabel from '@/Components/Form/InputLabel.vue';
 import PrimaryButton from '@/Components/General/PrimaryButton.vue';
 import SecondaryButton from '@/Components/General/SecondaryButton.vue';
 import AppLayout from '@/Components/Layout/AppLayout.vue';

@@ -1,11 +1,13 @@
-import { addWeeks, endOfISOWeek, startOfISOWeek } from 'date-fns';
+import { addWeeks, endOfISOWeek, setHours, startOfISOWeek } from 'date-fns';
+
+// TODO: Something has to happen with timezones here. I hate timezones =/
 
 export function formatDateTime(d: Date | string): string {
   return new Date(d).toLocaleString('de-DE', { timeZone: 'UTC' });
 }
 
 export function formatDate(d: Date | string): string {
-  return new Date(d).toLocaleDateString('de-DE', { timeZone: 'UTC' });
+  return setHours(new Date(d), 12).toLocaleDateString('de-DE', { timeZone: 'UTC' });
 }
 
 export function formatInternationalDate(d: Date | string): string {
