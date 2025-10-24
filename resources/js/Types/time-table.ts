@@ -16,5 +16,5 @@ export interface TimeTable {
     name: string;
     email: string;
   };
-  designConfig?: TimeTableDesignConfig;
+  displayConfig?: TimeTableDesignConfig;
 }

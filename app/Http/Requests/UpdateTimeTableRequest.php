@@ -11,7 +11,7 @@ class UpdateTimeTableRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,9 +22,9 @@ class UpdateTimeTableRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'year' => ['required', 'integer', 'min:2000', 'max:2100'],
-            'week' => ['required', 'integer', 'min:1', 'max:53'],
-            'display_config' => ['nullable', 'json'],
+            'year' => ['integer', 'min:2000', 'max:2100'],
+            'week' => ['integer', 'min:1', 'max:53'],
+            'display_config' => ['json'],
         ];
     }
 }

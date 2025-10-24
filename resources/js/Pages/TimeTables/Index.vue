@@ -6,7 +6,7 @@ import { router } from '@inertiajs/vue3';
 import { toRef } from 'vue';
 import { MenuItem } from 'primevue/menuitem';
 import { TimeTable } from '@/Types/time-table';
-import useAlert from '@/Composables/useAlert';
+import useAlert from '@/Composables/use-alerts';
 
 const props = defineProps<{ timeTables: { data: TimeTable[] } }>();
 const timeTables = toRef(props, 'timeTables');

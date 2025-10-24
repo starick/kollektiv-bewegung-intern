@@ -37,7 +37,7 @@ const timeFrame = computed(
     :style="backgroundStyle"
   >
     <h1 class="text-center text-3xl font-bold tracking-wider" :style="designConfig.header ?? {}">
-      YOGUERILLAS
+      KOLLEKTIV:BEWEGUNG
     </h1>
     <h2
       class="text-center text-xl font-bold mb-4 tracking-wider opacity-80"

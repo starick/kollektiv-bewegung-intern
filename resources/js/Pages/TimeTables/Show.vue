@@ -2,14 +2,14 @@
 import { TimeTable } from '@/Types/time-table';
 import { defineProps, defineEmits, ref, computed, toRef, onMounted, watch } from 'vue';
 import { router } from '@inertiajs/vue3';
-import useAlert from '@/Composables/useAlert';
+import useAlert from '@/Composables/use-alerts';
 
 import AppLayout from '@/Components/Layout/AppLayout.vue';
 import TimeTableInfo from './Partials/TimeTableInfo.vue';
 import CourseTable from '../../Components/TimeTables/CourseTable.vue';
 import { Course } from '@/Types/course';
 import TimeTableDesign from './Partials/TimeTableDesign.vue';
-import useCourseActions from '@/Composables/useCourseActions';
+import useCourseActions from '@/Composables/use-course-actions';
 import { courseToDTO } from '@/Helpers/course-mapper';
 
 const props = defineProps<{
@@ -82,7 +82,6 @@ watch(() => props.timeTable, loadCourses, { immediate: true });
 
 <template>
   <AppLayout :title="title">
-    {{ timeTable }}
     <Tabs value="0">
       <TabList>
         <Tab value="0">Design</Tab>

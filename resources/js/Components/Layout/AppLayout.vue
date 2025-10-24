@@ -3,7 +3,7 @@ import { Head } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
 import Navbar from '@/Components/Layout/Navbar.vue';
 import { computed, onMounted, watch } from 'vue';
-import useAlert from '@/Composables/useAlert';
+import useAlert from '@/Composables/use-alerts';
 
 const page = usePage();
 const alert = useAlert();

@@ -1,22 +1,27 @@
 <script setup lang="ts">
 import { TimeTable } from '@/Types/time-table';
 import TimeTableDisplay from '@/Components/TimeTables/TimeTableDisplay.vue';
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import html2canvas from 'html2canvas';
 import Card from '@/Components/General/Card.vue';
 import { Course } from '@/Types/course';
 import ColorPickerWrapper from '@/Components/Form/ColorPickerWrapper.vue';
 import InputTextSize from '@/Components/Form/InputTextSize.vue';
 import TimeTableDesignControls from './TimeTableDesignControls.vue';
+import useTimeTableAtions from '@/Composables/use-timetable-actions';
+import useAlert from '@/Composables/use-alerts';
 
 const props = defineProps<{
   timeTable: TimeTable;
   courses: Array<Course>;
 }>();
 
+const timeTableActions = useTimeTableAtions();
+const alert = useAlert();
+
 const timetableRef = ref<HTMLElement | null>(null);
 
-const designConfig = reactive({
+const displayConfig = reactive({
   background: {
     image: '/img/background-01.png'
   },
@@ -34,12 +39,18 @@ const designConfig = reactive({
   header: {
     color: '#b0e0ff',
     scale: 1.2
-  },
-  padding: 20
+  }
 });
 
 const onSave = () => {
-  alert('Save functionality is not implemented yet.');
+  timeTableActions
+    .update(props.timeTable.id, { display_config: JSON.stringify(displayConfig) })
+    .then((result) => {
+      alert.add('Design saved successfully', 'success');
+    })
+    .catch((e) => {
+      alert.error('Error saving design', e);
+    });
 };
 
 const onDownload = async () => {
@@ -70,6 +81,16 @@ const menuItems = [
     command: onDownload
   }
 ];
+
+watch(
+  () => props.timeTable.displayConfig,
+  (value) => {
+    if (value) {
+      Object.assign(displayConfig, { ...displayConfig, ...value });
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -79,12 +100,11 @@ const menuItems = [
       border
       :menuItems="menuItems"
     >
-      <TimeTableDesignControls v-model="designConfig" @onSave="onSave" @onDownload="onDownload" />
-      <pre class="mt-4 bg-gray-100 p-2 text-xs">{{ designConfig }}</pre>
+      <TimeTableDesignControls v-model="displayConfig" @onSave="onSave" @onDownload="onDownload" />
     </Card>
     <div ref="timetableRef" class="flex-1">
       <TimeTableDisplay
-        :designConfig="designConfig"
+        :designConfig="displayConfig"
         :courses="courses"
         :year="timeTable.year"
         :week="timeTable.week"

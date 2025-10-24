@@ -23,6 +23,7 @@ class TimeTableResource extends JsonResource
             'creator' => new UserResource($this->whenLoaded('creator')),
             'courses' => CourseResource::collection($this->whenLoaded('courses')),
             'coursesCount' => $this->courses()->count(),
+            'displayConfig' => json_decode($this->display_config),
         ];
     }
 }

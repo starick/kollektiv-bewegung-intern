@@ -1,21 +1,7 @@
+import { InertiaCallbacks } from '@/Types/intertia-callbacks';
+import { Payload } from '@/Types/payload';
 import { router } from '@inertiajs/vue3';
 import { route } from 'ziggy-js';
-
-type Payload = Record<string, any>;
-type InertiaCallbacks = Partial<{
-  onCancelToken: {
-    ({ cancel }: { cancel: VoidFunction }): void;
-  };
-  onBefore: () => void;
-  onStart: () => void;
-  onProgress: () => void;
-  onCancel: () => void;
-  onSuccess: () => void;
-  onError: (errors: any) => void;
-  onFinish: () => void;
-  preserveState: boolean;
-  only: string[];
-}>;
 
 function options(cb: InertiaCallbacks = {}): InertiaCallbacks {
   return {

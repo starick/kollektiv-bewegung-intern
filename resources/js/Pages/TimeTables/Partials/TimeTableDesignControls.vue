@@ -1,11 +1,23 @@
 <script setup lang="ts">
 import { TimeTableDesignConfig } from '@/Types/time-table';
-import ColorPickerWrapper from '@/Components/Form/ColorPickerWrapper.vue';
+import ColorSwatch from '@/Components/Form/ColorSwatch.vue';
 import InputTextSize from '@/Components/Form/InputTextSize.vue';
+import useAlert from '@/Composables/use-alerts';
 
 const modelValue = defineModel<TimeTableDesignConfig>({ required: true });
 
 const emits = defineEmits(['onSave', 'onDownload']);
+
+const alert = useAlert();
+
+const backgroundImages = [
+  { label: 'Abstract 1', value: '/img/abstract-1.png' },
+  { label: 'Abstract 2', value: '/img/abstract-2.png' },
+  { label: 'Landscape 1', value: '/img/landscape-1.png' },
+  { label: 'Pastel 1', value: '/img/pastel-1.png' },
+  { label: 'Münster Hafen', value: '/img/meunster-hafen.png' },
+  { label: 'Münster Hafen 2', value: '/img/meunster-hafen-dark.png' }
+];
 </script>
 
 <template>
@@ -17,13 +29,7 @@ const emits = defineEmits(['onSave', 'onDownload']);
           <img :src="modelValue.background.image" class="w-32 h-20 object-cover rounded" />
           <Dropdown
             v-model="modelValue.background.image"
-            :options="[
-              { label: 'Test 1', value: 'https://wallpapercave.com/wp/wp3272711.jpg' },
-              {
-                label: 'Test 2s',
-                value: 'https://cdn.wallpapersafari.com/48/17/0SDb2r.jpg'
-              }
-            ]"
+            :options="backgroundImages"
             optionLabel="label"
             optionValue="value"
             placeholder="Background Image"
@@ -34,12 +40,36 @@ const emits = defineEmits(['onSave', 'onDownload']);
       </AccordionContent>
     </AccordionPanel>
     <AccordionPanel value="1">
+      <AccordionHeader>Header</AccordionHeader>
+      <AccordionContent>
+        <div class="grid grid-cols-1 gap-3">
+          <div>
+            <label class="block text-xs mb-1">Color</label>
+            <ColorSwatch v-model="modelValue.header.color" />
+          </div>
+          <div>
+            <label class="block text-xs mb-1">Scale</label>
+            <div class="flex items-center gap-3">
+              <InputNumber
+                v-model="modelValue.header.scale"
+                :min="0.8"
+                :max="3"
+                :step="0.05"
+                mode="decimal"
+                showButtons
+              />
+            </div>
+          </div>
+        </div>
+      </AccordionContent>
+    </AccordionPanel>
+    <AccordionPanel value="2">
       <AccordionHeader>Body</AccordionHeader>
       <AccordionContent>
         <div class="grid grid-cols-1 gap-3">
           <div class="col-span-2">
             <label class="block text-xs mb-1">Font Color</label>
-            <ColorPickerWrapper v-model="modelValue.body.color" />
+            <ColorSwatch v-model="modelValue.body.color" />
           </div>
           <div class="col-span-2">
             <label class="block text-xs mb-1">Font Size</label>
@@ -57,7 +87,7 @@ const emits = defineEmits(['onSave', 'onDownload']);
                 v-model="modelValue.body.scale"
                 :min="0.5"
                 :max="3"
-                :step="0.1"
+                :step="0.05"
                 mode="decimal"
                 showButtons
               />
@@ -81,38 +111,24 @@ const emits = defineEmits(['onSave', 'onDownload']);
       </AccordionContent>
     </AccordionPanel>
     <AccordionPanel value="3">
-      <AccordionHeader>Header</AccordionHeader>
+      <AccordionHeader>highlights</AccordionHeader>
       <AccordionContent>
         <div class="grid grid-cols-1 gap-3">
-          <div>
-            <label class="block text-xs mb-1">Color</label>
-            <ColorPickerWrapper v-model="modelValue.header.color" />
+          <div class="col-span-2">
+            <label class="block text-xs mb-1">Font Color</label>
+            <ColorSwatch v-model="modelValue.highlight.color" />
           </div>
-          <div>
-            <label class="block text-xs mb-1">Scale</label>
-            <div class="flex items-center gap-3">
-              <InputNumber
-                v-model="modelValue.header.scale"
-                :min="0.8"
-                :max="3"
-                :step="0.1"
-                mode="decimal"
-                showButtons
-              />
-            </div>
+          <div class="col-span-2">
+            <label class="block text-xs mb-1">Background Color</label>
+            <ColorSwatch v-model="modelValue.highlight.background" />
           </div>
         </div>
       </AccordionContent>
     </AccordionPanel>
     <AccordionPanel value="4">
-      <AccordionHeader>General</AccordionHeader>
+      <AccordionHeader>Debug</AccordionHeader>
       <AccordionContent>
-        <div>
-          <label class="block text-xs mb-1">Padding</label>
-          <div class="flex items-center gap-3">
-            <InputNumber v-model="modelValue.padding" :min="0" :max="100" :step="1" showButtons />
-          </div>
-        </div>
+        <pre class="mt-4 bg-gray-100 p-2 text-xs">{{ modelValue }}</pre>
       </AccordionContent>
     </AccordionPanel>
   </Accordion>

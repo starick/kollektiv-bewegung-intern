@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateTimeTableRequest;
 use App\Http\Resources\CourseResource;
 use App\Http\Resources\TimeTableResource;
 use App\Models\TimeTable;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use App\Services\CourseImportService;
 
@@ -56,7 +57,6 @@ class TimeTableController extends Controller
      */
     public function show(TimeTable $timeTable)
     {
-
         // $timeTableResource = (new TimeTableResource($timeTable->load('creator')))->resolve();
 
         // dd($timeTable->relationLoaded('courses'), $timeTableResource);
