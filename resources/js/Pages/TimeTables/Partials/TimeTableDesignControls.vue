@@ -33,8 +33,7 @@ const backgroundImages = [
             optionLabel="label"
             optionValue="value"
             placeholder="Background Image"
-            class="w-60"
-            showClear
+            class="w-full"
           />
         </div>
       </AccordionContent>

@@ -89,9 +89,13 @@ const timeFrame = computed(
               {{ formatTime(course.startTime) }} - {{ formatTime(course.endTime) }}
             </div>
             <div class="col-span-9 pl-2">
-              <span class="font-bold mr-4">{{ course.name }}</span>
-              <span class="text-sm">{{ course.instructor }}</span>
-              <span v-if="course.location" class="text-sm ml-4">
+              <span class="font-bold mr-4 inline-block">{{ course.name }}</span>
+              <span class="text-sm inline-block mr-4">{{ course.instructor }}</span>
+              <span
+                v-if="course.location"
+                class="text-sm p-0.5 inline-block"
+                :style="designConfig.highlight"
+              >
                 {{ course.location }}
               </span>
             </div>

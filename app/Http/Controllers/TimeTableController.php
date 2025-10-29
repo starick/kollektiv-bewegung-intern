@@ -89,8 +89,7 @@ class TimeTableController extends Controller
     public function update(UpdateTimeTableRequest $request, TimeTable $timeTable)
     {
         $timeTable->update($request->validated());
-        return redirect()->route('time-tables.show', $timeTable)
-            ->with('success', 'Time table updated successfully.');
+        return redirect()->route('time-tables.show', $timeTable);
     }
 
     /**

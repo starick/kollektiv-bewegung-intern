@@ -44,23 +44,22 @@ const panelRef = ref<InstanceType<typeof OverlayPanel> | null>(null);
 function togglePanel(e: Event) {
   panelRef.value?.toggle(e);
 }
-const previewStyle = computed(() => ({ backgroundColor: modelValue.value }));
 </script>
 
 <template>
   <div class="flex items-center gap-2" :id="props.id ?? 'color-swatch-picker'">
     <Button class="flex items-center gap-2" @click="togglePanel" variant="text">
       <span
-        class="inline-block rounded border border-gray-300"
-        :style="[{ width: '18px', height: '18px' }, previewStyle]"
+        class="inline-block rounded border border-gray-300 w-[18px] h-[18px]"
+        :style="{ backgroundColor: modelValue }"
       />
       <span class="font-mono text-sm text-black">{{ modelValue }}</span>
     </Button>
 
-    <OverlayPanel ref="panelRef" :dismissable="true" style="padding: 0">
+    <OverlayPanel ref="panelRef" :dismissable="true">
       <div class="grid grid-cols-2 gap-3 p-3 w-96 select-none">
         <div>
-          <div class="grid gap-1" style="grid-template-columns: repeat(7, minmax(0, 1fr))">
+          <div class="grid gap-1 grid-cols-7">
             <div v-for="(col, index) in presets" :key="index" class="flex flex-col gap-1">
               <button
                 v-for="color in col"
