@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
-import FormSection from '@/Components/General/FormSection.vue';
 import InputError from '@/Components/Form/InputError.vue';
 import InputLabel from '@/Components/Form/InputLabel.vue';
 import PrimaryButton from '@/Components/General/PrimaryButton.vue';
 import TextInput from '@/Components/Form/TextInput.vue';
 import { route } from 'ziggy-js';
+import FormSection from '@/Components/Form/FormSection.vue';
 
 const form = useForm({
   name: ''

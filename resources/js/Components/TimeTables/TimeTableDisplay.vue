@@ -85,9 +85,7 @@ const timeFrame = computed(
             :key="course.id"
             class="grid grid-cols-12 gap-x-2 py-0.2"
           >
-            <div class="font-medium col-span-2">
-              {{ formatTime(course.startTime) }} - {{ formatTime(course.endTime) }}
-            </div>
+            <div class="font-medium col-span-2">{{ course.startTime }} - {{ course.endTime }}</div>
             <div class="col-span-9 pl-2">
               <span class="font-bold mr-4 inline-block">{{ course.name }}</span>
               <span class="text-sm inline-block mr-4">{{ course.instructor }}</span>

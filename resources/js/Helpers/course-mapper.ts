@@ -1,5 +1,6 @@
 import { Course } from '@/Types/course';
 import { formatDayAndMonth, formatInternationalDate, formatWeekday } from './date-time-helper';
+import { Time } from '@/ValueObjects/time';
 
 export function groupCoursesByDay(courses: Course[]) {
   const map = new Map<
@@ -37,8 +38,20 @@ export function courseToDTO(course: Course): Record<string, string | null> {
     name: course.name,
     instructor: course.instructor,
     date: course.date.toISOString(),
-    start_time: course.startTime.toISOString(),
-    end_time: course.endTime.toISOString(),
+    start_time: course.startTime.toString(),
+    end_time: course.endTime.toString(),
     location: course.location.length > 0 ? course.location : null
   };
+}
+
+export function fromAPI(data: any): Course {
+  return {
+    id: data.id ?? -1,
+    name: data.name ?? 'MISSING NAME',
+    instructor: data.instructor ?? 'MISSING INSTRUCTOR',
+    date: new Date(data.date),
+    startTime: Time.parse(data.start_time),
+    endTime: Time.parse(data.end_time),
+    location: data.location ?? ''
+  } as Course;
 }
