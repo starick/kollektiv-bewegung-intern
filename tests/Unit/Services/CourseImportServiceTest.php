@@ -100,43 +100,6 @@ class CourseImportServiceTest extends TestCase
             'location' => null,
         ]);
     }
-
-    public function test_import_uses_provided_timezone_when_parsing_dates(): void
-    {
-        $tt = TimeTable::create([
-            'year' => 2025,
-            'week' => 1,
-            'created_by' => null,
-            'display_config' => [],
-        ]);
-
-        $tz = new DateTimeZone('UTC');
-
-        $row = collect([
-            'titel'        => 'Quantum Mechanics',
-            'wer'          => 'Richard',
-            'beschreibung' => null,
-            'wo'           => 'Room Q',
-            'start_datum'  => '02.01.2025 14:00', // interpreted as UTC
-            'end_datum'    => '02.01.2025 15:00',
-        ]);
-
-        Excel::shouldReceive('toCollection')
-            ->once()
-            ->andReturn(collect([collect([$row])]));
-
-        $service = new CourseImportService();
-        $collection = $service->import('whatever.xlsx', $tt, $tz);
-
-        $this->assertCount(1, $collection);
-        /** @var Course $course */
-        $course = $collection->first();
-
-        // Ensure the parsed times round-trip to the given timezone and match input strings
-        $this->assertSame('02.01.2025 14:00', $course->start_time->setTimezone($tz)->format('d.m.Y H:i'));
-        $this->assertSame('02.01.2025 15:00', $course->end_time->setTimezone($tz)->format('d.m.Y H:i'));
-    }
-
     public function test_create_course_returns_null_when_title_missing(): void
     {
         $tt = TimeTable::create([

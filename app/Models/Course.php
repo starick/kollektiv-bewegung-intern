@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\TimeCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,14 +16,16 @@ class Course extends Model
         'time_table_id',
         'name',
         'instructor',
+        'date',
         'start_time',
         'end_time',
         'location',
     ];
 
     protected $casts = [
-        'start_time' => 'datetime',
-        'end_time' => 'datetime',
+        'start_time' => TimeCast::class,
+        'end_time' => TimeCast::class,
+        'date' => 'datetime',
     ];
 
 

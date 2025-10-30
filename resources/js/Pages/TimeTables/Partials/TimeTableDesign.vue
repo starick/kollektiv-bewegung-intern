@@ -14,10 +14,13 @@ import useAlert from '@/Composables/use-alerts';
 const props = defineProps<{
   timeTable: TimeTable;
   courses: Array<Course>;
+  isLoading: boolean;
 }>();
 
 const timeTableActions = useTimeTableAtions();
 const alert = useAlert();
+
+const size = ref(800);
 
 const timetableRef = ref<HTMLElement | null>(null);
 
@@ -94,21 +97,36 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-row">
-    <Card
-      class="flex-1 flex-col rounded-r-none overflow-y-scroll h-[800px]"
-      border
-      :menuItems="menuItems"
-    >
-      <TimeTableDesignControls v-model="displayConfig" @onSave="onSave" @onDownload="onDownload" />
-    </Card>
-    <div ref="timetableRef" class="flex-1">
-      <TimeTableDisplay
-        :designConfig="displayConfig"
-        :courses="courses"
-        :year="timeTable.year"
-        :week="timeTable.week"
-      />
+  <div>
+    <div class="flex flex-row">
+      <Card
+        :class="`flex-1 flex-col rounded-r-none overflow-y-scroll h-[${800}px]`"
+        border
+        :menuItems="menuItems"
+      >
+        <TimeTableDesignControls
+          v-model="displayConfig"
+          @onSave="onSave"
+          @onDownload="onDownload"
+        />
+      </Card>
+      <div ref="timetableRef" class="flex-1">
+        <div
+          v-if="isLoading"
+          :class="`flex flex-1 flex-col justify-center bg-gray-100 items-center h-[${800}px] w-[${800}px]`"
+        >
+          <ProgressSpinner />
+        </div>
+
+        <TimeTableDisplay
+          v-else
+          :designConfig="displayConfig"
+          :courses="courses"
+          :year="timeTable.year"
+          :week="timeTable.week"
+          :size="800"
+        />
+      </div>
     </div>
   </div>
 </template>

@@ -127,7 +127,7 @@ watch(
         <Calendar v-model="data[field]" timeOnly hourFormat="24" showIcon />
       </template>
       <template #body="{ data }: { data: Course }">
-        {{ formatTime(data.startTime) }}
+        {{ data.startTime }}
       </template>
     </Column>
 
@@ -136,7 +136,7 @@ watch(
         <Calendar v-model="data[field]" timeOnly hourFormat="24" showIcon />
       </template>
       <template #body="{ data }: { data: Course }">
-        {{ formatTime(data.endTime) }}
+        {{ data.endTime }}
       </template>
     </Column>
 

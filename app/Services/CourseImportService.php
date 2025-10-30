@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\ValueObjects\Time;
 use DateTimeZone;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Facades\Excel;
@@ -48,15 +49,16 @@ class CourseImportService
         }
 
         $dataMapped = array_filter([
-            'start_time'    => Carbon::createFromFormat('d.m.Y H:i', $courseData->get('start_datum'), $timeZone),
-            'end_time'      => Carbon::createFromFormat('d.m.Y H:i', $courseData->get('end_datum'), $timeZone),
+            'date'          => Carbon::createFromFormat('d.m.Y H:i', $courseData->get('start_datum'), $timeZone),
+            'start_time'    => Time::parse($courseData->get('start_datum')),
+            'end_time'      => Time::parse($courseData->get('end_datum')),
             'name'          => $courseData->get('titel') ?? '',
             'instructor'    => $instructor ? mb_strimwidth($instructor,0, 64,'...') : '',
             'location'      => $location,
             'time_table_id' => $timeTable?->id,
         ], fn($data) => $data !== null);
 
-        return $timeTable->isWithinTimeRange($dataMapped['start_time']) 
+        return $timeTable->isWithinTimeRange($dataMapped['date']) 
             ? Course::create($dataMapped)
             : null;
     }

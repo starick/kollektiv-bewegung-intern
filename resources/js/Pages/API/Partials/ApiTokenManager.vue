@@ -7,7 +7,7 @@ import Checkbox from '@/Components/Form/Checkbox.vue';
 import ConfirmationModal from '@/Components/General/ConfirmationModal.vue';
 import DangerButton from '@/Components/General/DangerButton.vue';
 import DialogModal from '@/Components/General/DialogModal.vue';
-import FormSection from '@/Components/General/FormSection.vue';
+import FormSection from '@/Components/Form/FormSection.vue';
 import InputError from '@/Components/Form/InputError.vue';
 import InputLabel from '@/Components/Form/InputLabel.vue';
 import PrimaryButton from '@/Components/General/PrimaryButton.vue';
