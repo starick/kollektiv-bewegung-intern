@@ -44,7 +44,7 @@ export function courseToDTO(course: Course): Record<string, string | null> {
   };
 }
 
-export function fromAPI(data: any): Course {
+export function toCourse(data: any): Course {
   return {
     id: data.id ?? -1,
     name: data.name ?? 'MISSING NAME',

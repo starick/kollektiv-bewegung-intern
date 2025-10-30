@@ -20,7 +20,7 @@ class TimeTableResource extends JsonResource
             'week' => $this->week,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
-            'creator' => new UserResource($this->whenLoaded('creator')),
+            'creator' => (new UserResource($this->whenLoaded('creator')))->resolve(),
             'courses' => CourseResource::collection($this->whenLoaded('courses')),
             'coursesCount' => $this->courses()->count(),
             'displayConfig' => json_decode($this->display_config),

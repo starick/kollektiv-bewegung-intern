@@ -16,6 +16,7 @@ import {
   DataTable,
   FileUpload,
   InputNumber,
+  ProgressSpinner,
   Row,
   Select,
   Slider,
@@ -50,6 +51,7 @@ export function addComponents(app: App): App {
   app.component('AccordionPanel', AccordionPanel);
   app.component('AccordionHeader', AccordionHeader);
   app.component('AccordionContent', AccordionContent);
+  app.component('ProgressSpinner', ProgressSpinner);
 
   // import Dropdown from 'primevue/dropdown';
   // import InputText from 'primevue/inputtext';

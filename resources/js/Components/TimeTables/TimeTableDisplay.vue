@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { defineProps, computed, toRef } from 'vue';
+import { defineProps, computed } from 'vue';
 import { Course } from '@/Types/course';
-import { endOfWeek, formatDate, formatTime, startOfWeek } from '@/Helpers/date-time-helper';
+import { endOfWeek, formatDate, startOfWeek } from '@/Helpers/date-time-helper';
 import { groupCoursesByDay } from '@/Helpers/course-mapper';
 import { TimeTableDesignConfig } from '@/Types/time-table';
 
@@ -10,6 +10,7 @@ const props = defineProps<{
   year: number;
   designConfig: TimeTableDesignConfig;
   courses: Array<Course>;
+  size: number;
 }>();
 
 const groupedCourses = computed(() => groupCoursesByDay(props.courses));
@@ -33,7 +34,7 @@ const timeFrame = computed(
 
 <template>
   <div
-    class="relative flex flex-col w-[800px] h-[800px] shadow-lg overflow-hidden bg-gray-300"
+    :class="`relative flex flex-col w-[${size}px] h-[${size}px] shadow-lg overflow-hidden bg-gray-300`"
     :style="backgroundStyle"
   >
     <h1 class="text-center text-3xl font-bold tracking-wider" :style="designConfig.header ?? {}">
