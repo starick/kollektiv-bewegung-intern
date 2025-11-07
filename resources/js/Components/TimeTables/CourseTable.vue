@@ -76,8 +76,7 @@ watch(
       </template>
       <Column field="date" header="Date" sortable>
         <template #editor="{ data, field }">
-          {{ data.date }}
-          <Calendar v-model="data[field]" dateFormat="dd.mm.yyyy" showIcon />
+          <Calendar v-model="data[field]" dateFormat="dd.mm.yy" showIcon />
         </template>
         <template #body="{ data }: { data: Course }">
           {{ formatDate(data.date) }}
