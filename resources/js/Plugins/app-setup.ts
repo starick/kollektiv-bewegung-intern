@@ -13,6 +13,8 @@ import {
   Calendar,
   ColorPicker,
   Column,
+  ConfirmDialog,
+  ContextMenu,
   DataTable,
   FileUpload,
   InputNumber,
@@ -45,6 +47,8 @@ export function addComponents(app: App): App {
   app.component('Tabs', Tabs);
   app.component('Textarea', Textarea);
   app.component('Toast', Toast);
+  app.component('ConfirmDialog', ConfirmDialog);
+  app.component('ContextMenu', ContextMenu);
   app.component('Calendar', Calendar);
   app.component('Select', Select);
   app.component('Accordion', Accordion);

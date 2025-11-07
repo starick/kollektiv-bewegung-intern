@@ -62,6 +62,7 @@ watch(
       <main>
         <div class="py-10">
           <Toast class="mt-12" />
+          <ConfirmDialog />
           <div class="my-2 max-w-7xl mx-auto sm:px-6 lg:px-8">
             <slot />
           </div>

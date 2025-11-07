@@ -6,6 +6,7 @@ use App\Http\Requests\StoreCourseRequest;
 use App\Http\Requests\UpdateCourseRequest;
 use App\Models\Course;
 use App\Models\TimeTable;
+use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
@@ -30,17 +31,17 @@ class CourseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCourseRequest $request)
+    public function store(StoreCourseRequest $request, TimeTable $timeTable)
     {
         $course = Course::create($request->validated());
-        return redirect()->route('time-tables.show', $course->timeTable)
+        return redirect()->route('time-tables.show', $timeTable)
             ->with('success', 'Course created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Course $course)
+    public function show(Request $request, TimeTable $timeTable, Course $course)
     {
         // probably not needed
         return redirect()->route('not-found');
@@ -49,7 +50,7 @@ class CourseController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Course $course)
+    public function edit(Request $request, TimeTable $timeTable, Course $course)
     {
         // probably not needed
         return redirect()->route('not-found');
@@ -68,7 +69,7 @@ class CourseController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Course $course)
+    public function destroy(Request $request, TimeTable $timeTable, Course $course)
     {
         $course->delete();
         return redirect()->route('time-tables.show', $course->timeTable)
