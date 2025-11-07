@@ -1,3 +1,5 @@
+import { courseToDTO } from '@/Helpers/course-mapper';
+import { Course } from '@/Types/course';
 import { InertiaCallbacks } from '@/Types/intertia-callbacks';
 import { Payload } from '@/Types/payload';
 import { router } from '@inertiajs/vue3';
@@ -24,7 +26,7 @@ export default function useCourseActions(timeTableId: number) {
   }
 
   function edit(courseId: number, payload: Payload, cb?: InertiaCallbacks) {
-    router.put(url.update(courseId), payload, options(cb));
+    router.put(url.update(courseId), courseToDTO(payload as Course), options(cb));
   }
 
   function remove(courseId: number, cb?: InertiaCallbacks) {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCourseRequest;
 use App\Http\Requests\UpdateCourseRequest;
 use App\Models\Course;
+use App\Models\TimeTable;
 
 class CourseController extends Controller
 {
@@ -57,7 +58,7 @@ class CourseController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCourseRequest $request, Course $course)
+    public function update(UpdateCourseRequest $request, TimeTable $timeTable, Course $course)
     {
         $course->update($request->validated());
         return redirect()->route('time-tables.show', $course->timeTable)

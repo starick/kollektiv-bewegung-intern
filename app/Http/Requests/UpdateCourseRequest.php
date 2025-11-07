@@ -11,7 +11,8 @@ class UpdateCourseRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        // TODO authorization logic
+        return true;
     }
 
     /**
@@ -25,8 +26,8 @@ class UpdateCourseRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'instructor' => ['required', 'string', 'max:255'],
             'location' => ['nullable', 'string', 'max:255'],
-            'start_time' => ['required', 'date'],
-            'end_time' => ['required', 'date', 'after:start_time'],
+            'start_time' => ['required', 'string', 'date_format:H:i'],
+            'end_time' => ['required', 'string', 'date_format:H:i', 'after:start_time'],
         ];
     }
 }

@@ -3,10 +3,9 @@ import { computed, defineProps, watch } from 'vue';
 
 import AppLayout from '@/Components/Layout/AppLayout.vue';
 import TimeTableInfo from './Partials/TimeTableInfo.vue';
-import CourseTable from '../../Components/TimeTables/CourseTable.vue';
 import TimeTableDesign from './Partials/TimeTableDesign.vue';
 import { timetableShowModel, TimeTableShowProps } from '@/Models/TimeTables/timetable-show-model';
-import DataTableTest from '@/Components/TimeTables/DataTableTest.vue';
+import CourseTable from '@/Components/TimeTables/CourseTable.vue';
 import { toCourse } from '@/Helpers/course-mapper';
 
 const props = defineProps<TimeTableShowProps>();
@@ -38,7 +37,7 @@ watch(() => props.timeTable, loadCourses, { immediate: true });
           />
         </TabPanel>
         <TabPanel value="1">
-          <DataTableTest
+          <CourseTable
             :timeTable="timeTable"
             :courses="coursesMapped"
             @row-add="addCourse"

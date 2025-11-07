@@ -6,6 +6,7 @@ import { Course } from '@/Types/course';
 import { formatDate } from '@/Helpers/date-time-helper';
 import TimeInput from '../Form/TimeInput.vue';
 import { newCourse } from '@/Helpers/course-mapper';
+import { DataTableRowEditSaveEvent } from 'primevue';
 
 const emit = defineEmits(['reload', 'row-save', 'row-cancel', 'row-delete', 'row-add']);
 
@@ -16,16 +17,14 @@ const props = defineProps({
 
 const coursesRef = ref([]);
 const editingRows = ref([]);
-const statuses = ref([
-  { label: 'In Stock', value: 'INSTOCK' },
-  { label: 'Low Stock', value: 'LOWSTOCK' },
-  { label: 'Out of Stock', value: 'OUTOFSTOCK' }
-]);
 
-const onRowEditSave = (event) => {
-  let { newData, index } = event;
+const onRowEditSave = (event: DataTableRowEditSaveEvent) => {
+  if (JSON.stringify(event.data) === JSON.stringify(event.newData)) {
+    return;
+  }
 
-  coursesRef.value[index] = newData;
+  coursesRef.value[event.index] = event.newData;
+  emit('row-save', event.newData);
 };
 
 function onAddRow() {
@@ -77,7 +76,8 @@ watch(
       </template>
       <Column field="date" header="Date" sortable>
         <template #editor="{ data, field }">
-          <Calendar v-model="data[field]" dateFormat="yy-mm-dd" showIcon />
+          {{ data.date }}
+          <Calendar v-model="data[field]" dateFormat="dd.mm.yyyy" showIcon />
         </template>
         <template #body="{ data }: { data: Course }">
           {{ formatDate(data.date) }}

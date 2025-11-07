@@ -46,7 +46,7 @@ export function timetableShowModel(props: TimeTableShowProps) {
   function addCourse(course: Course) {
     courseActions.add(courseToDTO(course), {
       onSuccess: () => {
-        alert.add('course deleted', 'success');
+        alert.add('course added', 'success');
         loadCourses();
       },
       onError: (e: Event) => alert.error('Error adding course:', e)
@@ -54,9 +54,9 @@ export function timetableShowModel(props: TimeTableShowProps) {
   }
 
   function saveCourse(course: Course) {
-    courseActions.edit(course.id, courseToDTO(course), {
+    courseActions.edit(course.id, course, {
       onSuccess: () => {
-        alert.add('course deleted', 'success');
+        alert.add('course updated', 'success');
         loadCourses();
       },
       onError: (e: Event) => alert.error('Error saving course:', e)

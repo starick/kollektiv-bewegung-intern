@@ -34,10 +34,19 @@ export function groupCoursesByDay(courses: Course[]) {
 }
 
 export function courseToDTO(course: Course): Record<string, string | null> {
+  const dateString = course.date instanceof Date ? course.date.toISOString() : course.date;
+  console.log({
+    name: course.name,
+    instructor: course.instructor,
+    date: dateString,
+    start_time: course.startTime.toString(),
+    end_time: course.endTime.toString(),
+    location: course.location.length > 0 ? course.location : null
+  });
   return {
     name: course.name,
     instructor: course.instructor,
-    date: course.date.toISOString(),
+    date: dateString,
     start_time: course.startTime.toString(),
     end_time: course.endTime.toString(),
     location: course.location.length > 0 ? course.location : null
