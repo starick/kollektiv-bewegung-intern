@@ -100,7 +100,7 @@ watch(
   <div>
     <div class="flex flex-row">
       <Card
-        :class="`flex-1 flex-col rounded-r-none overflow-y-scroll h-[${800}px]`"
+        :class="`flex-1 flex-col rounded-r-none overflow-y-scroll h-[${size}px]`"
         border
         :menuItems="menuItems"
       >
@@ -113,7 +113,7 @@ watch(
       <div ref="timetableRef" class="flex-1">
         <div
           v-if="isLoading"
-          :class="`flex flex-1 flex-col justify-center bg-gray-100 items-center h-[${800}px] w-[${800}px]`"
+          :class="`flex flex-1 flex-col justify-center bg-gray-100 items-center h-[${size}px] w-[${size}px]`"
         >
           <ProgressSpinner />
         </div>
@@ -124,7 +124,7 @@ watch(
           :courses="courses"
           :year="timeTable.year"
           :week="timeTable.week"
-          :size="800"
+          :size="size"
         />
       </div>
     </div>

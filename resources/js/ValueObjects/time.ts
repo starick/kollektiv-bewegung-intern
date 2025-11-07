@@ -1,10 +1,10 @@
 import { min } from 'date-fns';
 
 export class Time {
-  hour: number;
-  minute: number;
+  public hour: number;
+  public minute: number;
 
-  private constructor(hour: number, minute: number) {
+  public constructor(hour: number, minute: number) {
     if (hour < 0 || hour > 23) {
       throw new RangeError('Hour must be between 0 and 23');
     }
@@ -60,6 +60,6 @@ export class Time {
   }
 
   toJSON(): string {
-    return JSON.stringify(this);
+    return this.toString();
   }
 }

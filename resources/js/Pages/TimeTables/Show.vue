@@ -1,16 +1,22 @@
 <script setup lang="ts">
-import { defineProps, watch } from 'vue';
+import { computed, defineProps, watch } from 'vue';
 
 import AppLayout from '@/Components/Layout/AppLayout.vue';
 import TimeTableInfo from './Partials/TimeTableInfo.vue';
 import CourseTable from '../../Components/TimeTables/CourseTable.vue';
 import TimeTableDesign from './Partials/TimeTableDesign.vue';
 import { timetableShowModel, TimeTableShowProps } from '@/Models/TimeTables/timetable-show-model';
+import DataTableTest from '@/Components/TimeTables/DataTableTest.vue';
+import { toCourse } from '@/Helpers/course-mapper';
 
 const props = defineProps<TimeTableShowProps>();
 
 const { isLoading, title, reload, loadCourses, deleteCourse, addCourse, saveCourse } =
   timetableShowModel(props);
+
+const coursesMapped = computed(() => {
+  return props.courses && props.courses.length ? props.courses.map(toCourse) : [];
+});
 
 watch(() => props.timeTable, loadCourses, { immediate: true });
 </script>
@@ -25,13 +31,24 @@ watch(() => props.timeTable, loadCourses, { immediate: true });
       </TabList>
       <TabPanels>
         <TabPanel value="0">
-          <TimeTableDesign :timeTable="timeTable" :courses="courses" :is-loading="isLoading" />
+          <TimeTableDesign
+            :timeTable="timeTable"
+            :courses="coursesMapped"
+            :is-loading="isLoading"
+          />
         </TabPanel>
         <TabPanel value="1">
-          <div v-if="isLoading" class="flex flex-1">
+          <DataTableTest
+            :timeTable="timeTable"
+            :courses="coursesMapped"
+            @row-add="addCourse"
+            @row-save="saveCourse"
+            @row-delete="deleteCourse"
+            @reload="loadCourses"
+          />
+          <!-- <div v-if="isLoading" class="flex flex-1">
             <ProgressSpinner />
           </div>
-
           <CourseTable
             v-else
             :timeTable="timeTable"
@@ -41,7 +58,7 @@ watch(() => props.timeTable, loadCourses, { immediate: true });
             @row-delete="deleteCourse"
             @row-save="saveCourse"
             @row-add="addCourse"
-          />
+          /> -->
         </TabPanel>
         <TabPanel value="2">
           <TimeTableInfo :timeTable="timeTable" />

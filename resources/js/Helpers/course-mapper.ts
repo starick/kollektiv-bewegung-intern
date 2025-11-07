@@ -50,8 +50,24 @@ export function toCourse(data: any): Course {
     name: data.name ?? 'MISSING NAME',
     instructor: data.instructor ?? 'MISSING INSTRUCTOR',
     date: new Date(data.date),
-    startTime: Time.parse(data.start_time),
-    endTime: Time.parse(data.end_time),
+    startTime: Time.parse(data.startTime),
+    endTime: Time.parse(data.endTime),
     location: data.location ?? ''
   } as Course;
+}
+
+export function newCourse(): Course {
+  const now = new Date();
+
+  const tempId = -Date.now();
+
+  return {
+    id: tempId,
+    date: now,
+    startTime: new Time(10, 0),
+    endTime: new Time(12, 0),
+    name: '',
+    instructor: '',
+    location: ''
+  };
 }

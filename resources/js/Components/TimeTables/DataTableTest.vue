@@ -16,11 +16,6 @@ const props = defineProps({
 
 const coursesRef = ref([]);
 const editingRows = ref([]);
-const statuses = ref([
-  { label: 'In Stock', value: 'INSTOCK' },
-  { label: 'Low Stock', value: 'LOWSTOCK' },
-  { label: 'Out of Stock', value: 'OUTOFSTOCK' }
-]);
 
 const onRowEditSave = (event) => {
   let { newData, index } = event;
@@ -77,7 +72,7 @@ watch(
       </template>
       <Column field="date" header="Date" sortable>
         <template #editor="{ data, field }">
-          <Calendar v-model="data[field]" dateFormat="yy-mm-dd" showIcon />
+          <Calendar v-model="data[field]" dateFormat="dd.mm.yyyy" showIcon />
         </template>
         <template #body="{ data }: { data: Course }">
           {{ formatDate(data.date) }}

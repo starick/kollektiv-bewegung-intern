@@ -22,7 +22,9 @@ const backgroundStyle = computed(() => {
     backgroundImage: bg.image ? `url(${bg.image})` : 'none',
     backgroundSize: bg.size ?? 'cover',
     backgroundPosition: bg.position ?? 'center',
-    backgroundRepeat: bg.repeat ?? 'no-repeat'
+    backgroundRepeat: bg.repeat ?? 'no-repeat',
+    width: `${props.size}px`,
+    height: `${props.size}px`
   };
 });
 
@@ -34,7 +36,7 @@ const timeFrame = computed(
 
 <template>
   <div
-    :class="`relative flex flex-col w-[${size}px] h-[${size}px] shadow-lg overflow-hidden bg-gray-300`"
+    :class="`relative flex flex-col shadow-lg overflow-hidden bg-gray-300`"
     :style="backgroundStyle"
   >
     <h1 class="text-center text-3xl font-bold tracking-wider" :style="designConfig.header ?? {}">
