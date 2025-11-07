@@ -6,7 +6,7 @@ import { Course } from '@/Types/course';
 import { formatDate } from '@/Helpers/date-time-helper';
 import TimeInput from '../Form/TimeInput.vue';
 import { newCourse } from '@/Helpers/course-mapper';
-import { DataTableRowEditSaveEvent } from 'primevue';
+import { DataTableRowEditSaveEvent, useConfirm } from 'primevue';
 
 const emit = defineEmits(['reload', 'row-save', 'row-cancel', 'row-delete', 'row-add']);
 
@@ -15,8 +15,20 @@ const props = defineProps({
   courses: { type: Array as PropType<Course[]>, default: () => [] }
 });
 
+const confirm = useConfirm();
+
+const selectedRow = ref<Course | null>(null);
+const contextMenu = ref<any>(null);
+const contextMenuOptions = ref([
+  { label: 'Delete', icon: 'pi pi-trash', command: () => onDeleteRow(selectedRow.value) }
+]);
+
 const coursesRef = ref([]);
 const editingRows = ref([]);
+
+const onRowContextMenu = (event) => {
+  contextMenu.value?.show(event.originalEvent);
+};
 
 const onRowEditSave = (event: DataTableRowEditSaveEvent) => {
   if (JSON.stringify(event.data) === JSON.stringify(event.newData)) {
@@ -35,11 +47,20 @@ function onAddRow() {
 }
 
 function onDeleteRow(row: Course) {
-  emit('row-delete', row);
-  coursesRef.value = coursesRef.value.filter((r) => r.id !== row.id);
-  const ed = { ...editingRows.value };
-  delete ed[row.id as any];
-  editingRows.value = ed;
+  confirm.require({
+    header: 'Confirm deletion',
+    message: 'Delete this course?',
+    icon: 'pi pi-exclamation-triangle',
+    acceptLabel: 'Delete',
+    rejectLabel: 'Cancel',
+    accept: () => {
+      emit('row-delete', row);
+      coursesRef.value = coursesRef.value.filter((r) => r.id !== row.id);
+      const rows = { ...editingRows.value };
+      delete rows[row.id as any];
+      editingRows.value = rows;
+    }
+  });
 }
 
 watch(
@@ -53,11 +74,15 @@ watch(
 
 <template>
   <div class="card">
+    <ContextMenu ref="contextMenu" :model="contextMenuOptions" @hide="selectedRow = null" />
     <DataTable
       v-model:editingRows="editingRows"
+      v-model:contextMenuSelection="selectedRow"
       :value="coursesRef"
+      contextMenu
       editMode="row"
       dataKey="id"
+      @rowContextmenu="onRowContextMenu"
       @row-edit-save="onRowEditSave"
       :pt="{
         table: { style: 'min-width: 50rem' },

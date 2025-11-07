@@ -9,6 +9,7 @@ import { ZiggyVue } from 'ziggy-js';
 import Aura from '@primevue/themes/aura';
 import '../css/styles.scss';
 import { addComponents } from '@/Plugins/app-setup';
+import { ConfirmationService } from 'primevue';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -37,6 +38,7 @@ createInertiaApp({
     });
     inertiaApp.use(ToastService);
     addComponents(inertiaApp);
+    inertiaApp.use(ConfirmationService);
     inertiaApp.mount(el);
 
     return inertiaApp;
