@@ -58,10 +58,5 @@ export function addComponents(app: App): App {
   app.component('AccordionContent', AccordionContent);
   app.component('ProgressSpinner', ProgressSpinner);
 
-  // import Dropdown from 'primevue/dropdown';
-  // import InputText from 'primevue/inputtext';
-  // import InputNumber from 'primevue/inputnumber';
-  // import Slider from 'primevue/slider';
-  // import ColorPicker from 'primevue/colorpicker';
   return app;
 }
