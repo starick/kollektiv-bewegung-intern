@@ -33,7 +33,10 @@ class CourseController extends Controller
      */
     public function store(StoreCourseRequest $request, TimeTable $timeTable)
     {
-        $course = Course::create($request->validated());
+        $course = Course::create([
+            ...$request->validated(),
+            'time_table_id' => $timeTable->id,
+        ]);
         return redirect()->route('time-tables.show', $timeTable)
             ->with('success', 'Course created successfully.');
     }

@@ -25,6 +25,7 @@ class StoreCourseRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'instructor' => ['required', 'string', 'max:255'],
             'location' => ['nullable', 'string', 'max:255'],
+            'date' => ['required', 'date'],
             'start_time' => ['required', 'string', 'date_format:H:i'],
             'end_time' => ['required', 'string', 'date_format:H:i', 'after:start_time'],
         ];
