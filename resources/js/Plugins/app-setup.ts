@@ -16,6 +16,7 @@ import {
   ConfirmDialog,
   ContextMenu,
   DataTable,
+  Dialog,
   FileUpload,
   InputNumber,
   ProgressSpinner,
@@ -47,8 +48,8 @@ export function addComponents(app: App): App {
   app.component('Tabs', Tabs);
   app.component('Textarea', Textarea);
   app.component('Toast', Toast);
-  app.component('ConfirmDialog', ConfirmDialog);
   app.component('ContextMenu', ContextMenu);
+  app.component('Dialog', Dialog);
   app.component('Calendar', Calendar);
   app.component('Select', Select);
   app.component('Accordion', Accordion);
@@ -56,11 +57,7 @@ export function addComponents(app: App): App {
   app.component('AccordionHeader', AccordionHeader);
   app.component('AccordionContent', AccordionContent);
   app.component('ProgressSpinner', ProgressSpinner);
+  app.component('ConfirmDialog', ConfirmDialog);
 
-  // import Dropdown from 'primevue/dropdown';
-  // import InputText from 'primevue/inputtext';
-  // import InputNumber from 'primevue/inputnumber';
-  // import Slider from 'primevue/slider';
-  // import ColorPicker from 'primevue/colorpicker';
   return app;
 }

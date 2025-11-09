@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { router, useForm, usePage } from '@inertiajs/vue3';
 import ActionMessage from '@/Components/General/ActionMessage.vue';
 import ActionSection from '@/Components/General/ActionSection.vue';
-import ConfirmationModal from '@/Components/General/ConfirmationModal.vue';
+import ConfirmationModal from '@/Components/Form/ConfirmationModal.vue';
 import DangerButton from '@/Components/General/DangerButton.vue';
 import DialogModal from '@/Components/General/DialogModal.vue';
 import FormSection from '@/Components/Form/FormSection.vue';

@@ -4,7 +4,6 @@ import { useForm } from '@inertiajs/vue3';
 import ActionMessage from '@/Components/General/ActionMessage.vue';
 import ActionSection from '@/Components/General/ActionSection.vue';
 import Checkbox from '@/Components/Form/Checkbox.vue';
-import ConfirmationModal from '@/Components/General/ConfirmationModal.vue';
 import DangerButton from '@/Components/General/DangerButton.vue';
 import DialogModal from '@/Components/General/DialogModal.vue';
 import FormSection from '@/Components/Form/FormSection.vue';
@@ -15,6 +14,7 @@ import SecondaryButton from '@/Components/General/SecondaryButton.vue';
 import SectionBorder from '@/Components/General/SectionBorder.vue';
 import TextInput from '@/Components/Form/TextInput.vue';
 import { route } from 'ziggy-js';
+import ConfirmationModal from '@/Components/Form/ConfirmationModal.vue';
 
 const props = defineProps({
   tokens: Array,
