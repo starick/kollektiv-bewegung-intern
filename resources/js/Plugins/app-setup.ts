@@ -57,6 +57,7 @@ export function addComponents(app: App): App {
   app.component('AccordionHeader', AccordionHeader);
   app.component('AccordionContent', AccordionContent);
   app.component('ProgressSpinner', ProgressSpinner);
+  app.component('ConfirmDialog', ConfirmDialog);
 
   return app;
 }

@@ -68,6 +68,10 @@ function onDeleteRow(row: Course) {
   });
 }
 
+const onReload = () => {
+  emit('reload');
+};
+
 watch(
   () => props.courses,
   (list) => {
