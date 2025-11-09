@@ -5,8 +5,8 @@ import { TimeTable } from '@/Types/time-table';
 import { Course } from '@/Types/course';
 import { formatDate } from '@/Helpers/date-time-helper';
 import TimeInput from '../Form/TimeInput.vue';
-import { newCourse } from '@/Helpers/course-mapper';
 import { DataTableRowEditSaveEvent, useConfirm } from 'primevue';
+import CourseCreateModal from './CourseCreateModal.vue';
 
 const emit = defineEmits(['reload', 'row-save', 'row-cancel', 'row-delete', 'row-add']);
 
@@ -25,6 +25,11 @@ const contextMenuOptions = ref([
 
 const coursesRef = ref([]);
 const editingRows = ref([]);
+const showCreateModal = ref(false);
+
+const toggleCreateModal = () => {
+  showCreateModal.value = !showCreateModal.value;
+};
 
 const onRowContextMenu = (event) => {
   contextMenu.value?.show(event.originalEvent);
@@ -37,10 +42,10 @@ const onRowEditSave = (event: DataTableRowEditSaveEvent) => {
 
   coursesRef.value[event.index] = event.newData;
   emit('row-save', event.newData);
+  showCreateModal.value = false;
 };
 
-function onAddRow() {
-  const row = newCourse();
+function onAddRow(row: Course) {
   coursesRef.value = [row, ...coursesRef.value];
   editingRows.value = { ...editingRows.value, [row.id as any]: true };
   emit('row-add', row);
@@ -75,6 +80,11 @@ watch(
 <template>
   <div class="card">
     <ContextMenu ref="contextMenu" :model="contextMenuOptions" @hide="selectedRow = null" />
+    <CourseCreateModal
+      v-model:visible="showCreateModal"
+      @close="toggleCreateModal"
+      @save="onAddRow"
+    />
     <DataTable
       v-model:editingRows="editingRows"
       v-model:contextMenuSelection="selectedRow"
@@ -96,7 +106,7 @@ watch(
       <template #header>
         <div class="flex flex-wrap items-center justify-end gap-6">
           <Button icon="pi pi-refresh" rounded @click="onReload" />
-          <Button icon="pi pi-plus" rounded @click="onAddRow" />
+          <Button icon="pi pi-plus" rounded @click="toggleCreateModal" />
         </div>
       </template>
       <Column field="date" header="Date" sortable>

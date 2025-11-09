@@ -1,70 +1,99 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { Course } from '@/Types/course';
 import InfoField from '../General/InfoField.vue';
 import TextInput from '../Form/TextInput.vue';
 import Card from '../General/Card.vue';
+import TimeInput from '../Form/TimeInput.vue';
+import { Time } from '@/ValueObjects/time';
+import { newCourse } from '@/Helpers/course-mapper';
 
-defineProps<{
-  visible: boolean;
-}>();
-
+const visible = defineModel<boolean>('visible');
 const emit = defineEmits(['save', 'close']);
 
-function makeEmptyCourse(): Course {
-  const now = new Date();
-  const start = new Date(now);
-  start.setMinutes(0, 0, 0);
-  const end = new Date(start);
-  end.setHours(end.getHours() + 1);
+const course = ref<Course>(newCourse());
+const errors = ref<{ name?: string; instructor?: string }>({});
 
-  const tempId = -Date.now();
+watch(visible, (val) => {
+  if (val) {
+    course.value = newCourse();
+    errors.value = {};
+  }
+});
 
-  return {
-    id: tempId,
-    date: now,
-    startTime: start,
-    endTime: end,
-    name: '',
-    instructor: '',
-    place: ''
-  } as unknown as Course;
+function validate(): boolean {
+  errors.value = {};
+  if (!course.value.name.trim()) {
+    errors.value.name = 'Title is required.';
+  }
+  if (!course.value.instructor.trim()) {
+    errors.value.instructor = 'Instructor is required.';
+  }
+  return Object.keys(errors.value).length === 0;
 }
 
-const course = ref<Course>(makeEmptyCourse());
+function onSave() {
+  if (validate()) {
+    emit('save', course.value);
+  }
+}
 </script>
 
 <template>
-  <OverlayPanel :visible="visible" :dismissable="true" @hide="$emit('close')">
+  <Dialog :visible="visible" modal :closable="false">
     <Card class="mb-4">
       <template #header>
         <div class="flex justify-between items-center">
           <h3 class="text-lg font-medium">Create New Course</h3>
-          <button class="text-gray-500 hover:text-gray-700" @click="$emit('close')">&times;</button>
+          <Button
+            icon="pi pi-times"
+            rounded
+            class="text-gray-500 hover:text-gray-700"
+            @click="$emit('close')"
+          />
         </div>
       </template>
-      <div class="flex flex-row">
+
+      <form @submit.prevent="onSave" class="grid grid-cols-2 gap-4 mb-4">
         <InfoField title="date">
           <Calendar v-model="course.date" dateFormat="yy-mm-dd" showIcon />
         </InfoField>
-        <InfoField title="start time">
-          // TODO custom time picker
-          {{ course.startTime }}
-        </InfoField>
-        <InfoField title="end time">
-          // TODO custom time picker
-          {{ course.startTime }}
-        </InfoField>
+
+        <div class="flex flex-row gap-4">
+          <InfoField title="start time">
+            <TimeInput v-model="course.startTime" />
+          </InfoField>
+          <InfoField title="end time">
+            <TimeInput v-model="course.endTime" />
+          </InfoField>
+        </div>
+
         <InfoField title="title">
-          <TextInput v-model="course.name" />
+          <TextInput
+            v-model="course.name"
+            class="w-full"
+            :class="{ 'border-red-500': errors.name }"
+          />
+          <small v-if="errors.name" class="text-red-500">{{ errors.name }}</small>
         </InfoField>
+
         <InfoField title="instructor">
-          <TextInput v-model="course.instructor" />
+          <TextInput
+            v-model="course.instructor"
+            class="w-full"
+            :class="{ 'border-red-500': errors.instructor }"
+          />
+          <small v-if="errors.instructor" class="text-red-500">{{ errors.instructor }}</small>
         </InfoField>
-        <InfoField title="place">
-          <TextInput v-model="course.location" clearable />
+
+        <InfoField title="place (leave empty if in Bewegungsraum)">
+          <TextInput v-model="course.location" clearable class="w-full" />
         </InfoField>
-      </div>
+
+        <div class="col-span-2 flex justify-center mt-6">
+          <Button label="Save" icon="pi pi-check" class="w-1/2" type="submit" />
+        </div>
+      </form>
     </Card>
-  </OverlayPanel>
+  </Dialog>
 </template>
