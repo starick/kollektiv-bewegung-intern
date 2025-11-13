@@ -1,22 +1,30 @@
 <script setup lang="ts">
 import { Time } from '@/ValueObjects/time';
-import { Value } from 'sass';
-import { computed } from 'vue';
-
-const emits = defineEmits(['update:modelValue']);
+import { computed, watch } from 'vue';
 
 const modelValue = defineModel<Time>({ required: true });
 </script>
 
 <template>
-  <div class="flex flex-row gap-2">
-    <input
-      class="w-16 border border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+  <div class="flex items-center">
+    <InputNumber
       v-model="modelValue.hour"
+      :min="0"
+      :max="23"
+      inputClass="w-12 text-center"
+      showButtons
+      button-layout="vertical"
     />
-    <input
-      class="w-16 border border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+    <span class="text-gray-500 select-none mx-1">:</span>
+    <InputNumber
       v-model="modelValue.minute"
+      :min="0"
+      :max="59"
+      :step="15"
+      :prefix="modelValue.minute < 10 ? '0' : ''"
+      inputClass="w-12 text-center mx-0"
+      showButtons
+      button-layout="vertical"
     />
   </div>
 </template>
