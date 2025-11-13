@@ -26,22 +26,22 @@ const timetableRef = ref<HTMLElement | null>(null);
 
 const displayConfig = reactive({
   background: {
-    image: '/img/background-01.png'
+    image: '/img/abstract-1.png'
   },
   body: {
     fontSize: '1em',
-    color: '#c1c1c1',
+    color: '#424242',
     scale: 1,
-    'line-height': 1.2,
+    'line-height': 1.6,
     'margin-top': '0.5em'
   },
   highlight: {
-    color: '#f0f0ff',
-    background: '#679'
+    color: '#B8611A',
+    background: '#F5DCB6'
   },
   header: {
-    color: '#b0e0ff',
-    scale: 1.2
+    color: '#A14800',
+    scale: 1.15
   }
 });
 
