@@ -2,7 +2,17 @@ import { Course } from '@/Types/course';
 import { formatDayAndMonth, formatInternationalDate, formatWeekday } from './date-time-helper';
 import { Time } from '@/ValueObjects/time';
 
+function compareCourses(a: Course, b: Course): number {
+  if (a.date < b.date) {
+    return -1;
+  }
+  if (a.date > b.date) {
+    return 1;
+  }
+  return a.startTime.compare(b.startTime);
+}
 export function groupCoursesByDay(courses: Course[]) {
+  const coursesOrdered = courses.sort(compareCourses);
   const map = new Map<
     string,
     {
@@ -13,7 +23,7 @@ export function groupCoursesByDay(courses: Course[]) {
     }
   >();
 
-  for (const course of courses ?? []) {
+  for (const course of coursesOrdered ?? []) {
     const dateKey = formatInternationalDate(course.date);
 
     if (map.has(dateKey)) {
@@ -35,14 +45,7 @@ export function groupCoursesByDay(courses: Course[]) {
 
 export function courseToDTO(course: Course): Record<string, string | null> {
   const dateString = course.date instanceof Date ? course.date.toISOString() : course.date;
-  console.log({
-    name: course.name,
-    instructor: course.instructor,
-    date: dateString,
-    start_time: course.startTime.toString(),
-    end_time: course.endTime.toString(),
-    location: course.location.length > 0 ? course.location : null
-  });
+
   return {
     name: course.name,
     instructor: course.instructor,

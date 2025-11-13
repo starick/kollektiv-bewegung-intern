@@ -62,4 +62,9 @@ export class Time {
   toJSON(): string {
     return this.toString();
   }
+
+  compare(other: Time): number {
+    if (this.hour !== other.hour) return this.hour - other.hour;
+    return this.minute - other.minute;
+  }
 }
