@@ -26,6 +26,7 @@ const contextMenuOptions = ref([
 const coursesRef = ref([]);
 const editingRows = ref([]);
 const showCreateModal = ref(false);
+const rowDataBeforeEdit = ref<string | null>(null);
 
 const toggleCreateModal = () => {
   showCreateModal.value = !showCreateModal.value;
@@ -35,9 +36,30 @@ const onRowContextMenu = (event) => {
   contextMenu.value?.show(event.originalEvent);
 };
 
+const onRowEditInit = (event) => {
+  rowDataBeforeEdit.value = JSON.stringify(event.data);
+};
+
+const onRowEditCancel = (event) => {
+  rowDataBeforeEdit.value = null;
+};
+
 const onRowEditSave = (event: DataTableRowEditSaveEvent) => {
-  if (JSON.stringify(event.data) === JSON.stringify(event.newData)) {
-    return;
+  if (rowDataBeforeEdit.value === JSON.stringify(event.newData)) {
+    if (
+      event.data.startTime.compare(event.newData.startTime) === 0 &&
+      event.data.endTime.compare(event.newData.endTime) === 0
+    ) {
+      console.log(
+        'No changes detected, cancelling edit',
+        event.data.startTime.compare(event.newData.startTime),
+        event.data.endTime.compare(event.newData.endTime),
+        event.data.endTime,
+        event.newData.endTime
+      );
+      emit('row-cancel', event.data);
+      return;
+    }
   }
 
   coursesRef.value[event.index] = event.newData;
@@ -98,6 +120,8 @@ watch(
       dataKey="id"
       @rowContextmenu="onRowContextMenu"
       @row-edit-save="onRowEditSave"
+      @row-edit-init="onRowEditInit"
+      @row-edit-cancel="onRowEditCancel"
       :pt="{
         table: { style: 'min-width: 50rem' },
         column: {
