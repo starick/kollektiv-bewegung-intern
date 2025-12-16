@@ -3,16 +3,16 @@ import { ref } from 'vue';
 import { router, useForm, usePage } from '@inertiajs/vue3';
 import ActionMessage from '@/Components/General/ActionMessage.vue';
 import ActionSection from '@/Components/General/ActionSection.vue';
-import ConfirmationModal from '@/Components/General/ConfirmationModal.vue';
+import ConfirmationModal from '@/Components/Form/ConfirmationModal.vue';
 import DangerButton from '@/Components/General/DangerButton.vue';
 import DialogModal from '@/Components/General/DialogModal.vue';
-import FormSection from '@/Components/General/FormSection.vue';
-import InputError from '@/Components/General/InputError.vue';
-import InputLabel from '@/Components/General/InputLabel.vue';
+import FormSection from '@/Components/Form/FormSection.vue';
+import InputError from '@/Components/Form/InputError.vue';
+import InputLabel from '@/Components/Form/InputLabel.vue';
 import PrimaryButton from '@/Components/General/PrimaryButton.vue';
 import SecondaryButton from '@/Components/General/SecondaryButton.vue';
 import SectionBorder from '@/Components/General/SectionBorder.vue';
-import TextInput from '@/Components/General/TextInput.vue';
+import TextInput from '@/Components/Form/TextInput.vue';
 
 const props = defineProps({
   team: Object,

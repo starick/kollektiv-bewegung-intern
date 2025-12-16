@@ -3,11 +3,61 @@ import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import Dropdown from 'primevue/dropdown';
 import Toast from 'primevue/toast';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionHeader,
+  AccordionPanel,
+  AccordionTab,
+  Button,
+  Calendar,
+  ColorPicker,
+  Column,
+  ConfirmDialog,
+  ContextMenu,
+  DataTable,
+  Dialog,
+  FileUpload,
+  InputNumber,
+  ProgressSpinner,
+  Row,
+  Select,
+  Slider,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs
+} from 'primevue';
+
 export function addComponents(app: App): App {
-  app.component('InputText', InputText);
-  app.component('Textarea', Textarea);
+  app.component('Button', Button);
+  app.component('Column', Column);
+  app.component('DataTable', DataTable);
   app.component('Dropdown', Dropdown);
+  app.component('FileUpload', FileUpload);
+  app.component('InputNumber', InputNumber);
+  app.component('InputText', InputText);
+  app.component('Slider', Slider);
+  app.component('ColorPicker', ColorPicker);
+  app.component('Row', Row);
+  app.component('Tab', Tab);
+  app.component('TabList', TabList);
+  app.component('TabPanel', TabPanel);
+  app.component('TabPanels', TabPanels);
+  app.component('Tabs', Tabs);
+  app.component('Textarea', Textarea);
   app.component('Toast', Toast);
+  app.component('ContextMenu', ContextMenu);
+  app.component('Dialog', Dialog);
+  app.component('Calendar', Calendar);
+  app.component('Select', Select);
+  app.component('Accordion', Accordion);
+  app.component('AccordionPanel', AccordionPanel);
+  app.component('AccordionHeader', AccordionHeader);
+  app.component('AccordionContent', AccordionContent);
+  app.component('ProgressSpinner', ProgressSpinner);
+  app.component('ConfirmDialog', ConfirmDialog);
 
   return app;
 }

@@ -2,13 +2,13 @@
 import { ref } from 'vue';
 import { Link, router, useForm } from '@inertiajs/vue3';
 import ActionMessage from '@/Components/General/ActionMessage.vue';
-import FormSection from '@/Components/General/FormSection.vue';
-import InputError from '@/Components/General/InputError.vue';
-import InputLabel from '@/Components/General/InputLabel.vue';
+import FormSection from '@/Components/Form/FormSection.vue';
+import InputError from '@/Components/Form/InputError.vue';
+import InputLabel from '@/Components/Form/InputLabel.vue';
 import PrimaryButton from '@/Components/General/PrimaryButton.vue';
 import SecondaryButton from '@/Components/General/SecondaryButton.vue';
-import TextInput from '@/Components/General/TextInput.vue';
-import {route} from "ziggy-js";
+import TextInput from '@/Components/Form/TextInput.vue';
+import { route } from 'ziggy-js';
 
 const props = defineProps({
   user: Object
@@ -84,7 +84,10 @@ const clearPhotoFileInput = () => {
 
     <template #form>
       <!-- Profile Photo -->
-      <div v-if="($page.props.jetstream as any).managesProfilePhotos" class="col-span-6 sm:col-span-4">
+      <div
+        v-if="($page.props.jetstream as any).managesProfilePhotos"
+        class="col-span-6 sm:col-span-4"
+      >
         <!-- Profile Photo File Input -->
         <input
           id="photo"
@@ -156,7 +159,11 @@ const clearPhotoFileInput = () => {
         />
         <InputError :message="form.errors.email" class="mt-2" />
 
-        <div v-if="($page.props.jetstream as any).hasEmailVerification && user.email_verified_at === null">
+        <div
+          v-if="
+            ($page.props.jetstream as any).hasEmailVerification && user.email_verified_at === null
+          "
+        >
           <p class="text-sm mt-2 dark:text-white">
             Your email address is unverified.
 

@@ -4,10 +4,10 @@ import { useForm } from '@inertiajs/vue3';
 import ActionMessage from '@/Components/General/ActionMessage.vue';
 import ActionSection from '@/Components/General/ActionSection.vue';
 import DialogModal from '@/Components/General/DialogModal.vue';
-import InputError from '@/Components/General/InputError.vue';
+import InputError from '@/Components/Form/InputError.vue';
 import PrimaryButton from '@/Components/General/PrimaryButton.vue';
 import SecondaryButton from '@/Components/General/SecondaryButton.vue';
-import TextInput from '@/Components/General/TextInput.vue';
+import TextInput from '@/Components/Form/TextInput.vue';
 import { route } from 'ziggy-js';
 
 defineProps({

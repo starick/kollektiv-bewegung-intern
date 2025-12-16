@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import ActionSection from '@/Components/General/ActionSection.vue';
-import ConfirmationModal from '@/Components/General/ConfirmationModal.vue';
+import ConfirmationModal from '@/Components/Form/ConfirmationModal.vue';
 import DangerButton from '@/Components/General/DangerButton.vue';
 import SecondaryButton from '@/Components/General/SecondaryButton.vue';
 

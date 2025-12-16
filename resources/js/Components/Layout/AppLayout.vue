@@ -1,105 +1,72 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { Head, router, usePage } from '@inertiajs/vue3';
-
-import { route } from 'ziggy-js';
+import { Head } from '@inertiajs/vue3';
+import { usePage } from '@inertiajs/vue3';
 import Navbar from '@/Components/Layout/Navbar.vue';
+import { computed, onMounted, watch } from 'vue';
+import useAlert from '@/Composables/use-alerts';
+
+const page = usePage();
+const alert = useAlert();
 
 defineProps({
-  title: String
+  title: String,
+  noHeader: {
+    type: Boolean,
+    default: false
+  }
 });
 
-const menu = ref();
+const flash = computed(() => (page.props as any).flash ?? {});
 
-const switchToTeam = (team) => {
-  router.put(
-    route('current-team.update'),
-    {
-      team_id: team.id
-    },
-    {
-      preserveState: false
-    }
-  );
-};
-
-const logout = () => {
-  router.post(route('logout'));
-};
-
-const pageProps = usePage().props;
-
-const menuItems = [
-  { label: 'Dashboard', icon: 'pi pi-home', command: () => router.get(route('dashboard')) }
-];
-
-const items = [
-  {
-    label: 'Team',
-    icon: 'pi pi-users',
-    items: [
-      {
-        label: 'Team Settings',
-        icon: 'pi pi-users',
-        command: () => router.get(route('teams.show', pageProps.auth.user.current_team))
-      },
-      {
-        label: 'Create New Team',
-        icon: 'pi pi-plus-circle',
-        visible: pageProps.jetstream.canCreateTeams,
-        command: () => router.get(route('teams.create'))
-      },
-      {
-        separator: true
-      },
-      {
-        label: 'Switch Teams',
-        visible: pageProps.auth.user.all_teams.length > 1,
-        items: pageProps.auth.user.all_teams.map((team) => ({
-          label: team.name,
-          icon:
-            team.id === pageProps.auth.user.current_team_id
-              ? 'pi pi-check-circle text-green-400'
-              : '',
-          command: () => switchToTeam(team)
-        }))
-      }
-    ]
-  },
-  {
-    label: pageProps.auth.user.name,
-    items: [
-      {
-        label: 'Profile',
-        icon: 'pi pi-user',
-        command: () => router.get(route('profile.show'))
-      },
-      {
-        label: 'Log Out',
-        icon: 'pi pi-sign-out',
-        command: logout
-      }
-    ]
+onMounted(() => {
+  if (flash.value?.success) {
+    alert.add((page.props.flash as any).success, 'success');
   }
-];
 
-const toggle = (event) => {
-  menu.value.toggle(event);
-};
+  if ((flash.value?.flash as any)?.error) {
+    alert.error((page.props.flash as any).error);
+  }
+});
+
+watch(
+  () => flash.value?.success,
+  (message, prevMessage) => {
+    if (message && message !== prevMessage) alert.add(message, 'success');
+  },
+  { immediate: true, flush: 'post' }
+);
+
+watch(
+  () => flash.value?.error,
+  (message, prevMessage) => {
+    if (message && message !== prevMessage) alert.error(message);
+  },
+  { immediate: true, flush: 'post' }
+);
 </script>
 
 <template>
-  <div>
+  <div class="bg-slate-50 dark:bg-slate-900 min-h-screen">
     <Head :title="title" />
     <div>
       <Navbar />
-      <header v-if="$slots.header">
+      <header v-if="!noHeader">
         <div class="m-2 ml-8">
-          <slot name="header" />
+          <slot name="header">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+              {{ title }}
+            </h2>
+          </slot>
         </div>
       </header>
       <main>
-        <slot />
+        <div class="py-10">
+          <Toast class="mt-12" />
+          <ConfirmDialog />
+          <div class="my-2 max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <slot />
+          </div>
+        </div>
       </main>
     </div>
   </div>

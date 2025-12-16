@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import {PropType} from "vue";
+import { PropType } from 'vue';
 
 defineProps({
   type: {
-    type: String as PropType<"submit" | "reset" | "button">,
+    type: String as PropType<'submit' | 'reset' | 'button'>,
     default: 'submit'
   }
 });
