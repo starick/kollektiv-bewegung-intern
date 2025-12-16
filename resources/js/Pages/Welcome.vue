@@ -74,7 +74,7 @@ function handleImageError() {
 
           <p class="mt-6 text-gray-500 dark:text-gray-400 leading-relaxed">
             This tool is developed to help manage internal processes and communication within
-            Kollektiv:Bewegung. It's a work in progress so please be kind with it. If you encounter
+            Kollektiv:Bewegung. It's a work in progress so please be kind to it. If you encounter
             any issues or have suggestions for improvements, feel free to reach out to the
             development team.
           </p>
