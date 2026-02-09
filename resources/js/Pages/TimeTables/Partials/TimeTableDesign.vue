@@ -10,6 +10,7 @@ import InputTextSize from '@/Components/Form/InputTextSize.vue';
 import TimeTableDesignControls from './TimeTableDesignControls.vue';
 import useTimeTableAtions from '@/Composables/use-timetable-actions';
 import useAlert from '@/Composables/use-alerts';
+import { DEFAULT_DISPLAY_CONFIG } from '@/Constants/default-display-config';
 
 const props = defineProps<{
   timeTable: TimeTable;
@@ -24,26 +25,7 @@ const size = ref(800);
 
 const timetableRef = ref<HTMLElement | null>(null);
 
-const displayConfig = reactive({
-  background: {
-    image: '/img/abstract-1.png'
-  },
-  body: {
-    fontSize: '1em',
-    color: '#424242',
-    scale: 1,
-    'line-height': 1.6,
-    'margin-top': '0.5em'
-  },
-  highlight: {
-    color: '#B8611A',
-    background: '#F5DCB6'
-  },
-  header: {
-    color: '#A14800',
-    scale: 1.15
-  }
-});
+const displayConfig = reactive(DEFAULT_DISPLAY_CONFIG);
 
 const onSave = () => {
   timeTableActions

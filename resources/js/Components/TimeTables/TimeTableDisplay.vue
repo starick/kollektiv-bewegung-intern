@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, computed } from 'vue';
+import { computed } from 'vue';
 import { Course } from '@/Types/course';
 import { endOfWeek, formatDate, startOfWeek } from '@/Helpers/date-time-helper';
 import { groupCoursesByDay } from '@/Helpers/course-mapper';
@@ -16,16 +16,25 @@ const props = defineProps<{
 const groupedCourses = computed(() => groupCoursesByDay(props.courses));
 
 const backgroundStyle = computed(() => {
-  const bg = props.designConfig.background ?? {};
+  const bg = props.designConfig.background ?? ({} as TimeTableDesignConfig['background']);
   return {
-    backgroundColor: bg.color ?? 'transparent',
+    backgroundColor: 'transparent',
     backgroundImage: bg.image ? `url(${bg.image})` : 'none',
-    backgroundSize: bg.size ?? 'cover',
-    backgroundPosition: bg.position ?? 'center',
-    backgroundRepeat: bg.repeat ?? 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
     width: `${props.size}px`,
     height: `${props.size}px`
   };
+});
+
+const overlayStyle = computed(() => {
+  return props.designConfig.overlay.hasOverlay
+    ? {
+        backgroundColor: props.designConfig.overlay.color,
+        opacity: props.designConfig.overlay.opacity
+      }
+    : {};
 });
 
 const timeFrame = computed(
@@ -50,7 +59,7 @@ const timeFrame = computed(
     </h2>
 
     <div
-      class="absolute top-8 -right-4 rounded-2xl py-2 px-4 rotate-[30deg] opacity-90"
+      class="absolute top-8 -right-4 rounded-2xl py-2 px-4 rotate-[30deg] opacity-90 z-20"
       :style="designConfig.highlight"
     >
       <p>Bitte vorher bei den</p>
@@ -67,11 +76,16 @@ const timeFrame = computed(
       <p>Alle Angebote sind nach Pay-What-You-Can-Prinzip</p>
     </div>
 
-    <div :class="`origin-top`" :style="designConfig.body">
+    <div :class="`origin-top`" :style="{ ...designConfig.body, margin: '0.5em' }">
+      <div
+        v-if="designConfig.overlay.hasOverlay"
+        class="absolute top-0 left-0 w-full h-full z-0"
+        :style="overlayStyle"
+      />
       <div
         v-for="group in groupedCourses"
         :key="group.dateKey"
-        class="mb-2 flex flex-row border-t border-white/30"
+        class="mb-2 flex flex-row border-t border-white/30 z-10 relative"
       >
         <div class="w-[130px] text-center">
           <h2 class="text-3xl font-bold pr-12 uppercase">
@@ -95,7 +109,7 @@ const timeFrame = computed(
               <span
                 v-if="course.location"
                 class="text-sm p-0.5 inline-block"
-                :style="designConfig.highlight"
+                :style="{ color: designConfig.highlight.color }"
               >
                 {{ course.location }}
               </span>

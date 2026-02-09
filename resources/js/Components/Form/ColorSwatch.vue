@@ -14,6 +14,7 @@ const props = withDefaults(
     swatchSize?: number;
     id?: string;
     showInput?: boolean;
+    disabled?: boolean;
   }>(),
   {
     columns: 6,
@@ -48,7 +49,12 @@ function togglePanel(e: Event) {
 
 <template>
   <div class="flex items-center gap-2" :id="props.id ?? 'color-swatch-picker'">
-    <Button class="flex items-center gap-2" @click="togglePanel" variant="text">
+    <Button
+      class="flex items-center gap-2"
+      @click="togglePanel"
+      variant="text"
+      :disabled="disabled"
+    >
       <span
         class="inline-block rounded border border-gray-300 w-[18px] h-[18px]"
         :style="{ backgroundColor: modelValue }"
