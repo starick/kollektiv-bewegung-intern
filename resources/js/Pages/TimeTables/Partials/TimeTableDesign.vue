@@ -98,7 +98,7 @@ watch(
 
 <template>
   <div>
-    <div class="flex flex-row">
+    <div class="flex flex-row" style="letter-spacing: 0.01px">
       <Card
         :class="`flex-1 flex-col rounded-r-none overflow-y-scroll h-[${size}px]`"
         border

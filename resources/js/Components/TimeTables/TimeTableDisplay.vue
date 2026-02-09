@@ -64,7 +64,7 @@ const timeFrame = computed(
         Sofern nicht anders angegeben, finden die Kurse im Bewegungsraum der B-Side (Am Mittelhafen
         42) statt.
       </p>
-      <p>Alle Angebote sind auf Pay-What-You-Feel-Basis</p>
+      <p>Alle Angebote sind nach Pay-What-You-Can-Prinzip</p>
     </div>
 
     <div :class="`origin-top`" :style="designConfig.body">
