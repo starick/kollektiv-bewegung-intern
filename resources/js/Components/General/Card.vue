@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Menubar } from 'primevue';
-import { MenuItem } from 'primevue/menuitem';
+import { MenuItem } from 'primevue';
 
 defineProps({
   menuItems: {
