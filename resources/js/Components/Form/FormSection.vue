@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, useSlots } from 'vue';
-import FormSection from '@/Components/Form/FormSection.vue';
+import SectionTitle from '../General/SectionTitle.vue';
 
 defineEmits(['submitted']);
 
