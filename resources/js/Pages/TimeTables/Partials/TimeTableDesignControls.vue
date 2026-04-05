@@ -36,6 +36,33 @@ const backgroundImages = [
             class="w-full"
           />
         </div>
+        <div class="col-span-2">
+          <label class="block text-xs mb-1">Overlay</label>
+
+          <div class="flex items-center gap-3 mb-4">
+            <Checkbox v-model="modelValue.overlay.hasOverlay" ariaLabel="has overlay" binary />
+            <div text-xs>has overlay</div>
+          </div>
+
+          <ColorSwatch
+            v-model="modelValue.overlay.color"
+            :disabled="!modelValue.overlay.hasOverlay"
+          />
+        </div>
+        <div>
+          <label class="block text-xs mb-1">Overlay Opacity</label>
+          <div class="flex items-center gap-3">
+            <InputNumber
+              v-model="modelValue.overlay.opacity"
+              :disabled="!modelValue.overlay.hasOverlay"
+              :min="0"
+              :max="1"
+              :step="0.05"
+              mode="decimal"
+              showButtons
+            />
+          </div>
+        </div>
       </AccordionContent>
     </AccordionPanel>
     <AccordionPanel value="1">
@@ -110,7 +137,7 @@ const backgroundImages = [
       </AccordionContent>
     </AccordionPanel>
     <AccordionPanel value="3">
-      <AccordionHeader>highlights</AccordionHeader>
+      <AccordionHeader>Highlights</AccordionHeader>
       <AccordionContent>
         <div class="grid grid-cols-1 gap-3">
           <div class="col-span-2">

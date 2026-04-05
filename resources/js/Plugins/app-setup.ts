@@ -11,6 +11,7 @@ import {
   AccordionTab,
   Button,
   Calendar,
+  Checkbox,
   ColorPicker,
   Column,
   ConfirmDialog,
@@ -49,6 +50,7 @@ export function addComponents(app: App): App {
   app.component('Textarea', Textarea);
   app.component('Toast', Toast);
   app.component('ContextMenu', ContextMenu);
+  app.component('Checkbox', Checkbox);
   app.component('Dialog', Dialog);
   app.component('Calendar', Calendar);
   app.component('Select', Select);

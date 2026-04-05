@@ -1,8 +1,6 @@
-import { SassString } from 'sass';
-import { Course } from './course';
+import { DEFAULT_DISPLAY_CONFIG } from '@/Constants/default-display-config';
 
-// TODO: Be more specific as soon as type is more fleshed-out / expecations are clear
-export type TimeTableDesignConfig = Record<string, any>;
+export type TimeTableDesignConfig = typeof DEFAULT_DISPLAY_CONFIG;
 
 export interface TimeTable {
   id: number;
