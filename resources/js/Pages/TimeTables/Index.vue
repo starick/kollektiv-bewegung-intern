@@ -4,7 +4,7 @@ import AppLayout from '@/Components/Layout/AppLayout.vue';
 import { route } from 'ziggy-js';
 import { router } from '@inertiajs/vue3';
 import { toRef } from 'vue';
-import { MenuItem } from 'primevue/menuitem';
+import { MenuItem } from 'primevue';
 import { TimeTable } from '@/Types/time-table';
 import useAlert from '@/Composables/use-alerts';
 

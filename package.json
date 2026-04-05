@@ -35,7 +35,7 @@
         "date-fns": "^4.1.0",
         "html2canvas": "^1.4.1",
         "primeicons": "github:primefaces/primeicons",
-        "primevue": "^4.2.5",
+        "primevue": "^4.5.4",
         "sass": "^1.83.1",
         "tailwindcss-primeui": "^0.4.0",
         "vue-tsc": "^2.2.0",
