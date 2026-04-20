@@ -10,7 +10,7 @@ function options(cb: InertiaCallbacks = {}): InertiaCallbacks {
   };
 }
 
-export default function useTimeTableAtions() {
+export default function useTimeTableActions() {
   const url = {
     store: () => route('time-tables.store'),
     update: (timeTableId: number) => route('time-tables.update', { time_table: timeTableId }),

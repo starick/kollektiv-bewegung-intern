@@ -6,7 +6,7 @@ import html2canvas from 'html2canvas';
 import Card from '@/Components/General/Card.vue';
 import { Course } from '@/Types/course';
 import TimeTableDesignControls from './TimeTableDesignControls.vue';
-import useTimeTableAtions from '@/Composables/use-timetable-actions';
+import useTimeTableActions from '@/Composables/use-timetable-actions';
 import useAlert from '@/Composables/use-alerts';
 import { DEFAULT_DISPLAY_CONFIG } from '@/Constants/default-display-config';
 import { useConfirm } from 'primevue';
@@ -17,7 +17,7 @@ const props = defineProps<{
   isLoading: boolean;
 }>();
 
-const timeTableActions = useTimeTableAtions();
+const timeTableActions = useTimeTableActions();
 const alert = useAlert();
 const confirm = useConfirm();
 
