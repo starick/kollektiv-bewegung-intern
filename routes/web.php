@@ -25,5 +25,6 @@ Route::middleware([
     })->name('dashboard');
 
     Route::resource('time-tables', TimeTableController::class);
+    Route::post('time-tables/{time_table}/reimport', [TimeTableController::class, 'reimport'])->name('time-tables.reimport');
     Route::resource('time-tables.courses', CourseController::class)->only(['store', 'update', 'destroy']);
 });

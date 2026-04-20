@@ -4,6 +4,7 @@ import { computed, defineProps, watch } from 'vue';
 import AppLayout from '@/Components/Layout/AppLayout.vue';
 import TimeTableInfo from './Partials/TimeTableInfo.vue';
 import TimeTableDesign from './Partials/TimeTableDesign.vue';
+import TimeTableActions from './Partials/TimeTableActions.vue';
 import { timetableShowModel, TimeTableShowProps } from '@/Models/TimeTables/timetable-show-model';
 import CourseTable from '@/Components/TimeTables/CourseTable.vue';
 import { toCourse } from '@/Helpers/course-mapper';
@@ -27,6 +28,7 @@ watch(() => props.timeTable, loadCourses, { immediate: true });
         <Tab value="0">Design</Tab>
         <Tab value="1">Courses</Tab>
         <Tab value="2">Info</Tab>
+        <Tab value="3">Actions</Tab>
       </TabList>
       <TabPanels>
         <TabPanel value="0">
@@ -61,6 +63,9 @@ watch(() => props.timeTable, loadCourses, { immediate: true });
         </TabPanel>
         <TabPanel value="2">
           <TimeTableInfo :timeTable="timeTable" />
+        </TabPanel>
+        <TabPanel value="3">
+          <TimeTableActions :timeTable="timeTable" />
         </TabPanel>
       </TabPanels>
     </Tabs>
