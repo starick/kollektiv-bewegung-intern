@@ -5,8 +5,6 @@ import { computed, reactive, ref, watch } from 'vue';
 import html2canvas from 'html2canvas';
 import Card from '@/Components/General/Card.vue';
 import { Course } from '@/Types/course';
-import ColorPickerWrapper from '@/Components/Form/ColorPickerWrapper.vue';
-import InputTextSize from '@/Components/Form/InputTextSize.vue';
 import TimeTableDesignControls from './TimeTableDesignControls.vue';
 import useTimeTableAtions from '@/Composables/use-timetable-actions';
 import useAlert from '@/Composables/use-alerts';
