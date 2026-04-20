@@ -100,4 +100,17 @@ class TimeTableController extends Controller
         $timeTable->delete();
         return redirect()->route('time-tables.index')->with('success', 'Time table deleted successfully.');
     }
+
+    public function reimport(\Illuminate\Http\Request $request, TimeTable $timeTable, CourseImportService $courseImportService)
+    {
+        $request->validate([
+            'file' => ['required', 'file', 'mimes:xlsx,xls,csv'],
+        ]);
+
+        $timeTable->courses()->delete();
+        $courseImportService->import($request->file('file'), $timeTable);
+
+        return redirect()->route('time-tables.show', $timeTable)
+            ->with('success', 'Courses reimported successfully.');
+    }
 }
