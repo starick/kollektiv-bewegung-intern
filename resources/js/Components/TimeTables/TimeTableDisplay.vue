@@ -24,7 +24,8 @@ const backgroundStyle = computed(() => {
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     width: `${props.size}px`,
-    height: `${props.size}px`
+    height: `${props.size}px`,
+    fontFamily: props.designConfig.body.fontFamily
   };
 });
 
@@ -48,12 +49,15 @@ const timeFrame = computed(
     :class="`relative flex flex-col shadow-lg overflow-hidden bg-gray-300`"
     :style="backgroundStyle"
   >
-    <h1 class="text-center text-3xl font-bold tracking-wider" :style="designConfig.header ?? {}">
+    <h1
+      class="text-center text-3xl font-bold tracking-wider"
+      :style="{ ...designConfig.header, fontFamily: designConfig.header.fontFamily }"
+    >
       KOLLEKTIV:BEWEGUNG
     </h1>
     <h2
       class="text-center text-xl font-bold mb-4 tracking-wider opacity-80"
-      :style="{ color: designConfig.header.color }"
+      :style="{ color: designConfig.header.color, fontFamily: designConfig.header.fontFamily }"
     >
       {{ timeFrame }}
     </h2>

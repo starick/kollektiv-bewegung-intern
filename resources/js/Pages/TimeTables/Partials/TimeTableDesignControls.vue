@@ -3,6 +3,7 @@ import { TimeTableDesignConfig } from '@/Types/time-table';
 import ColorSwatch from '@/Components/Form/ColorSwatch.vue';
 import InputTextSize from '@/Components/Form/InputTextSize.vue';
 import useAlert from '@/Composables/use-alerts';
+import FontSelect from '@/Components/Form/FontSelect.vue';
 
 const modelValue = defineModel<TimeTableDesignConfig>({ required: true });
 
@@ -13,7 +14,7 @@ const alert = useAlert();
 const backgroundImages = [
   { label: 'Abstract 1', value: '/img/abstract-1.png' },
   { label: 'Abstract 2', value: '/img/abstract-2.png' },
-  { label: 'Landscape 1', value: '/img/landscape-1.png' },
+  { label: 'Soft 1', value: '/img/soft-1.png' },
   { label: 'Pastel 1', value: '/img/pastel-1.png' },
   { label: 'Münster Hafen', value: '/img/meunster-hafen.png' },
   { label: 'Münster Hafen 2', value: '/img/meunster-hafen-dark.png' }
@@ -70,6 +71,10 @@ const backgroundImages = [
       <AccordionContent>
         <div class="grid grid-cols-1 gap-3">
           <div>
+            <label class="block text-xs mb-1">Font</label>
+            <FontSelect v-model="modelValue.header.fontFamily" />
+          </div>
+          <div>
             <label class="block text-xs mb-1">Color</label>
             <ColorSwatch v-model="modelValue.header.color" />
           </div>
@@ -93,6 +98,10 @@ const backgroundImages = [
       <AccordionHeader>Body</AccordionHeader>
       <AccordionContent>
         <div class="grid grid-cols-1 gap-3">
+          <div class="col-span-2">
+            <label class="block text-xs mb-1">Font Family</label>
+            <FontSelect v-model="modelValue.body.fontFamily" />
+          </div>
           <div class="col-span-2">
             <label class="block text-xs mb-1">Font Color</label>
             <ColorSwatch v-model="modelValue.body.color" />
