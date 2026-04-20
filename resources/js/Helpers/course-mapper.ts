@@ -43,8 +43,12 @@ export function groupCoursesByDay(courses: Course[]) {
   );
 }
 
+function localISODate(date: Date): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
 export function courseToDTO(course: Course): Record<string, string | null> {
-  const dateString = course.date instanceof Date ? course.date.toISOString() : course.date;
+  const dateString = localISODate(course.date);
 
   return {
     name: course.name,

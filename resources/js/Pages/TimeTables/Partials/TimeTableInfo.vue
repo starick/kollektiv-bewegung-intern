@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { computed, toRefs } from 'vue';
 import { TimeTable } from '@/Types/time-table';
-import { addWeeks, endOfISOWeek, startOfISOWeek } from 'date-fns';
 import { endOfWeek, formatDate, formatDateTime, startOfWeek } from '@/Helpers/date-time-helper';
 import InfoField from '@/Components/General/InfoField.vue';
 
-const props = defineProps<{
+defineProps<{
   timeTable: TimeTable;
 }>();
 </script>
