@@ -1,21 +1,13 @@
-import { addWeeks, endOfISOWeek, setHours, startOfISOWeek } from 'date-fns';
-
-// TODO: Something has to happen with timezones here. I hate timezones =/
-
 export function formatDateTime(d: Date | string): string {
   return new Date(d).toLocaleString('de-DE', { timeZone: 'UTC' });
 }
 
 export function formatDate(d: Date | string): string {
-  return setHours(new Date(d), 12).toLocaleDateString('de-DE', { timeZone: 'UTC' });
+  return new Date(d).toLocaleDateString('de-DE', { timeZone: 'UTC' });
 }
 
 export function formatInternationalDate(d: Date | string): string {
-  const date = new Date(d);
-
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(
-    date.getDate()
-  ).padStart(2, '0')}`;
+  return new Date(d).toISOString().slice(0, 10);
 }
 
 export function formatTime(d: Date | string): string {
@@ -38,11 +30,15 @@ export function formatWeekday(d: Date | string): string {
   return new Date(d).toLocaleDateString('de-DE', { weekday: 'short', timeZone: 'UTC' });
 }
 
+// Returns UTC midnight of the Monday starting the given ISO week.
 export function startOfWeek(year: number, week: number): Date {
-  const isoWeek1 = startOfISOWeek(new Date(year, 0, 4));
-  return addWeeks(isoWeek1, (week ?? 1) - 1);
+  const jan4 = new Date(Date.UTC(year, 0, 4));
+  const dow = jan4.getUTCDay() || 7; // 1=Mon … 7=Sun
+  const week1Monday = new Date(jan4.getTime() - (dow - 1) * 86400000);
+  return new Date(week1Monday.getTime() + ((week ?? 1) - 1) * 7 * 86400000);
 }
 
+// Returns UTC midnight of the Sunday ending the given ISO week.
 export function endOfWeek(year: number, week: number): Date {
-  return endOfISOWeek(startOfWeek(year, week));
+  return new Date(startOfWeek(year, week).getTime() + 6 * 86400000);
 }

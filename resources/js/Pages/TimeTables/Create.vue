@@ -6,7 +6,8 @@ import PrimaryButton from '@/Components/General/PrimaryButton.vue';
 import SecondaryButton from '@/Components/General/SecondaryButton.vue';
 import AppLayout from '@/Components/Layout/AppLayout.vue';
 import { router, useForm } from '@inertiajs/vue3';
-import { getWeek, isSunday, startOfISOWeek, endOfISOWeek, addWeeks } from 'date-fns';
+import { getWeek, isSunday } from 'date-fns';
+import { formatDate, startOfWeek, endOfWeek } from '@/Helpers/date-time-helper';
 import { computed } from 'vue';
 import { route } from 'ziggy-js';
 
@@ -34,12 +35,8 @@ const submit = () => {
   });
 };
 
-const startDate = computed<Date>(() => {
-  const isoWeek1 = startOfISOWeek(new Date(formData.year, 0, 4));
-  return addWeeks(isoWeek1, (formData.week ?? 1) - 1);
-});
-
-const endDate = computed<Date>(() => endOfISOWeek(startDate.value));
+const startDate = computed<Date>(() => startOfWeek(formData.year, formData.week));
+const endDate = computed<Date>(() => endOfWeek(formData.year, formData.week));
 
 const title = 'Create New Timetable';
 </script>
@@ -52,7 +49,7 @@ const title = 'Create New Timetable';
           <template #title>Time Frame</template>
           <template #description>
             Selected range:
-            {{ startDate.toLocaleDateString('de-DE') }} - {{ endDate.toLocaleDateString('de-DE') }}
+            {{ formatDate(startDate) }} - {{ formatDate(endDate) }}
           </template>
 
           <template #form>
