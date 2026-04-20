@@ -7,7 +7,8 @@ export const DEFAULT_DISPLAY_CONFIG = {
     color: '#424242',
     scale: 1,
     'line-height': 1.6,
-    'margin-top': '0.5em'
+    'margin-top': '0.5em',
+    fontFamily: 'Figtree, sans-serif'
   },
   overlay: {
     hasOverlay: false,
@@ -20,6 +21,7 @@ export const DEFAULT_DISPLAY_CONFIG = {
   },
   header: {
     color: '#A14800',
-    scale: 1.15
+    scale: 1.15,
+    fontFamily: 'Oswald, sans-serif'
   }
 };
