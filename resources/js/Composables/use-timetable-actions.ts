@@ -22,7 +22,6 @@ export default function useTimeTableActions() {
   }
 
   async function update(timeTableId: number, payload: Payload, cb?: InertiaCallbacks) {
-    console.log('Updating timetable', timeTableId, payload, url.update(timeTableId));
     return router.patch(url.update(timeTableId), payload, options(cb));
   }
 

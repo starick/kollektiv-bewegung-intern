@@ -38,7 +38,7 @@ const onSelect = (e: { files?: File[] }) => {
 };
 
 const onClear = () => {
-  formData.data = null;
+  formData.file = null;
 };
 
 const submit = () => {

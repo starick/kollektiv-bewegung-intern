@@ -47,19 +47,6 @@ watch(() => props.timeTable, loadCourses, { immediate: true });
             @row-delete="deleteCourse"
             @reload="loadCourses"
           />
-          <!-- <div v-if="isLoading" class="flex flex-1">
-            <ProgressSpinner />
-          </div>
-          <CourseTable
-            v-else
-            :timeTable="timeTable"
-            :courses="courses"
-            editable
-            @reload="reload"
-            @row-delete="deleteCourse"
-            @row-save="saveCourse"
-            @row-add="addCourse"
-          /> -->
         </TabPanel>
         <TabPanel value="2">
           <TimeTableInfo :timeTable="timeTable" />

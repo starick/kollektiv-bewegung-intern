@@ -18,7 +18,6 @@ export function timetableShowModel(props: TimeTableShowProps) {
   const isLoading = ref<boolean>(true);
 
   async function reload() {
-    console.log('load timeTable');
     router.reload({
       only: ['timeTable'],
       onError: (e) => alert.error('Reload error:', e)
@@ -26,7 +25,6 @@ export function timetableShowModel(props: TimeTableShowProps) {
   }
 
   function loadCourses() {
-    console.log('load courses');
     courseActions.reload({
       onError: (e) => alert.error('Reload error:', e),
       onFinish: () => (isLoading.value = false)
