@@ -157,6 +157,13 @@ const backgroundImages = [
             <label class="block text-xs mb-1">Background Color</label>
             <ColorSwatch v-model="modelValue.highlight.background" />
           </div>
+          <div class="col-span-2">
+            <label class="block text-xs mb-1">Registration Note</label>
+            <div class="flex items-center gap-3">
+              <Checkbox v-model="modelValue.highlight.registrationNoteAsOverlay" binary ariaLabel="registration note as overlay" />
+              <span class="text-xs">Show as overlay badge</span>
+            </div>
+          </div>
         </div>
       </AccordionContent>
     </AccordionPanel>

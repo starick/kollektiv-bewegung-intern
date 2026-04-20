@@ -17,7 +17,8 @@ export const DEFAULT_DISPLAY_CONFIG = {
   },
   highlight: {
     color: '#B8611A',
-    background: '#F5DCB6'
+    background: '#F5DCB6',
+    registrationNoteAsOverlay: true
   },
   header: {
     color: '#A14800',

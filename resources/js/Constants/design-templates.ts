@@ -21,7 +21,11 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
         fontFamily: 'Figtree, sans-serif'
       },
       overlay: { hasOverlay: false, color: '#000000', opacity: 0.3 },
-      highlight: { color: '#B8611A', background: '#F5DCB6' },
+      highlight: {
+        color: '#B8611A',
+        background: '#F5DCB6',
+        registrationNoteAsOverlay: true
+      },
       header: { color: '#A14800', scale: 1.15, fontFamily: 'Oswald, sans-serif' }
     }
   },
@@ -39,7 +43,7 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
         fontFamily: 'Montserrat, sans-serif'
       },
       overlay: { hasOverlay: true, color: '#fff', opacity: 0.3 },
-      highlight: { color: '#ac5f01', background: '#f8d498' },
+      highlight: { color: '#ac5f01', background: '#f8d498', registrationNoteAsOverlay: true },
       header: { color: '#854414', scale: 1.15, fontFamily: 'Montserrat, sans-serif' }
     }
   },
@@ -51,14 +55,14 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
       body: {
         fontSize: '1em',
         color: '#2b2b2b',
-        scale: 1,
+        scale: 0.98,
         'line-height': 1.6,
-        'margin-top': '0.5em',
+        'margin-top': '0.3em',
         fontFamily: 'Raleway, sans-serif'
       },
-      overlay: { hasOverlay: true, color: '#ffffff', opacity: 0.4 },
-      highlight: { color: '#6F508F', background: '#ded4ff' },
-      header: { color: '#6F508F', scale: 1.15, fontFamily: 'Raleway, sans-serif' }
+      overlay: { hasOverlay: true, color: '#ffffff', opacity: 0.55 },
+      highlight: { color: '#FFFFFF', background: '#EAE7F5', registrationNoteAsOverlay: false },
+      header: { color: '#ffffff', scale: 1.2, fontFamily: '"Playfair Display", serif' }
     }
   },
   {
@@ -75,7 +79,7 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
         fontFamily: 'Inter, sans-serif'
       },
       overlay: { hasOverlay: true, color: '#ffffff', opacity: 0.6 },
-      highlight: { color: '#c0392b', background: '#fadbd8' },
+      highlight: { color: '#c0392b', background: '#fadbd8', registrationNoteAsOverlay: true },
       header: { color: '#922b21', scale: 1.15, fontFamily: 'Oswald, sans-serif' }
     }
   },
@@ -93,7 +97,7 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
         fontFamily: '"Playfair Display", serif'
       },
       overlay: { hasOverlay: true, color: '#000000', opacity: 0.4 },
-      highlight: { color: '#e0c070', background: '#5a4a20' },
+      highlight: { color: '#e0c070', background: '#5a4a20', registrationNoteAsOverlay: true },
       header: { color: '#f0d080', scale: 1.15, fontFamily: '"Playfair Display", serif' }
     }
   },
@@ -111,7 +115,7 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
         fontFamily: 'Figtree, sans-serif'
       },
       overlay: { hasOverlay: false, color: '#000000', opacity: 0.2 },
-      highlight: { color: '#7d3c98', background: '#e8daef' },
+      highlight: { color: '#7d3c98', background: '#e8daef', registrationNoteAsOverlay: true },
       header: { color: '#6c3483', scale: 1.15, fontFamily: 'Raleway, sans-serif' }
     }
   }
