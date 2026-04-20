@@ -61,8 +61,8 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
         fontFamily: 'Raleway, sans-serif'
       },
       overlay: { hasOverlay: true, color: '#ffffff', opacity: 0.55 },
-      highlight: { color: '#FFFFFF', background: '#EAE7F5', registrationNoteAsOverlay: false },
-      header: { color: '#ffffff', scale: 1.2, fontFamily: '"Playfair Display", serif' }
+      highlight: { color: '#791BD1', background: '#EAE7F5', registrationNoteAsOverlay: false },
+      header: { color: '#4C288F', scale: 1.2, fontFamily: '"Playfair Display", serif' }
     }
   },
   {
