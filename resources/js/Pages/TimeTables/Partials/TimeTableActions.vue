@@ -48,9 +48,9 @@ const onDelete = () => {
 
 <template>
   <div class="max-w-lg space-y-6">
-    <div class="border-b pb-6">
+    <div class="border-b dark:border-gray-700 pb-6">
       <p class="font-medium mb-1">Reimport Courses</p>
-      <p class="text-sm text-gray-600 mb-4">
+      <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
         Deletes all existing courses and imports new ones from a file.
       </p>
       <div class="flex flex-col gap-3">
@@ -80,7 +80,7 @@ const onDelete = () => {
 
     <div>
       <p class="font-medium mb-1">Delete Timetable</p>
-      <p class="text-sm text-gray-600 mb-4">
+      <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
         Permanently deletes this timetable and all linked courses.
       </p>
       <Button

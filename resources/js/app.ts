@@ -27,7 +27,10 @@ createInertiaApp({
     inertiaApp.use(ZiggyVue);
     inertiaApp.use(PrimeVue, {
       theme: {
-        preset: Aura
+        preset: Aura,
+        options: {
+          darkModeSelector: '.dark'
+        }
       },
       options: {
         cssLayer: {

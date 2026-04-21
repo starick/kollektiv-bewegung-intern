@@ -120,7 +120,7 @@ watch(
       <div ref="timetableRef" class="flex-1">
         <div
           v-if="isLoading"
-          :class="`flex flex-1 flex-col justify-center bg-gray-100 items-center h-[${size}px] w-[${size}px]`"
+          :class="`flex flex-1 flex-col justify-center bg-gray-100 dark:bg-gray-800 items-center h-[${size}px] w-[${size}px]`"
         >
           <ProgressSpinner />
         </div>

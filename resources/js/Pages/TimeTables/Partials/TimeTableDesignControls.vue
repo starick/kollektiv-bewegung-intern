@@ -170,7 +170,7 @@ const backgroundImages = [
     <AccordionPanel value="4">
       <AccordionHeader>Debug</AccordionHeader>
       <AccordionContent>
-        <pre class="mt-4 bg-gray-100 p-2 text-xs">{{ modelValue }}</pre>
+        <pre class="mt-4 bg-gray-100 dark:bg-gray-800 p-2 text-xs">{{ modelValue }}</pre>
       </AccordionContent>
     </AccordionPanel>
   </Accordion>
