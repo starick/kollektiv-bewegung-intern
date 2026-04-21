@@ -6,16 +6,31 @@ import PrimaryButton from '@/Components/General/PrimaryButton.vue';
 import SecondaryButton from '@/Components/General/SecondaryButton.vue';
 import AppLayout from '@/Components/Layout/AppLayout.vue';
 import { router, useForm } from '@inertiajs/vue3';
-import { getWeek, isSunday, startOfISOWeek, endOfISOWeek, addWeeks } from 'date-fns';
-import { computed } from 'vue';
+import { getWeek, isSunday } from 'date-fns';
+import { formatDate, startOfWeek, endOfWeek } from '@/Helpers/date-time-helper';
+import { computed, ref, watch } from 'vue';
 import { route } from 'ziggy-js';
+import { DESIGN_TEMPLATES } from '@/Constants/design-templates';
+import DesignTemplateSelect from '@/Components/TimeTables/DesignTemplateSelect.vue';
 
 const currentDate = new Date();
 
-const formData = useForm<{ year: number; week: number; file?: File | null }>({
+const selectedTemplate = ref(DESIGN_TEMPLATES[0]);
+
+const formData = useForm<{
+  year: number;
+  week: number;
+  file?: File | null;
+  display_config?: string;
+}>({
   year: currentDate.getFullYear(),
   week: isSunday(currentDate) ? getWeek(currentDate) + 1 : getWeek(currentDate),
-  file: null
+  file: null,
+  display_config: JSON.stringify(DESIGN_TEMPLATES[0].config)
+});
+
+watch(selectedTemplate, (template) => {
+  formData.display_config = JSON.stringify(template.config);
 });
 
 const onSelect = (e: { files?: File[] }) => {
@@ -23,7 +38,7 @@ const onSelect = (e: { files?: File[] }) => {
 };
 
 const onClear = () => {
-  formData.data = null;
+  formData.file = null;
 };
 
 const submit = () => {
@@ -34,12 +49,8 @@ const submit = () => {
   });
 };
 
-const startDate = computed<Date>(() => {
-  const isoWeek1 = startOfISOWeek(new Date(formData.year, 0, 4));
-  return addWeeks(isoWeek1, (formData.week ?? 1) - 1);
-});
-
-const endDate = computed<Date>(() => endOfISOWeek(startDate.value));
+const startDate = computed<Date>(() => startOfWeek(formData.year, formData.week));
+const endDate = computed<Date>(() => endOfWeek(formData.year, formData.week));
 
 const title = 'Create New Timetable';
 </script>
@@ -52,7 +63,7 @@ const title = 'Create New Timetable';
           <template #title>Time Frame</template>
           <template #description>
             Selected range:
-            {{ startDate.toLocaleDateString('de-DE') }} - {{ endDate.toLocaleDateString('de-DE') }}
+            {{ formatDate(startDate) }} - {{ formatDate(endDate) }}
           </template>
 
           <template #form>
@@ -73,6 +84,17 @@ const title = 'Create New Timetable';
                 <InputLabel for="week" value="Week" />
                 <InputNumber id="week" v-model="formData.week" :min="1" :max="53" show-buttons />
               </div>
+            </div>
+          </template>
+        </FormSection>
+
+        <FormSection class="mb-4">
+          <template #title>Design Template</template>
+          <template #description>Choose a starting design for this timetable</template>
+
+          <template #form>
+            <div class="col-span-6">
+              <DesignTemplateSelect v-model="selectedTemplate" />
             </div>
           </template>
         </FormSection>

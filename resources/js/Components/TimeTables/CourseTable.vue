@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { PropType } from 'vue';
 import { TimeTable } from '@/Types/time-table';
 import { Course } from '@/Types/course';
@@ -45,21 +45,13 @@ const onRowEditCancel = (event) => {
 };
 
 const onRowEditSave = (event: DataTableRowEditSaveEvent) => {
-  if (rowDataBeforeEdit.value === JSON.stringify(event.newData)) {
-    if (
-      event.data.startTime.compare(event.newData.startTime) === 0 &&
-      event.data.endTime.compare(event.newData.endTime) === 0
-    ) {
-      console.log(
-        'No changes detected, cancelling edit',
-        event.data.startTime.compare(event.newData.startTime),
-        event.data.endTime.compare(event.newData.endTime),
-        event.data.endTime,
-        event.newData.endTime
-      );
-      emit('row-cancel', event.data);
-      return;
-    }
+  if (
+    rowDataBeforeEdit.value === JSON.stringify(event.newData) &&
+    event.data.startTime.compare(event.newData.startTime) === 0 &&
+    event.data.endTime.compare(event.newData.endTime) === 0
+  ) {
+    emit('row-cancel', event.data);
+    return;
   }
 
   coursesRef.value[event.index] = event.newData;

@@ -10,7 +10,7 @@ function options(cb: InertiaCallbacks = {}): InertiaCallbacks {
   };
 }
 
-export default function useTimeTableAtions() {
+export default function useTimeTableActions() {
   const url = {
     store: () => route('time-tables.store'),
     update: (timeTableId: number) => route('time-tables.update', { time_table: timeTableId }),
@@ -22,7 +22,6 @@ export default function useTimeTableAtions() {
   }
 
   async function update(timeTableId: number, payload: Payload, cb?: InertiaCallbacks) {
-    console.log('Updating timetable', timeTableId, payload, url.update(timeTableId));
     return router.patch(url.update(timeTableId), payload, options(cb));
   }
 

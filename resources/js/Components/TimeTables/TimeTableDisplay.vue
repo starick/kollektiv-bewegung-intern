@@ -24,7 +24,8 @@ const backgroundStyle = computed(() => {
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     width: `${props.size}px`,
-    height: `${props.size}px`
+    height: `${props.size}px`,
+    fontFamily: props.designConfig.body.fontFamily
   };
 });
 
@@ -48,17 +49,21 @@ const timeFrame = computed(
     :class="`relative flex flex-col shadow-lg overflow-hidden bg-gray-300`"
     :style="backgroundStyle"
   >
-    <h1 class="text-center text-3xl font-bold tracking-wider" :style="designConfig.header ?? {}">
+    <h1
+      class="text-center text-3xl font-bold tracking-wider"
+      :style="{ ...designConfig.header, fontFamily: designConfig.header.fontFamily }"
+    >
       KOLLEKTIV:BEWEGUNG
     </h1>
     <h2
       class="text-center text-xl font-bold mb-4 tracking-wider opacity-80"
-      :style="{ color: designConfig.header.color }"
+      :style="{ color: designConfig.header.color, fontFamily: designConfig.header.fontFamily }"
     >
       {{ timeFrame }}
     </h2>
 
     <div
+      v-if="designConfig.highlight.registrationNoteAsOverlay"
       class="absolute top-8 -right-4 rounded-2xl py-2 px-4 rotate-[30deg] opacity-90 z-20"
       :style="designConfig.highlight"
     >
@@ -73,10 +78,15 @@ const timeFrame = computed(
         Sofern nicht anders angegeben, finden die Kurse im Bewegungsraum der B-Side (Am Mittelhafen
         42) statt.
       </p>
-      <p>Alle Angebote sind nach Pay-What-You-Can-Prinzip</p>
+      <p>
+        Alle Angebote sind nach Pay-What-You-Can-Prinzip.
+        <span v-if="!designConfig.highlight.registrationNoteAsOverlay">
+          Bitte vorher bei den Kursleitenden anmelden!
+        </span>
+      </p>
     </div>
 
-    <div :class="`origin-top`" :style="{ ...designConfig.body, margin: '0.5em' }">
+    <div :class="`origin-top`" :style="designConfig.body">
       <div
         v-if="designConfig.overlay.hasOverlay"
         class="absolute top-0 left-0 w-full h-full z-0"
@@ -108,7 +118,7 @@ const timeFrame = computed(
               <span class="text-sm inline-block mr-4">{{ course.instructor }}</span>
               <span
                 v-if="course.location"
-                class="text-sm p-0.5 inline-block"
+                class="text-sm font-bold p-0.5 inline-block"
                 :style="{ color: designConfig.highlight.color }"
               >
                 {{ course.location }}

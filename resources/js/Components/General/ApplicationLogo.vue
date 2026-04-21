@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <svg viewBox="0 0 2500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 2500 500" fill="none" xmlns="http://www.w3.org/2000/svg" class="dark:invert">
     <g>
       <title>Layer 1</title>
       <g id="svg_44">

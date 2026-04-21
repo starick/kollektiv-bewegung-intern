@@ -6,7 +6,7 @@ defineProps<{
 
 <template>
   <div>
-    <dt class="font-medium text-gray-300 dark:text-gray-600">{{ title }}</dt>
+    <dt class="font-medium text-gray-500 dark:text-gray-400">{{ title }}</dt>
     <dd>
       <slot />
     </dd>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Time } from '@/ValueObjects/time';
-import { computed, watch } from 'vue';
 
 const modelValue = defineModel<Time>({ required: true });
 </script>
@@ -15,7 +14,7 @@ const modelValue = defineModel<Time>({ required: true });
       showButtons
       button-layout="vertical"
     />
-    <span class="text-gray-500 select-none mx-1">:</span>
+    <span class="text-gray-500 dark:text-gray-400 select-none mx-1">:</span>
     <InputNumber
       v-model="modelValue.minute"
       :min="0"

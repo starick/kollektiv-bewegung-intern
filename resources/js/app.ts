@@ -3,7 +3,7 @@ import '../css/app.css';
 import { createApp, DefineComponent, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import PrimeVue from 'primevue/config';
+import PrimeVue, { defaultOptions } from 'primevue/config';
 import ToastService from 'primevue/toastservice';
 import { ZiggyVue } from 'ziggy-js';
 import Aura from '@primevue/themes/aura';
@@ -27,13 +27,20 @@ createInertiaApp({
     inertiaApp.use(ZiggyVue);
     inertiaApp.use(PrimeVue, {
       theme: {
-        preset: Aura
+        preset: Aura,
+        options: {
+          darkModeSelector: '.dark'
+        }
       },
       options: {
         cssLayer: {
           name: 'primevue',
           order: 'tailwind-base, primevue, tailwind-utilities'
         }
+      },
+      locale: {
+        ...defaultOptions.locale,
+        firstDayOfWeek: 1
       }
     });
     inertiaApp.use(ToastService);

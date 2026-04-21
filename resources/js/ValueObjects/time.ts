@@ -1,4 +1,3 @@
-import { min } from 'date-fns';
 
 export class Time {
   public hour: number;

@@ -4,9 +4,9 @@ import AppLayout from '@/Components/Layout/AppLayout.vue';
 import { route } from 'ziggy-js';
 import { router } from '@inertiajs/vue3';
 import { toRef } from 'vue';
-import { MenuItem } from 'primevue';
 import { TimeTable } from '@/Types/time-table';
 import useAlert from '@/Composables/use-alerts';
+import { MenuItem } from 'primevue';
 
 const props = defineProps<{ timeTables: { data: TimeTable[] } }>();
 const timeTables = toRef(props, 'timeTables');
@@ -55,7 +55,7 @@ const title = 'Timetables Overview';
       >
         <Column field="createdAt" header="Created At" sortable>
           <template #body="{ data }: { data: TimeTable }">
-            {{ new Date(data.createdAt).toLocaleDateString('de-DE') }}
+            {{ new Date(data.createdAt).toLocaleDateString('de-DE', { timeZone: 'UTC' }) }}
           </template>
         </Column>
         <Column field="year" header="Year/Week" sortable>

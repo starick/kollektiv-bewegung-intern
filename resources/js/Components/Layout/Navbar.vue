@@ -2,6 +2,7 @@
 import { route } from 'ziggy-js';
 import { router, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { useDarkMode } from '@/Composables/use-dark-mode';
 import { Menubar, Menu, Avatar } from 'primevue';
 import ApplicationLogo from '@/Components/General/ApplicationLogo.vue';
 import ResponsiveNavLink from '@/Components/General/ResponsiveNavLink.vue';
@@ -11,6 +12,8 @@ const pageProps = usePage().props as any;
 
 const menu = ref();
 const showTeamModal = ref(false);
+
+const { isDark, toggle: toggleDark } = useDarkMode();
 
 const toggle = (event) => {
   menu.value.toggle(event);
@@ -87,13 +90,21 @@ const items = [
         </ResponsiveNavLink>
       </template>
       <template #end>
-        <Avatar
-          :image="pageProps.auth.user.profile_photo_url"
-          shape="circle"
-          size="large"
-          @click="toggle"
-        />
-        <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
+        <div class="flex items-center gap-2">
+          <Button
+            :icon="isDark ? 'pi pi-sun' : 'pi pi-moon'"
+            text
+            rounded
+            @click="toggleDark"
+          />
+          <Avatar
+            :image="pageProps.auth.user.profile_photo_url"
+            shape="circle"
+            size="large"
+            @click="toggle"
+          />
+          <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
+        </div>
       </template>
     </Menubar>
     <TeamSwitchModal v-model:show="showTeamModal" />
