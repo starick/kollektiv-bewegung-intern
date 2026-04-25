@@ -8,7 +8,7 @@ export interface DesignTemplate {
 
 export const DESIGN_TEMPLATES: DesignTemplate[] = [
   {
-    name: 'Abstract Warm',
+    name: 'Abstract 1',
     preview: '/img/abstract-1.png',
     config: {
       background: { image: '/img/abstract-1.png' },
@@ -30,7 +30,7 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
     }
   },
   {
-    name: 'Abstract Cool',
+    name: 'Abstract 2',
     preview: '/img/abstract-2.png',
     config: {
       background: { image: '/img/abstract-2.png' },
@@ -38,13 +38,13 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
         fontSize: '1em',
         color: '#231c18',
         scale: 1,
-        'line-height': 1.6,
-        'margin-top': '0.5em',
+        'line-height': 1.4,
+        'margin-top': '0',
         fontFamily: 'Montserrat, sans-serif'
       },
       overlay: { hasOverlay: true, color: '#fff', opacity: 0.3 },
       highlight: { color: '#ac5f01', background: '#f8d498', registrationNoteAsOverlay: true },
-      header: { color: '#854414', scale: 1.15, fontFamily: 'Montserrat, sans-serif' }
+      header: { color: '#854414', scale: 0.95, fontFamily: 'Montserrat, sans-serif' }
     }
   },
   {
@@ -72,15 +72,15 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
       background: { image: '/img/meunster-hafen.png' },
       body: {
         fontSize: '1em',
-        color: '#1a1a1a',
+        color: '#FAFAFA',
         scale: 1,
         'line-height': 1.6,
-        'margin-top': '0.5em',
+        'margin-top': '0em',
         fontFamily: 'Inter, sans-serif'
       },
-      overlay: { hasOverlay: true, color: '#ffffff', opacity: 0.6 },
-      highlight: { color: '#c0392b', background: '#fadbd8', registrationNoteAsOverlay: true },
-      header: { color: '#922b21', scale: 1.15, fontFamily: 'Oswald, sans-serif' }
+      overlay: { hasOverlay: true, color: '#1E3142', opacity: 0.5 },
+      highlight: { color: '#66BAFF', background: '#304961', registrationNoteAsOverlay: true },
+      header: { color: '#90CAF9', scale: 1.15, fontFamily: 'Oswald, sans-serif' }
     }
   },
   {
@@ -105,18 +105,32 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
     name: 'Pastel',
     preview: '/img/pastel-1.png',
     config: {
-      background: { image: '/img/pastel-1.png' },
+      background: {
+        image: '/img/pastel-1.png'
+      },
       body: {
         fontSize: '1em',
         color: '#4a4a4a',
         scale: 1,
         'line-height': 1.6,
         'margin-top': '0.5em',
-        fontFamily: 'Figtree, sans-serif'
+        fontFamily: 'Raleway, sans-serif'
       },
-      overlay: { hasOverlay: false, color: '#000000', opacity: 0.2 },
-      highlight: { color: '#7d3c98', background: '#e8daef', registrationNoteAsOverlay: true },
-      header: { color: '#6c3483', scale: 1.15, fontFamily: 'Raleway, sans-serif' }
+      overlay: {
+        hasOverlay: false,
+        color: '#000000',
+        opacity: 0.2
+      },
+      highlight: {
+        color: '#B3522E',
+        background: '#F0C48D',
+        registrationNoteAsOverlay: true
+      },
+      header: {
+        color: '#9C5230',
+        scale: 1.1,
+        fontFamily: '"Playfair Display", serif'
+      }
     }
   }
 ];
