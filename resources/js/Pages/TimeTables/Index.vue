@@ -8,7 +8,10 @@ import { TimeTable } from '@/Types/time-table';
 import useAlert from '@/Composables/use-alerts';
 import { MenuItem } from 'primevue';
 
-const props = defineProps<{ timeTables: { data: TimeTable[] } }>();
+const props = defineProps<{
+  timeTables: { data: TimeTable[] };
+  filters: { mine: boolean };
+}>();
 const timeTables = toRef(props, 'timeTables');
 
 const alert = useAlert();
@@ -19,6 +22,10 @@ const reload = async () => {
     onError: (e) => alert.error('Reload error:', e),
     onSuccess: () => alert.add('reload successful', 'success')
   });
+};
+
+const toggleMine = (value: boolean) => {
+  router.get(route('time-tables.index'), { mine: value ? '1' : undefined }, { preserveState: true });
 };
 
 const rowClick = async (e: any) => {
@@ -44,6 +51,16 @@ const title = 'Timetables Overview';
 <template>
   <AppLayout :title="title">
     <Card :menu-items="menuItems">
+      <div class="flex items-center gap-4 mb-3">
+        <div class="flex items-center gap-2">
+          <RadioButton input-id="filter-all" :model-value="filters.mine" :value="false" @change="() => toggleMine(false)" />
+          <label for="filter-all">All</label>
+        </div>
+        <div class="flex items-center gap-2">
+          <RadioButton input-id="filter-mine" :model-value="filters.mine" :value="true" @change="() => toggleMine(true)" />
+          <label for="filter-mine">Mine</label>
+        </div>
+      </div>
       <DataTable
         :value="timeTables.data"
         responsiveLayout="scroll"

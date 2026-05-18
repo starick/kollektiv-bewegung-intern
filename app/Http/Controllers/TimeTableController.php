@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateTimeTableRequest;
 use App\Http\Resources\CourseResource;
 use App\Http\Resources\TimeTableResource;
 use App\Models\TimeTable;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Services\CourseImportService;
 
@@ -15,10 +16,17 @@ class TimeTableController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $query = TimeTable::with('creator');
+
+        if ($request->boolean('mine')) {
+            $query->where('created_by', auth()->id());
+        }
+
         return Inertia::render('TimeTables/Index', [
-            'timeTables' => TimeTableResource::collection(TimeTable::with('creator')->get()),
+            'timeTables' => TimeTableResource::collection($query->get()),
+            'filters' => ['mine' => $request->boolean('mine')],
         ]);
     }
 

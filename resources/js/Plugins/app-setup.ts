@@ -28,7 +28,9 @@ import {
   TabList,
   TabPanel,
   TabPanels,
-  Tabs
+  RadioButton,
+  Tabs,
+  ToggleButton
 } from 'primevue';
 
 export function addComponents(app: App): App {
@@ -60,6 +62,8 @@ export function addComponents(app: App): App {
   app.component('AccordionContent', AccordionContent);
   app.component('ProgressSpinner', ProgressSpinner);
   app.component('ConfirmDialog', ConfirmDialog);
+  app.component('RadioButton', RadioButton);
+  app.component('ToggleButton', ToggleButton);
 
   return app;
 }
