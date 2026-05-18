@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { TimeTable } from '@/Types/time-table';
 import TimeTableDisplay from '@/Components/TimeTables/TimeTableDisplay.vue';
+import TimeTableBubbleDisplay from '@/Components/TimeTables/TimeTableBubbleDisplay.vue';
 import { computed, reactive, ref, watch } from 'vue';
-import html2canvas from 'html2canvas';
+import { toJpeg } from 'html-to-image';
 import Card from '@/Components/General/Card.vue';
 import { Course } from '@/Types/course';
 import TimeTableDesignControls from './TimeTableDesignControls.vue';
@@ -30,15 +31,20 @@ const hasUnsavedChanges = computed(() => JSON.stringify(displayConfig) !== saved
 
 const doDownload = async () => {
   if (!timetableRef.value) return;
-  const canvas = await html2canvas(timetableRef.value, {
-    useCORS: true,
-    backgroundColor: null,
-    scale: 2,
-    logging: false
+
+  await document.fonts.ready;
+  await new Promise(requestAnimationFrame);
+
+  const dataUrl = await toJpeg(timetableRef.value, {
+    quality: 0.95,
+    backgroundColor: '#f7c88f',
+    pixelRatio: 2,
+    cacheBust: true
   });
+
   const link = document.createElement('a');
   link.download = `timetable_${props.timeTable.year}-${props.timeTable.week}.jpg`;
-  link.href = canvas.toDataURL('image/jpeg', 0.95);
+  link.href = dataUrl;
   link.click();
 };
 

@@ -6,7 +6,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import PrimeVue, { defaultOptions } from 'primevue/config';
 import ToastService from 'primevue/toastservice';
 import { ZiggyVue } from 'ziggy-js';
-import Aura from '@primevue/themes/aura';
+import Aura from '@primeuix/themes/aura';
 import '../css/styles.scss';
 import { addComponents } from '@/Plugins/app-setup';
 import { ConfirmationService } from 'primevue';
