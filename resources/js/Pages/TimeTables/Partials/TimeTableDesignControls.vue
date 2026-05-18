@@ -11,6 +11,11 @@ const emits = defineEmits(['onSave', 'onDownload']);
 
 const alert = useAlert();
 
+const layoutOptions = [
+  { label: 'List', value: 'list' },
+  { label: 'Bubble', value: 'bubble' }
+];
+
 const backgroundImages = [
   { label: 'Abstract 1', value: '/img/abstract-1.png' },
   { label: 'Abstract 2', value: '/img/abstract-2.png' },
@@ -24,7 +29,7 @@ const backgroundImages = [
 <template>
   <Accordion value="0">
     <AccordionPanel value="0">
-      <AccordionHeader>Background</AccordionHeader>
+      <AccordionHeader>Theme</AccordionHeader>
       <AccordionContent>
         <div class="flex items-center gap-3 mb-4">
           <img :src="modelValue.background.image" class="w-32 h-20 object-cover rounded" />
@@ -37,6 +42,38 @@ const backgroundImages = [
             class="w-full"
           />
         </div>
+        <div>
+          <label class="block text-xs mb-1">Layout</label>
+          <div class="flex items-center gap-3">
+            <Dropdown
+              v-model="modelValue.layout"
+              :options="layoutOptions"
+              optionLabel="label"
+              optionValue="value"
+              class="w-full"
+            />
+          </div>
+        </div>
+
+        <div v-if="modelValue.layout === 'bubble'" class="mt-2">
+          <label class="block text-xs mb-1">Columns</label>
+          <div class="flex items-center gap-3">
+            <InputNumber
+              v-model="modelValue.columns"
+              :min="1"
+              :max="6"
+              :step="1"
+              mode="decimal"
+              class="w-full"
+              showButtons
+            />
+          </div>
+        </div>
+      </AccordionContent>
+    </AccordionPanel>
+    <AccordionPanel value="5">
+      <AccordionHeader>Overlay</AccordionHeader>
+      <AccordionContent>
         <div class="col-span-2">
           <label class="block text-xs mb-1">Overlay</label>
 
@@ -107,14 +144,9 @@ const backgroundImages = [
             <ColorSwatch v-model="modelValue.body.color" />
           </div>
           <div class="col-span-2">
-            <label class="block text-xs mb-1">Font Size</label>
-            <InputTextSize v-model="modelValue.body.fontSize" />
-          </div>
-          <div class="col-span-2">
             <label class="block text-xs mb-1">Margin</label>
             <InputTextSize v-model="modelValue.body['margin-top']" />
           </div>
-
           <div class="col-span-2">
             <label class="block text-xs mb-1">Scale</label>
             <div class="flex items-center gap-3">
@@ -128,7 +160,6 @@ const backgroundImages = [
               />
             </div>
           </div>
-
           <div class="col-span-2">
             <label class="block text-xs mb-1">Line Height</label>
             <div class="flex items-center gap-3">
@@ -160,7 +191,11 @@ const backgroundImages = [
           <div class="col-span-2">
             <label class="block text-xs mb-1">Registration Note</label>
             <div class="flex items-center gap-3">
-              <Checkbox v-model="modelValue.highlight.registrationNoteAsOverlay" binary ariaLabel="registration note as overlay" />
+              <Checkbox
+                v-model="modelValue.highlight.registrationNoteAsOverlay"
+                binary
+                ariaLabel="registration note as overlay"
+              />
               <span class="text-xs">Show as overlay badge</span>
             </div>
           </div>

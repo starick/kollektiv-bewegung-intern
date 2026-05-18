@@ -11,6 +11,8 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
     name: 'Abstract 1',
     preview: '/img/abstract-1.png',
     config: {
+      layout: 'list',
+      columns: 4,
       background: { image: '/img/abstract-1.png' },
       body: {
         fontSize: '1em',
@@ -33,6 +35,8 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
     name: 'Abstract 2',
     preview: '/img/abstract-2.png',
     config: {
+      layout: 'list',
+      columns: 4,
       background: { image: '/img/abstract-2.png' },
       body: {
         fontSize: '1em',
@@ -51,6 +55,8 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
     name: 'Soft',
     preview: '/img/soft-1.png',
     config: {
+      layout: 'list',
+      columns: 4,
       background: { image: '/img/soft-1.png' },
       body: {
         fontSize: '1em',
@@ -69,6 +75,8 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
     name: 'Münster Hafen',
     preview: '/img/meunster-hafen.png',
     config: {
+      layout: 'list',
+      columns: 4,
       background: { image: '/img/meunster-hafen.png' },
       body: {
         fontSize: '1em',
@@ -87,6 +95,8 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
     name: 'Münster Hafen Dark',
     preview: '/img/meunster-hafen-dark.png',
     config: {
+      layout: 'list',
+      columns: 4,
       background: { image: '/img/meunster-hafen-dark.png' },
       body: {
         fontSize: '1em',
@@ -105,6 +115,8 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
     name: 'Pastel',
     preview: '/img/pastel-1.png',
     config: {
+      layout: 'list',
+      columns: 4,
       background: {
         image: '/img/pastel-1.png'
       },

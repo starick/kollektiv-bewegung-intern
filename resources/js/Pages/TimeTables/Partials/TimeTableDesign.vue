@@ -131,6 +131,14 @@ watch(
           <ProgressSpinner />
         </div>
 
+        <TimeTableBubbleDisplay
+          v-else-if="displayConfig.layout === 'bubble'"
+          :designConfig="displayConfig"
+          :courses="courses"
+          :year="timeTable.year"
+          :week="timeTable.week"
+          :size="size"
+        />
         <TimeTableDisplay
           v-else
           :designConfig="displayConfig"

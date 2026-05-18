@@ -1,4 +1,6 @@
 export const DEFAULT_DISPLAY_CONFIG = {
+  layout: 'list' as 'list' | 'bubble',
+  columns: 4,
   background: {
     image: '/img/abstract-1.png'
   },
