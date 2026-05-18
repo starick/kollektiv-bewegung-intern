@@ -4,6 +4,7 @@ import { Course } from '@/Types/course';
 import { endOfWeek, formatDate, startOfWeek } from '@/Helpers/date-time-helper';
 import { groupCoursesByDay } from '@/Helpers/course-mapper';
 import { TimeTableDesignConfig } from '@/Types/time-table';
+import TimeTableFooter from '@/Components/TimeTables/TimeTableFooter.vue';
 
 const props = defineProps<{
   week: number;
@@ -112,21 +113,7 @@ const timeFrame = computed(
       <p>Kursleitenden anmelden</p>
     </div>
 
-    <div
-      class="absolute bottom-2 left-2 text-sm opacity-90"
-      :style="{ color: designConfig.highlight.color }"
-    >
-      <p>
-        Sofern nicht anders angegeben, finden die Kurse im Bewegungsraum der B-Side (Am Mittelhafen
-        42) statt.
-      </p>
-      <p>
-        Alle Angebote sind nach Pay-What-You-Can-Prinzip.
-        <span v-if="!designConfig.highlight.registrationNoteAsOverlay">
-          Bitte vorher bei den Kursleitenden anmelden!
-        </span>
-      </p>
-    </div>
+    <TimeTableFooter :footerConfig="designConfig.footer" :addRegistrationNote="!designConfig.highlight.registrationNoteAsOverlay" />
 
     <div class="origin-top flex-1 min-h-0" :style="designConfig.body">
       <div

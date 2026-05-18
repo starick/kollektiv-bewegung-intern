@@ -22,7 +22,7 @@ const backgroundImages = [
   { label: 'Soft 1', value: '/img/soft-1.png' },
   { label: 'Pastel 1', value: '/img/pastel-1.png' },
   { label: 'Münster Hafen', value: '/img/meunster-hafen.png' },
-  { label: 'Münster Hafen 2', value: '/img/meunster-hafen-dark.png' }
+  { label: 'Foliage', value: '/img/foliage-1.png' }
 ];
 </script>
 
@@ -198,6 +198,37 @@ const backgroundImages = [
               />
               <span class="text-xs">Show as overlay badge</span>
             </div>
+          </div>
+        </div>
+      </AccordionContent>
+    </AccordionPanel>
+    <AccordionPanel value="6">
+      <AccordionHeader>Footer</AccordionHeader>
+      <AccordionContent>
+        <div class="grid grid-cols-1 gap-3">
+          <div>
+            <label class="block text-xs mb-1">Text Color</label>
+            <ColorSwatch v-model="modelValue.footer.color" />
+          </div>
+          <div>
+            <label class="block text-xs mb-1">Overlay</label>
+            <div class="flex items-center gap-3 mb-2">
+              <Checkbox v-model="modelValue.footer.overlay.hasOverlay" binary ariaLabel="footer overlay" />
+              <span class="text-xs">has overlay</span>
+            </div>
+            <ColorSwatch v-model="modelValue.footer.overlay.color" :disabled="!modelValue.footer.overlay.hasOverlay" />
+          </div>
+          <div>
+            <label class="block text-xs mb-1">Overlay Opacity</label>
+            <InputNumber
+              v-model="modelValue.footer.overlay.opacity"
+              :disabled="!modelValue.footer.overlay.hasOverlay"
+              :min="0"
+              :max="1"
+              :step="0.05"
+              mode="decimal"
+              showButtons
+            />
           </div>
         </div>
       </AccordionContent>
