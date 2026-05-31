@@ -150,5 +150,26 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
       },
       footer: { color: '#B3522E', overlay: { hasOverlay: false, color: '#000000', opacity: 0.3 } }
     }
+  },
+  {
+    name: 'Foliage',
+    preview: '/img/foliage-1.png',
+    config: {
+      layout: 'bubble',
+      columns: 4,
+      background: { image: '/img/foliage-1.png' },
+      body: {
+        fontSize: '1em',
+        color: '#424242',
+        scale: 0.94,
+        'line-height': 1,
+        'margin-top': '-0.4em',
+        fontFamily: 'Montserrat, sans-serif'
+      },
+      overlay: { hasOverlay: false, color: '#000000', opacity: 0.3 },
+      highlight: { color: '#FFFAFA', background: '#639471', registrationNoteAsOverlay: false },
+      header: { color: '#315232', scale: 1.15, fontFamily: 'Oswald, sans-serif' },
+      footer: { color: '#025406', overlay: { hasOverlay: true, color: '#FAFAFA', opacity: 0.6 } }
+    }
   }
 ];
