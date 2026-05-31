@@ -1,4 +1,6 @@
 export const DEFAULT_DISPLAY_CONFIG = {
+  layout: 'list' as 'list' | 'bubble',
+  columns: 4,
   background: {
     image: '/img/abstract-1.png'
   },
@@ -24,5 +26,13 @@ export const DEFAULT_DISPLAY_CONFIG = {
     color: '#A14800',
     scale: 1.15,
     fontFamily: 'Oswald, sans-serif'
+  },
+  footer: {
+    color: '#B8611A',
+    overlay: {
+      hasOverlay: false,
+      color: '#000000',
+      opacity: 0.3
+    }
   }
 };

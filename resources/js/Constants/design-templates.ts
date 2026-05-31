@@ -11,6 +11,8 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
     name: 'Abstract 1',
     preview: '/img/abstract-1.png',
     config: {
+      layout: 'list',
+      columns: 4,
       background: { image: '/img/abstract-1.png' },
       body: {
         fontSize: '1em',
@@ -26,13 +28,16 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
         background: '#F5DCB6',
         registrationNoteAsOverlay: true
       },
-      header: { color: '#A14800', scale: 1.15, fontFamily: 'Oswald, sans-serif' }
+      header: { color: '#A14800', scale: 1.15, fontFamily: 'Oswald, sans-serif' },
+      footer: { color: '#B8611A', overlay: { hasOverlay: false, color: '#ffffff', opacity: 0.3 } }
     }
   },
   {
     name: 'Abstract 2',
     preview: '/img/abstract-2.png',
     config: {
+      layout: 'list',
+      columns: 4,
       background: { image: '/img/abstract-2.png' },
       body: {
         fontSize: '1em',
@@ -44,13 +49,16 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
       },
       overlay: { hasOverlay: true, color: '#fff', opacity: 0.3 },
       highlight: { color: '#ac5f01', background: '#f8d498', registrationNoteAsOverlay: true },
-      header: { color: '#854414', scale: 0.95, fontFamily: 'Montserrat, sans-serif' }
+      header: { color: '#854414', scale: 0.95, fontFamily: 'Montserrat, sans-serif' },
+      footer: { color: '#ac5f01', overlay: { hasOverlay: false, color: '#000000', opacity: 0.3 } }
     }
   },
   {
     name: 'Soft',
     preview: '/img/soft-1.png',
     config: {
+      layout: 'list',
+      columns: 4,
       background: { image: '/img/soft-1.png' },
       body: {
         fontSize: '1em',
@@ -62,13 +70,16 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
       },
       overlay: { hasOverlay: true, color: '#ffffff', opacity: 0.55 },
       highlight: { color: '#791BD1', background: '#EAE7F5', registrationNoteAsOverlay: false },
-      header: { color: '#4C288F', scale: 1.2, fontFamily: '"Playfair Display", serif' }
+      header: { color: '#4C288F', scale: 1.2, fontFamily: '"Playfair Display", serif' },
+      footer: { color: '#791BD1', overlay: { hasOverlay: false, color: '#000000', opacity: 0.3 } }
     }
   },
   {
     name: 'Münster Hafen',
     preview: '/img/meunster-hafen.png',
     config: {
+      layout: 'list',
+      columns: 4,
       background: { image: '/img/meunster-hafen.png' },
       body: {
         fontSize: '1em',
@@ -80,13 +91,16 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
       },
       overlay: { hasOverlay: true, color: '#1E3142', opacity: 0.5 },
       highlight: { color: '#66BAFF', background: '#304961', registrationNoteAsOverlay: true },
-      header: { color: '#90CAF9', scale: 1.15, fontFamily: 'Oswald, sans-serif' }
+      header: { color: '#90CAF9', scale: 1.15, fontFamily: 'Oswald, sans-serif' },
+      footer: { color: '#66BAFF', overlay: { hasOverlay: false, color: '#000000', opacity: 0.3 } }
     }
   },
   {
     name: 'Münster Hafen Dark',
     preview: '/img/meunster-hafen-dark.png',
     config: {
+      layout: 'list',
+      columns: 4,
       background: { image: '/img/meunster-hafen-dark.png' },
       body: {
         fontSize: '1em',
@@ -98,13 +112,16 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
       },
       overlay: { hasOverlay: true, color: '#000000', opacity: 0.4 },
       highlight: { color: '#e0c070', background: '#5a4a20', registrationNoteAsOverlay: true },
-      header: { color: '#f0d080', scale: 1.15, fontFamily: '"Playfair Display", serif' }
+      header: { color: '#f0d080', scale: 1.15, fontFamily: '"Playfair Display", serif' },
+      footer: { color: '#e0c070', overlay: { hasOverlay: false, color: '#000000', opacity: 0.3 } }
     }
   },
   {
     name: 'Pastel',
     preview: '/img/pastel-1.png',
     config: {
+      layout: 'list',
+      columns: 4,
       background: {
         image: '/img/pastel-1.png'
       },
@@ -130,7 +147,8 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
         color: '#9C5230',
         scale: 1.1,
         fontFamily: '"Playfair Display", serif'
-      }
+      },
+      footer: { color: '#B3522E', overlay: { hasOverlay: false, color: '#000000', opacity: 0.3 } }
     }
   }
 ];
