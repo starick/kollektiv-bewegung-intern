@@ -34,7 +34,7 @@
     "dependencies": {
         "@primevue/themes": "^4.2.5",
         "date-fns": "^4.1.0",
-        "html2canvas": "^1.4.1",
+        "html-to-image": "^1.11.13",
         "primeicons": "github:primefaces/primeicons",
         "primevue": "^4.5.4",
         "sass": "^1.83.1",
