@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Course;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -22,7 +23,7 @@ class CourseImport implements ToModel, WithHeadingRow
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
-    public function model(array $row)
+    public function model(array $row): Model|array|null
     {
         $place = Arr::get($row, 'Wo');
 
