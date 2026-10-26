@@ -13,7 +13,7 @@ use App\Models\TimeTable;
 
 class CourseImportService
 {
-    public function import($file, TimeTable $timeTable = null, DateTimeZone $timeZone = null)
+    public function import($file, ?TimeTable $timeTable = null, ?DateTimeZone $timeZone = null)
     {
         $coursesFromExcel = Excel::toCollection(new CourseImport, $file)->first();
         $courses = new Collection();
