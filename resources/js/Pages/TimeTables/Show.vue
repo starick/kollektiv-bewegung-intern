@@ -25,10 +25,10 @@ watch(() => props.timeTable, loadCourses, { immediate: true });
   <AppLayout :title="title">
     <Tabs value="0">
       <TabList>
-        <Tab value="0">Design</Tab>
-        <Tab value="1">Courses</Tab>
-        <Tab value="2">Info</Tab>
-        <Tab value="3">Actions</Tab>
+        <Tab value="0">{{ $t('Design') }}</Tab>
+        <Tab value="1">{{ $t('Courses') }}</Tab>
+        <Tab value="2">{{ $t('Info') }}</Tab>
+        <Tab value="3">{{ $t('Actions') }}</Tab>
       </TabList>
       <TabPanels>
         <TabPanel value="0">

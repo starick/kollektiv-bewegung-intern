@@ -3,8 +3,6 @@ import { ref, computed } from 'vue';
 import ColorPicker from 'primevue/colorpicker';
 import OverlayPanel from 'primevue/overlaypanel';
 import Button from 'primevue/button';
-import SecondaryButton from '../General/SecondaryButton.vue';
-import PrimaryButton from '../General/PrimaryButton.vue';
 
 const modelValue = defineModel<string>({ required: true });
 
@@ -83,7 +81,7 @@ function togglePanel(e: Event) {
               class="border rounded px-2 py-1 text-sm w-full mt-2"
               v-model="modelValue"
               placeholder="#RRGGBB"
-              aria-label="Color hex value"
+              :aria-label="$t('Color hex value')"
             />
           </div>
         </div>

@@ -6,9 +6,22 @@ import { router } from '@inertiajs/vue3';
 import { computed, ref, toRef, watch } from 'vue';
 import { Protocol } from '@/Types/protocol';
 import useAlert from '@/Composables/use-alerts';
-import { DataTablePageEvent, DataTableSortEvent, IconField, InputIcon, MenuItem, Tag } from 'primevue';
+import { trans } from '@/Composables/use-translations';
+import {
+  DataTablePageEvent,
+  DataTableSortEvent,
+  IconField,
+  InputIcon,
+  MenuItem,
+  Tag
+} from 'primevue';
 
-type Filters = { search: string; sort: 'date' | 'updatedAt'; direction: 'asc' | 'desc'; perPage: number };
+type Filters = {
+  search: string;
+  sort: 'date' | 'updatedAt';
+  direction: 'asc' | 'desc';
+  perPage: number;
+};
 
 const props = defineProps<{
   protocols: {
@@ -19,7 +32,9 @@ const props = defineProps<{
 }>();
 const protocols = toRef(props, 'protocols');
 
-const first = computed(() => (protocols.value.meta.current_page - 1) * protocols.value.meta.per_page);
+const first = computed(
+  () => (protocols.value.meta.current_page - 1) * protocols.value.meta.per_page
+);
 
 // Loads the list with changed filters; anything but a page change starts again on page 1
 const visit = (changes: Partial<Filters> & { page?: number }) => {
@@ -62,8 +77,8 @@ const alert = useAlert();
 const reload = async () => {
   router.reload({
     only: ['protocols'],
-    onError: (e) => alert.error('Reload error:', e),
-    onSuccess: () => alert.add('reload successful', 'success')
+    onError: (e) => alert.error(trans('Reload error:'), e),
+    onSuccess: () => alert.add(trans('reload successful'), 'success')
   });
 };
 
@@ -73,18 +88,18 @@ const rowClick = async (e: any) => {
 
 const menuItems: MenuItem[] = [
   {
-    label: 'Create New',
+    label: trans('Create New'),
     icon: 'pi pi-plus',
     command: () => router.get(route('protocols.create'))
   },
   {
-    label: 'Refresh',
+    label: trans('Refresh'),
     icon: 'pi pi-refresh',
     command: reload
   }
 ];
 
-const title = 'Protocols Overview';
+const title = trans('Protocols Overview');
 </script>
 
 <template>
@@ -95,8 +110,8 @@ const title = 'Protocols Overview';
           <InputIcon class="pi pi-search" />
           <InputText
             v-model="search"
-            placeholder="Search protocols"
-            aria-label="Search protocols"
+            :placeholder="$t('Search protocols')"
+            :aria-label="$t('Search protocols')"
             @keydown.esc="search = ''"
           />
           <InputIcon
@@ -104,7 +119,7 @@ const title = 'Protocols Overview';
             class="pi pi-times cursor-pointer"
             role="button"
             tabindex="0"
-            aria-label="Clear search"
+            :aria-label="$t('Clear search')"
             @click="search = ''"
             @keydown.enter="search = ''"
           />
@@ -128,31 +143,34 @@ const title = 'Protocols Overview';
         @row-click="rowClick"
       >
         <template #empty>
-          {{ filters.search ? 'No protocols match your search.' : 'No protocols yet.' }}
+          {{ filters.search ? $t('No protocols match your search.') : $t('No protocols yet.') }}
         </template>
-        <Column field="date" header="Protocol" sortable>
+        <Column field="date" :header="$t('Protocol')" sortable>
           <template #body="{ data }: { data: Protocol }">
             <div class="font-semibold">
               {{ new Date(data.date).toLocaleDateString('de-DE', { timeZone: 'UTC' }) }}
             </div>
-            <div v-if="data.description" class="line-clamp-1 text-sm text-gray-600 dark:text-gray-400">
+            <div
+              v-if="data.description"
+              class="line-clamp-1 text-sm text-gray-600 dark:text-gray-400"
+            >
               {{ data.description }}
             </div>
           </template>
         </Column>
-        <Column field="topics" header="Topics">
+        <Column field="topics" :header="$t('Topics')">
           <template #body="{ data }: { data: Protocol }">
             <div class="flex flex-wrap gap-1">
               <Tag v-for="topic in data.topics" :key="topic" :value="topic" severity="secondary" />
             </div>
           </template>
         </Column>
-        <Column field="editor" header="Last Edited By">
+        <Column field="editor" :header="$t('Last Edited By')">
           <template #body="{ data }: { data: Protocol }">
             {{ data.editor?.name }}
           </template>
         </Column>
-        <Column field="updatedAt" header="Updated At" sortable>
+        <Column field="updatedAt" :header="$t('Updated At')" sortable>
           <template #body="{ data }: { data: Protocol }">
             {{ new Date(data.updatedAt).toLocaleDateString('de-DE') }}
           </template>

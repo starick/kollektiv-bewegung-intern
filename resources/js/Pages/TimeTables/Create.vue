@@ -30,8 +30,8 @@ const {
     <Card>
       <form @submit.prevent="submit">
         <FormSection class="mb-4">
-          <template #title>File Upload</template>
-          <template #description>Upload courses as .xls or .xlsx file</template>
+          <template #title>{{ $t('File Upload') }}</template>
+          <template #description>{{ $t('Upload courses as .xls or .xlsx file') }}</template>
 
           <template #form>
             <FileUpload
@@ -51,20 +51,29 @@ const {
         </FormSection>
 
         <FormSection class="mb-4">
-          <template #title>Time Frame</template>
+          <template #title>{{ $t('Time Frame') }}</template>
           <template #description>
-            Selected range:
-            {{ formatDate(startDate) }} - {{ formatDate(endDate) }}
+            {{
+              $t('Selected range: :start - :end', {
+                start: formatDate(startDate),
+                end: formatDate(endDate)
+              })
+            }}
           </template>
 
           <template #form>
-            <div v-if="detectingWeek" class="col-span-6">Reading week from file…</div>
+            <div v-if="detectingWeek" class="col-span-6">{{ $t('Reading week from file…') }}</div>
             <div v-else-if="weekDetected" class="col-span-6">
-              {{ formData.week }} / {{ formData.year }} (detected from file)
+              {{
+                $t(':week / :year (detected from file)', {
+                  week: formData.week,
+                  year: formData.year
+                })
+              }}
             </div>
             <div v-else class="col-span-6 flex flex-row">
               <div>
-                <InputLabel for="year" value="Year" />
+                <InputLabel for="year" :value="$t('Year')" />
                 <InputNumber
                   id="year"
                   v-model="formData.year"
@@ -76,19 +85,19 @@ const {
               </div>
 
               <div class="ml-4">
-                <InputLabel for="week" value="Week" />
+                <InputLabel for="week" :value="$t('Week')" />
                 <InputNumber id="week" v-model="formData.week" :min="1" :max="53" show-buttons />
               </div>
             </div>
             <div v-if="formData.file && !detectingWeek && !weekDetected" class="col-span-6">
-              Could not detect the week from this file, please select it manually.
+              {{ $t('Could not detect the week from this file, please select it manually.') }}
             </div>
           </template>
         </FormSection>
 
         <FormSection>
-          <template #title>Design Template</template>
-          <template #description>Choose a starting design for this timetable</template>
+          <template #title>{{ $t('Design Template') }}</template>
+          <template #description>{{ $t('Choose a starting design for this timetable') }}</template>
 
           <template #form>
             <div class="col-span-6">
@@ -104,13 +113,13 @@ const {
             class="mr-4"
             @click="cancel"
           >
-            Cancel
+            {{ $t('Cancel') }}
           </SecondaryButton>
           <PrimaryButton
             :class="{ 'opacity-25': formData.processing }"
             :disabled="formData.processing"
           >
-            Create
+            {{ $t('Create') }}
           </PrimaryButton>
         </div>
       </form>

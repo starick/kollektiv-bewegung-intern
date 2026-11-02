@@ -29,7 +29,7 @@ function handleImageError() {
 </script>
 
 <template>
-  <Head title="Welcome" />
+  <Head :title="$t('Welcome')" />
   <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
     <div class="relative min-h-screen w-screen flex flex-col items-center justify-between">
       <header class="grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3 w-screen px-12">
@@ -42,7 +42,7 @@ function handleImageError() {
             :href="route('dashboard')"
             class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
           >
-            Dashboard
+            {{ $t('Dashboard') }}
           </Link>
 
           <template v-else>
@@ -50,7 +50,7 @@ function handleImageError() {
               :href="route('login')"
               class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
             >
-              Log in
+              {{ $t('Log in') }}
             </Link>
 
             <Link
@@ -58,7 +58,7 @@ function handleImageError() {
               :href="route('register')"
               class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
             >
-              Register
+              {{ $t('Register') }}
             </Link>
           </template>
         </nav>
@@ -69,14 +69,15 @@ function handleImageError() {
           class="p-6 lg:p-8 dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent"
         >
           <h1 class="mt-8 text-2xl font-medium text-gray-900 dark:text-white">
-            Welcome to Kollektiv Bewegung Intern!
+            {{ $t('Welcome to :app!', { app: 'Kollektiv Bewegung Intern' }) }}
           </h1>
 
           <p class="mt-6 text-gray-500 dark:text-gray-400 leading-relaxed">
-            This tool is developed to help manage internal processes and communication within
-            Kollektiv:Bewegung. It's a work in progress so please be kind to it. If you encounter
-            any issues or have suggestions for improvements, feel free to reach out to the
-            development team.
+            {{
+              $t(
+                "This tool is developed to help manage internal processes and communication within Kollektiv:Bewegung. It's a work in progress so please be kind to it. If you encounter any issues or have suggestions for improvements, feel free to reach out to the development team."
+              )
+            }}
           </p>
         </div>
       </main>

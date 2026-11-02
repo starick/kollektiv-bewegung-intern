@@ -5,6 +5,7 @@ import { Course } from '@/Types/course';
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import { TimeTable } from '@/Types/time-table';
+import { trans } from '@/Composables/use-translations';
 
 export interface TimeTableShowProps {
   timeTable: TimeTable;
@@ -20,13 +21,13 @@ export function timetableShowModel(props: TimeTableShowProps) {
   async function reload() {
     router.reload({
       only: ['timeTable'],
-      onError: (e) => alert.error('Reload error:', e)
+      onError: (e) => alert.error(trans('Reload error:'), e)
     });
   }
 
   function loadCourses() {
     courseActions.reload({
-      onError: (e) => alert.error('Reload error:', e),
+      onError: (e) => alert.error(trans('Reload error:'), e),
       onFinish: () => (isLoading.value = false)
     });
   }
@@ -34,10 +35,10 @@ export function timetableShowModel(props: TimeTableShowProps) {
   function deleteCourse(course: Course) {
     courseActions.remove(course.id, {
       onSuccess: () => {
-        alert.add('course deleted', 'success');
+        alert.add(trans('course deleted'), 'success');
         loadCourses();
       },
-      onError: (e: Event) => alert.error('Error deleting course:', e)
+      onError: (e: Event) => alert.error(trans('Error deleting course:'), e)
     });
   }
 
@@ -46,7 +47,7 @@ export function timetableShowModel(props: TimeTableShowProps) {
       onSuccess: () => {
         loadCourses();
       },
-      onError: (e: Event) => alert.error('Error adding course:', e)
+      onError: (e: Event) => alert.error(trans('Error adding course:'), e)
     });
   }
 
@@ -55,11 +56,11 @@ export function timetableShowModel(props: TimeTableShowProps) {
       onSuccess: () => {
         loadCourses();
       },
-      onError: (e: Event) => alert.error('Error saving course:', e)
+      onError: (e: Event) => alert.error(trans('Error saving course:'), e)
     });
   }
 
-  const title = 'Show Timetable';
+  const title = trans('Show Timetable');
 
   return {
     isLoading,

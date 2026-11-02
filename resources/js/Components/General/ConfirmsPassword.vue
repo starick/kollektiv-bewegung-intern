@@ -80,11 +80,11 @@ const closeModal = () => {
 
     <DialogModal :show="confirmingPassword" @close="closeModal">
       <template #title>
-        {{ title }}
+        {{ $t(title) }}
       </template>
 
       <template #content>
-        {{ content }}
+        {{ $t(content) }}
 
         <div class="mt-4">
           <TextInput
@@ -92,7 +92,7 @@ const closeModal = () => {
             v-model="form.password"
             type="password"
             class="mt-1 block w-3/4"
-            placeholder="Password"
+            :placeholder="$t('Password')"
             autocomplete="current-password"
             @keyup.enter="confirmPassword"
           />
@@ -102,7 +102,7 @@ const closeModal = () => {
       </template>
 
       <template #footer>
-        <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
+        <SecondaryButton @click="closeModal"> {{ $t('Cancel') }} </SecondaryButton>
 
         <PrimaryButton
           class="ms-3"
@@ -110,7 +110,7 @@ const closeModal = () => {
           :disabled="form.processing"
           @click="confirmPassword"
         >
-          {{ button }}
+          {{ $t(button) }}
         </PrimaryButton>
       </template>
     </DialogModal>

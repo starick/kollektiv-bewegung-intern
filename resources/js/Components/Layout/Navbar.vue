@@ -6,6 +6,7 @@ import { useDarkMode } from '@/Composables/use-dark-mode';
 import { Menubar, Menu, Avatar } from 'primevue';
 import ApplicationLogo from '@/Components/General/ApplicationLogo.vue';
 import ResponsiveNavLink from '@/Components/General/ResponsiveNavLink.vue';
+import { trans } from '@/Composables/use-translations';
 
 const pageProps = usePage().props as any;
 
@@ -21,14 +22,14 @@ const logout = () => {
 };
 
 const menuItems = [
-  { label: 'Dashboard', icon: 'pi pi-home', command: () => router.get(route('dashboard')) },
+  { label: trans('Dashboard'), icon: 'pi pi-home', command: () => router.get(route('dashboard')) },
   {
-    label: 'Timetables',
+    label: trans('Timetables'),
     icon: 'pi pi-table',
     command: () => router.get(route('time-tables.index'))
   },
   {
-    label: 'Protocols',
+    label: trans('Protocols'),
     icon: 'pi pi-file',
     command: () => router.get(route('protocols.index'))
   }
@@ -37,12 +38,12 @@ const menuItems = [
 const items = [
   {
     // Users removed from the shared team have no current team
-    label: `Team: ${pageProps.auth.user.current_team?.name ?? '–'}`,
+    label: trans('Team: :name', { name: pageProps.auth.user.current_team?.name ?? '–' }),
     icon: 'pi pi-users',
     visible: !!pageProps.auth.user.current_team,
     items: [
       {
-        label: 'Team Settings',
+        label: trans('Team Settings'),
         icon: 'pi pi-users',
         command: () => router.get(route('teams.show', pageProps.auth.user.current_team))
       }
@@ -55,12 +56,12 @@ const items = [
     label: pageProps.auth.user.name,
     items: [
       {
-        label: 'Profile',
+        label: trans('Profile'),
         icon: 'pi pi-user',
         command: () => router.get(route('profile.show'))
       },
       {
-        label: 'Log Out',
+        label: trans('Log Out'),
         icon: 'pi pi-sign-out',
         command: logout
       }
@@ -79,12 +80,7 @@ const items = [
       </template>
       <template #end>
         <div class="flex items-center gap-2">
-          <Button
-            :icon="isDark ? 'pi pi-sun' : 'pi pi-moon'"
-            text
-            rounded
-            @click="toggleDark"
-          />
+          <Button :icon="isDark ? 'pi pi-sun' : 'pi pi-moon'" text rounded @click="toggleDark" />
           <Avatar
             :image="pageProps.auth.user.profile_photo_url"
             shape="circle"

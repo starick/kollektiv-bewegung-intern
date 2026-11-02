@@ -3,6 +3,7 @@ import AppLayout from '@/Components/Layout/AppLayout.vue';
 import DeleteUserForm from '@/Pages/Profile/Partials/DeleteUserForm.vue';
 import LogoutOtherBrowserSessionsForm from '@/Pages/Profile/Partials/LogoutOtherBrowserSessionsForm.vue';
 import SectionBorder from '@/Components/General/SectionBorder.vue';
+import UpdateLocaleForm from '@/Pages/Profile/Partials/UpdateLocaleForm.vue';
 import UpdatePasswordForm from '@/Pages/Profile/Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from '@/Pages/Profile/Partials/UpdateProfileInformationForm.vue';
 
@@ -13,9 +14,11 @@ defineProps({
 </script>
 
 <template>
-  <AppLayout title="Profile">
+  <AppLayout :title="$t('Profile')">
     <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Profile</h2>
+      <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        {{ $t('Profile') }}
+      </h2>
     </template>
 
     <div>
@@ -25,6 +28,10 @@ defineProps({
 
           <SectionBorder />
         </div>
+
+        <UpdateLocaleForm class="mt-10 sm:mt-0" />
+
+        <SectionBorder />
 
         <div v-if="($page.props.jetstream as any).canUpdatePassword">
           <UpdatePasswordForm class="mt-10 sm:mt-0" />

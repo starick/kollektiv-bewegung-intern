@@ -11,6 +11,7 @@ import useTimeTableActions from '@/Composables/use-timetable-actions';
 import useAlert from '@/Composables/use-alerts';
 import { DEFAULT_DISPLAY_CONFIG } from '@/Constants/default-display-config';
 import { useConfirm } from 'primevue';
+import { trans } from '@/Composables/use-translations';
 
 const props = defineProps<{
   timeTable: TimeTable;
@@ -53,10 +54,10 @@ const onSave = () => {
     .update(props.timeTable.id, { display_config: JSON.stringify(displayConfig) })
     .then(() => {
       savedSnapshot.value = JSON.stringify(displayConfig);
-      alert.add('Design saved successfully', 'success');
+      alert.add(trans('Design saved successfully'), 'success');
     })
     .catch((e) => {
-      alert.error('Error saving design', e);
+      alert.error(trans('Error saving design'), e);
     });
 };
 
@@ -66,11 +67,11 @@ const onDownload = () => {
     return;
   }
   confirm.require({
-    header: 'Unsaved Changes',
-    message: 'You have unsaved changes. Save before downloading?',
+    header: trans('Unsaved Changes'),
+    message: trans('You have unsaved changes. Save before downloading?'),
     icon: 'pi pi-exclamation-triangle',
-    acceptLabel: 'Save & Download',
-    rejectLabel: 'Download Anyway',
+    acceptLabel: trans('Save & Download'),
+    rejectLabel: trans('Download Anyway'),
     accept: () => {
       timeTableActions
         .update(props.timeTable.id, { display_config: JSON.stringify(displayConfig) })
@@ -78,7 +79,7 @@ const onDownload = () => {
           savedSnapshot.value = JSON.stringify(displayConfig);
           doDownload();
         })
-        .catch((e) => alert.error('Error saving design', e));
+        .catch((e) => alert.error(trans('Error saving design'), e));
     },
     reject: () => doDownload()
   });
@@ -86,12 +87,12 @@ const onDownload = () => {
 
 const menuItems = [
   {
-    label: 'Save Changes',
+    label: trans('Save Changes'),
     icon: 'pi pi-save',
     command: onSave
   },
   {
-    label: 'Download Image',
+    label: trans('Download Image'),
     icon: 'pi pi-download',
     command: onDownload
   }

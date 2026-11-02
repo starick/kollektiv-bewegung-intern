@@ -3,6 +3,7 @@ import { router, useForm } from '@inertiajs/vue3';
 import { useConfirm } from 'primevue';
 import { route } from 'ziggy-js';
 import { TimeTable } from '@/Types/time-table';
+import { trans } from '@/Composables/use-translations';
 
 const props = defineProps<{ timeTable: TimeTable }>();
 
@@ -20,26 +21,29 @@ const onFileClear = () => {
 
 const onReimport = () => {
   confirm.require({
-    header: 'Reimport Courses',
-    message: 'This will delete all existing courses and replace them with the uploaded file. Continue?',
+    header: trans('Reimport Courses'),
+    message: trans(
+      'This will delete all existing courses and replace them with the uploaded file. Continue?'
+    ),
     icon: 'pi pi-exclamation-triangle',
-    acceptLabel: 'Reimport',
-    rejectLabel: 'Cancel',
+    acceptLabel: trans('Reimport'),
+    rejectLabel: trans('Cancel'),
     acceptClass: 'p-button-danger',
-    accept: () => reimportForm.post(route('time-tables.reimport', { time_table: props.timeTable.id }), {
-      forceFormData: true,
-      onSuccess: () => reimportForm.reset()
-    })
+    accept: () =>
+      reimportForm.post(route('time-tables.reimport', { time_table: props.timeTable.id }), {
+        forceFormData: true,
+        onSuccess: () => reimportForm.reset()
+      })
   });
 };
 
 const onDelete = () => {
   confirm.require({
-    header: 'Delete Timetable',
-    message: 'This will permanently delete the timetable and all its courses. Continue?',
+    header: trans('Delete Timetable'),
+    message: trans('This will permanently delete the timetable and all its courses. Continue?'),
     icon: 'pi pi-exclamation-triangle',
-    acceptLabel: 'Delete',
-    rejectLabel: 'Cancel',
+    acceptLabel: trans('Delete'),
+    rejectLabel: trans('Cancel'),
     acceptClass: 'p-button-danger',
     accept: () => router.delete(route('time-tables.destroy', { time_table: props.timeTable.id }))
   });
@@ -49,9 +53,9 @@ const onDelete = () => {
 <template>
   <div class="max-w-lg space-y-6">
     <div class="border-b dark:border-gray-700 pb-6">
-      <p class="font-medium mb-1">Reimport Courses</p>
+      <p class="font-medium mb-1">{{ $t('Reimport Courses') }}</p>
       <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
-        Deletes all existing courses and imports new ones from a file.
+        {{ $t('Deletes all existing courses and imports new ones from a file.') }}
       </p>
       <div class="flex flex-col gap-3">
         <FileUpload
@@ -68,7 +72,7 @@ const onDelete = () => {
           {{ reimportForm.errors.file }}
         </div>
         <Button
-          label="Reimport"
+          :label="$t('Reimport')"
           icon="pi pi-upload"
           severity="danger"
           :disabled="!reimportForm.file || reimportForm.processing"
@@ -79,12 +83,12 @@ const onDelete = () => {
     </div>
 
     <div>
-      <p class="font-medium mb-1">Delete Timetable</p>
+      <p class="font-medium mb-1">{{ $t('Delete Timetable') }}</p>
       <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
-        Permanently deletes this timetable and all linked courses.
+        {{ $t('Permanently deletes this timetable and all linked courses.') }}
       </p>
       <Button
-        label="Delete Timetable"
+        :label="$t('Delete Timetable')"
         icon="pi pi-trash"
         severity="danger"
         @click="onDelete"
