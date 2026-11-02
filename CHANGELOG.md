@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/starick/kollektiv-bewegung-intern/compare/v1.3.0...v1.4.0) (2026-11-02)
+
+
+### Features
+
+* add german translation ([b491638](https://github.com/starick/kollektiv-bewegung-intern/commit/b4916385a49f2e478536fb6f34202c29ee601f08))
+* add german translation ([d5ec70b](https://github.com/starick/kollektiv-bewegung-intern/commit/d5ec70b19afa274b89355a4ddbdf7b503b3fbe81))
+* add Protocol model with factory ([390439e](https://github.com/starick/kollektiv-bewegung-intern/commit/390439eec3da3a3e2b57a8d20b10f960b13b505c))
+* protocol feature code review ([bc8ed35](https://github.com/starick/kollektiv-bewegung-intern/commit/bc8ed356f768655e5f5aaf032e44adf6c32ec436))
+* protocol list view ([110ec4e](https://github.com/starick/kollektiv-bewegung-intern/commit/110ec4e92560691a4c25cfdb5166b183d179c0da))
+* QoL changes on protocol views ([bb9c66c](https://github.com/starick/kollektiv-bewegung-intern/commit/bb9c66cec9c7ef16021fe2755c5a546c55dd63bb))
+* styling ([1e5c0e3](https://github.com/starick/kollektiv-bewegung-intern/commit/1e5c0e3c3f204bc78058f8927f7637fe976dc396))
+* translation adjustments ([38e451b](https://github.com/starick/kollektiv-bewegung-intern/commit/38e451baccfe776b5316a4d8329ffe8e3ccf06ca))
+* view, create and delete* protocols (*owners and admins only) ([8b5ed99](https://github.com/starick/kollektiv-bewegung-intern/commit/8b5ed9909f8ecdc1445b37e1d4e94d608f4e223f))
+
 ## [1.3.0](https://github.com/starick/kollektiv-bewegung-intern/compare/v1.2.6...v1.3.0) (2026-11-02)
 
 
