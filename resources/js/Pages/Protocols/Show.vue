@@ -37,12 +37,6 @@ const menuItems: MenuItem[] = [
     label: 'Back to Overview',
     icon: 'pi pi-arrow-left',
     command: () => router.get(route('protocols.index'))
-  },
-  {
-    label: 'Delete',
-    icon: 'pi pi-trash',
-    visible: props.can.delete,
-    command: confirmDelete
   }
 ];
 
@@ -52,6 +46,17 @@ const title = computed(() => `Protocol ${formattedDate.value}`);
 <template>
   <AppLayout :title="title">
     <Card :menu-items="menuItems">
+      <template #menu-end>
+        <Button
+          v-if="can.delete"
+          label="Delete"
+          icon="pi pi-trash"
+          severity="danger"
+          text
+          @click="confirmDelete"
+        />
+      </template>
+
       <div class="mb-6">
         <h1 class="text-2xl font-semibold">{{ formattedDate }}</h1>
         <p v-if="protocol.description" class="text-gray-600 dark:text-gray-400">
