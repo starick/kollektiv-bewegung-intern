@@ -39,6 +39,13 @@ class ProtocolTest extends TestCase
         $this->assertSame('2026-11-02', $protocol->date->toDateString());
     }
 
+    public function test_description_is_optional(): void
+    {
+        $protocol = Protocol::factory()->create(['description' => null]);
+
+        $this->assertNull($protocol->refresh()->description);
+    }
+
     public function test_user_references_are_nulled_when_user_is_deleted(): void
     {
         $protocol = Protocol::factory()->edited()->create();

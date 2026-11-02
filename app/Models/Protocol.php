@@ -15,6 +15,7 @@ class Protocol extends Model
      */
     protected $fillable = [
         'date',
+        'description',
         'text',
         'uploaded_by',
         'edited_by',

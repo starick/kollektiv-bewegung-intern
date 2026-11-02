@@ -19,6 +19,7 @@ class ProtocolFactory extends Factory
     {
         return [
             'date' => $this->faker->dateTimeBetween('-1 year')->format('Y-m-d'),
+            'description' => $this->faker->sentence(),
             'text' => "# {$this->faker->sentence(3)}\n\n{$this->faker->paragraphs(3, true)}",
             'uploaded_by' => User::factory(),
             'edited_by' => null,

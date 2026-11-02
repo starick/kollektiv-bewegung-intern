@@ -33,6 +33,11 @@ const menuItems = [
     label: 'Timetables',
     icon: 'pi pi-table',
     command: () => router.get(route('time-tables.index'))
+  },
+  {
+    label: 'Protocols',
+    icon: 'pi pi-file',
+    command: () => router.get(route('protocols.index'))
   }
 ];
 

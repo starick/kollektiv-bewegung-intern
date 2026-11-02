@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\ProtocolController;
 use App\Http\Controllers\TimeTableController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -25,4 +26,5 @@ Route::middleware([
     Route::resource('time-tables', TimeTableController::class);
     Route::post('time-tables/{time_table}/reimport', [TimeTableController::class, 'reimport'])->name('time-tables.reimport');
     Route::resource('time-tables.courses', CourseController::class)->only(['store', 'update', 'destroy']);
+    Route::resource('protocols', ProtocolController::class)->only(['index']);
 });
