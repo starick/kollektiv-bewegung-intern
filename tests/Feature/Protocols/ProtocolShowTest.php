@@ -56,6 +56,68 @@ class ProtocolShowTest extends TestCase
             );
     }
 
+    public function test_images_are_not_rendered(): void
+    {
+        $user = User::factory()->withPersonalTeam()->create();
+        $protocol = Protocol::factory()->create([
+            'text' => "Before ![logo](https://example.com/logo.png) after\n\n![][image1]\n\n[image1]: <data:image/png;base64,iVBORw0KGgo=>",
+        ]);
+
+        $this->actingAs($user)
+            ->get(route('protocols.show', $protocol))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('html', fn (string $html) => ! str_contains($html, '<img')
+                    && ! str_contains($html, 'logo')
+                    && ! str_contains($html, 'base64')
+                    && str_contains($html, 'Before')
+                    && str_contains($html, 'after'))
+            );
+    }
+
+    public function test_topics_are_shown(): void
+    {
+        $user = User::factory()->withPersonalTeam()->create();
+        $protocol = Protocol::factory()->create(['topics' => ['Budget', 'Events']]);
+
+        $this->actingAs($user)
+            ->get(route('protocols.show', $protocol))
+            ->assertInertia(fn (Assert $page) => $page->where('protocol.topics', ['Budget', 'Events']));
+    }
+
+    public function test_protocol_can_be_downloaded_as_markdown(): void
+    {
+        $user = User::factory()->withPersonalTeam()->create();
+        $protocol = Protocol::factory()->create([
+            'date' => '2026-11-02',
+            'description' => 'Plenum November',
+            'text' => "# Plenum\n\n- Punkt 1",
+        ]);
+
+        $response = $this->actingAs($user)->get(route('protocols.download', $protocol));
+
+        $response->assertOk()
+            ->assertDownload('2026-11-02-plenum-november.md')
+            ->assertHeader('Content-Type', 'text/markdown; charset=UTF-8');
+        $this->assertSame("# Plenum\n\n- Punkt 1", $response->streamedContent());
+    }
+
+    public function test_download_filename_without_description_is_the_date(): void
+    {
+        $user = User::factory()->withPersonalTeam()->create();
+        $protocol = Protocol::factory()->create(['date' => '2026-11-02', 'description' => null]);
+
+        $this->actingAs($user)
+            ->get(route('protocols.download', $protocol))
+            ->assertDownload('2026-11-02.md');
+    }
+
+    public function test_guests_cannot_download(): void
+    {
+        $protocol = Protocol::factory()->create();
+
+        $this->get(route('protocols.download', $protocol))->assertRedirect(route('login'));
+    }
+
     public function test_missing_protocol_returns_404(): void
     {
         $user = User::factory()->withPersonalTeam()->create();

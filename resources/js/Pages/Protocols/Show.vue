@@ -6,7 +6,7 @@ import { route } from 'ziggy-js';
 import { router } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import { Protocol } from '@/Types/protocol';
-import { MenuItem, useConfirm } from 'primevue';
+import { MenuItem, Tag, useConfirm } from 'primevue';
 
 const props = defineProps<{
   protocol: Protocol;
@@ -37,6 +37,12 @@ const menuItems: MenuItem[] = [
     label: 'Back to Overview',
     icon: 'pi pi-arrow-left',
     command: () => router.get(route('protocols.index'))
+  },
+  {
+    label: 'Download',
+    icon: 'pi pi-download',
+    // Plain link instead of an Inertia visit, so the browser handles the file download
+    url: route('protocols.download', { protocol: props.protocol.id })
   }
 ];
 
@@ -62,6 +68,9 @@ const title = computed(() => `Protocol ${formattedDate.value}`);
         <p v-if="protocol.description" class="text-gray-600 dark:text-gray-400">
           {{ protocol.description }}
         </p>
+        <div v-if="protocol.topics.length" class="flex flex-wrap gap-1 mt-2">
+          <Tag v-for="topic in protocol.topics" :key="topic" :value="topic" severity="secondary" />
+        </div>
       </div>
 
       <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-sm">

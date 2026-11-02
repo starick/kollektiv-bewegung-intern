@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProtocolRequest;
 use App\Http\Resources\ProtocolResource;
+use App\Markdown\DropImagesExtension;
 use App\Models\Protocol;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -15,14 +16,36 @@ class ProtocolController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $search = trim((string) $request->input('search'));
+        $sort = $request->input('sort') === 'updatedAt' ? 'updatedAt' : 'date';
+        $direction = $request->input('direction') === 'asc' ? 'asc' : 'desc';
+        $perPage = in_array($request->integer('per_page'), [10, 20, 50], true) ? $request->integer('per_page') : 20;
+
         $protocols = Protocol::with('uploader', 'editor')
-            ->orderByDesc('date')
-            ->get();
+            ->when($search !== '', function ($query) use ($search) {
+                $like = '%'.addcslashes($search, '%_\\').'%';
+
+                $query->where(fn ($query) => $query
+                    ->where('description', 'like', $like)
+                    // MySQL compares JSON case-sensitively, so compare the topics as lowercased text
+                    ->orWhereRaw('LOWER(CAST(topics AS CHAR)) LIKE ?', [mb_strtolower($like)])
+                    ->orWhere('text', 'like', $like));
+            })
+            ->orderBy($sort === 'updatedAt' ? 'updated_at' : 'date', $direction)
+            ->orderBy('id', $direction)
+            ->paginate($perPage)
+            ->withQueryString();
 
         return Inertia::render('Protocols/Index', [
             'protocols' => ProtocolResource::collection($protocols),
+            'filters' => [
+                'search' => $search,
+                'sort' => $sort,
+                'direction' => $direction,
+                'perPage' => $perPage,
+            ],
         ]);
     }
 
@@ -65,11 +88,27 @@ class ProtocolController extends Controller
             'html' => Str::markdown($protocol->text, [
                 'html_input' => 'escape',
                 'allow_unsafe_links' => false,
-            ]),
+            ], [new DropImagesExtension()]),
             'can' => [
                 'delete' => $request->user()->can('delete', $protocol),
             ],
         ]);
+    }
+
+    /**
+     * Download the protocol as Markdown file.
+     */
+    public function download(Protocol $protocol)
+    {
+        $filename = collect([$protocol->date->toDateString(), Str::slug($protocol->description ?? '')])
+            ->filter()
+            ->implode('-').'.md';
+
+        return response()->streamDownload(
+            fn () => print($protocol->text),
+            $filename,
+            ['Content-Type' => 'text/markdown; charset=UTF-8'],
+        );
     }
 
     /**
