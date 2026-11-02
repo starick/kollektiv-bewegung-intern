@@ -6,21 +6,14 @@ import { useDarkMode } from '@/Composables/use-dark-mode';
 import { Menubar, Menu, Avatar } from 'primevue';
 import ApplicationLogo from '@/Components/General/ApplicationLogo.vue';
 import ResponsiveNavLink from '@/Components/General/ResponsiveNavLink.vue';
-import TeamSwitchModal from '@/Components/Layout/TeamSwitchModal.vue';
 
 const pageProps = usePage().props as any;
 
 const menu = ref();
-const showTeamModal = ref(false);
-
 const { isDark, toggle: toggleDark } = useDarkMode();
 
 const toggle = (event) => {
   menu.value.toggle(event);
-};
-
-const toggleTeamModal = () => {
-  showTeamModal.value = !showTeamModal.value;
 };
 
 const logout = () => {
@@ -33,30 +26,25 @@ const menuItems = [
     label: 'Timetables',
     icon: 'pi pi-table',
     command: () => router.get(route('time-tables.index'))
+  },
+  {
+    label: 'Protocols',
+    icon: 'pi pi-file',
+    command: () => router.get(route('protocols.index'))
   }
 ];
 
 const items = [
   {
-    label: `Team: ${pageProps.auth.user.current_team.name}`,
+    // Users removed from the shared team have no current team
+    label: `Team: ${pageProps.auth.user.current_team?.name ?? '–'}`,
     icon: 'pi pi-users',
+    visible: !!pageProps.auth.user.current_team,
     items: [
       {
         label: 'Team Settings',
         icon: 'pi pi-users',
         command: () => router.get(route('teams.show', pageProps.auth.user.current_team))
-      },
-      {
-        label: 'Create New Team',
-        icon: 'pi pi-plus-circle',
-        visible: pageProps.jetstream.canCreateTeams,
-        command: () => router.get(route('teams.create'))
-      },
-      {
-        label: 'Switch Team',
-        icon: 'pi pi-sync',
-        visible: pageProps.auth.user.all_teams.length > 1,
-        command: () => toggleTeamModal()
       }
     ]
   },
@@ -107,6 +95,5 @@ const items = [
         </div>
       </template>
     </Menubar>
-    <TeamSwitchModal v-model:show="showTeamModal" />
   </div>
 </template>
