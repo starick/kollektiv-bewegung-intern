@@ -5,60 +5,51 @@ import InputLabel from '@/Components/Form/InputLabel.vue';
 import PrimaryButton from '@/Components/General/PrimaryButton.vue';
 import SecondaryButton from '@/Components/General/SecondaryButton.vue';
 import AppLayout from '@/Components/Layout/AppLayout.vue';
-import { router, useForm } from '@inertiajs/vue3';
-import { getWeek, isSunday } from 'date-fns';
-import { formatDate, startOfWeek, endOfWeek } from '@/Helpers/date-time-helper';
-import { computed, ref, watch } from 'vue';
-import { route } from 'ziggy-js';
-import { DESIGN_TEMPLATES } from '@/Constants/design-templates';
+import { formatDate } from '@/Helpers/date-time-helper';
 import DesignTemplateSelect from '@/Components/TimeTables/DesignTemplateSelect.vue';
+import { timetableCreateModel } from '@/Models/TimeTables/timetable-create-model';
 
-const currentDate = new Date();
-
-const selectedTemplate = ref(DESIGN_TEMPLATES[0]);
-
-const formData = useForm<{
-  year: number;
-  week: number;
-  file?: File | null;
-  display_config?: string;
-}>({
-  year: currentDate.getFullYear(),
-  week: isSunday(currentDate) ? getWeek(currentDate) + 1 : getWeek(currentDate),
-  file: null,
-  display_config: JSON.stringify(DESIGN_TEMPLATES[0].config)
-});
-
-watch(selectedTemplate, (template) => {
-  formData.display_config = JSON.stringify(template.config);
-});
-
-const onSelect = (e: { files?: File[] }) => {
-  formData.file = e.files?.[0] ?? null;
-};
-
-const onClear = () => {
-  formData.file = null;
-};
-
-const submit = () => {
-  formData.post(route('time-tables.store'), {
-    errorBag: 'createTimeTable',
-    preserveScroll: true,
-    forceFormData: true
-  });
-};
-
-const startDate = computed<Date>(() => startOfWeek(formData.year, formData.week));
-const endDate = computed<Date>(() => endOfWeek(formData.year, formData.week));
-
-const title = 'Create New Timetable';
+const {
+  currentDate,
+  selectedTemplate,
+  formData,
+  weekDetected,
+  detectingWeek,
+  startDate,
+  endDate,
+  title,
+  onFileSelect,
+  onFileClear,
+  submit,
+  cancel
+} = timetableCreateModel();
 </script>
 
 <template>
   <AppLayout :title="title">
     <Card>
       <form @submit.prevent="submit">
+        <FormSection class="mb-4">
+          <template #title>File Upload</template>
+          <template #description>Upload courses as .xls or .xlsx file</template>
+
+          <template #form>
+            <FileUpload
+              name="data"
+              mode="basic"
+              :auto="false"
+              :customUpload="false"
+              :multiple="false"
+              accept=".xlsx,.xls,.csv"
+              @select="onFileSelect"
+              @clear="onFileClear"
+            />
+            <div v-if="formData.errors.file" class="text-red-600 mt-2">
+              {{ formData.errors.file }}
+            </div>
+          </template>
+        </FormSection>
+
         <FormSection class="mb-4">
           <template #title>Time Frame</template>
           <template #description>
@@ -67,7 +58,11 @@ const title = 'Create New Timetable';
           </template>
 
           <template #form>
-            <div class="flex flex-row">
+            <div v-if="detectingWeek" class="col-span-6">Reading week from file…</div>
+            <div v-else-if="weekDetected" class="col-span-6">
+              {{ formData.week }} / {{ formData.year }} (detected from file)
+            </div>
+            <div v-else class="col-span-6 flex flex-row">
               <div>
                 <InputLabel for="year" value="Year" />
                 <InputNumber
@@ -85,10 +80,13 @@ const title = 'Create New Timetable';
                 <InputNumber id="week" v-model="formData.week" :min="1" :max="53" show-buttons />
               </div>
             </div>
+            <div v-if="formData.file && !detectingWeek && !weekDetected" class="col-span-6">
+              Could not detect the week from this file, please select it manually.
+            </div>
           </template>
         </FormSection>
 
-        <FormSection class="mb-4">
+        <FormSection>
           <template #title>Design Template</template>
           <template #description>Choose a starting design for this timetable</template>
 
@@ -99,33 +97,12 @@ const title = 'Create New Timetable';
           </template>
         </FormSection>
 
-        <FormSection>
-          <template #title>File Upload</template>
-          <template #description>Upload courses as .xls or .xlsx file</template>
-
-          <template #form>
-            <FileUpload
-              name="data"
-              mode="basic"
-              :auto="false"
-              :customUpload="false"
-              :multiple="false"
-              accept=".xlsx,.xls,.csv"
-              @select="onSelect"
-              @clear="onClear"
-            />
-            <div v-if="formData.errors.file" class="text-red-600 mt-2">
-              {{ formData.errors.file }}
-            </div>
-          </template>
-        </FormSection>
-
         <div class="flex flex-row justify-center mt-8">
           <SecondaryButton
             :class="{ 'opacity-25': formData.processing }"
             :disabled="formData.processing"
             class="mr-4"
-            @click="router.get(route('time-tables.index'))"
+            @click="cancel"
           >
             Cancel
           </SecondaryButton>

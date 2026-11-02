@@ -2,12 +2,11 @@
 
 namespace App\Services;
 
-use App\ValueObjects\Time;
+use App\ValueObjects\CourseRow;
 use DateTimeZone;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\CourseImport;
-use Carbon\Carbon;
 use App\Models\Course;
 use App\Models\TimeTable;
 
@@ -20,7 +19,7 @@ class CourseImportService
         $timeZone ??= new DateTimeZone('UTC');
 
         foreach ($coursesFromExcel as $courseData) {
-            if ($course = $this->createCourse($courseData, $timeTable, $timeZone)) {
+            if ($course = $this->createCourse(new CourseRow($courseData, $timeZone), $timeTable)) {
                 $courses->push($course);
             }
         }
@@ -28,33 +27,21 @@ class CourseImportService
         return $courses;
     }
 
-    public function createCourse(Collection $courseData, TimeTable $timeTable, DateTimeZone $timeZone): Course|null
+    public function createCourse(CourseRow $row, TimeTable $timeTable): Course|null
     {
-        if (
-            !$courseData->has('titel') ||
-            $courseData->get('titel') === null ||
-            $courseData->get('titel') === ''
-        ) {
+        if (!$row->isCourse()) {
             return null;
         }
 
-        $instructor = $courseData->get('wer');
-        if ($instructor === null || $instructor === '') {
-            $instructor = $courseData->get('beschreibung');
-        }
-
-        $location = $courseData->get('wo');
-        if (in_array($location, ['', 'Bewegungsraum', 'Freiraum', 'Am Mittelhafen 42'])) {
-            $location = null;
-        }
+        $instructor = $row->instructor();
 
         $dataMapped = array_filter([
-            'date'          => Carbon::createFromFormat('d.m.Y H:i', $courseData->get('start_datum'), $timeZone),
-            'start_time'    => Time::parse($courseData->get('start_datum')),
-            'end_time'      => Time::parse($courseData->get('end_datum')),
-            'name'          => $courseData->get('titel') ?? '',
+            'date'          => $row->startDate(),
+            'start_time'    => $row->startTime(),
+            'end_time'      => $row->endTime(),
+            'name'          => $row->title(),
             'instructor'    => $instructor ? mb_strimwidth($instructor,0, 64,'...') : '',
-            'location'      => $location,
+            'location'      => $row->location(),
             'time_table_id' => $timeTable?->id,
         ], fn($data) => $data !== null);
 

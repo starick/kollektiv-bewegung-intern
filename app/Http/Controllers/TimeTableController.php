@@ -10,6 +10,7 @@ use App\Models\TimeTable;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Services\CourseImportService;
+use App\Services\CourseWeekCountService;
 
 class TimeTableController extends Controller
 {
@@ -97,6 +98,15 @@ class TimeTableController extends Controller
     {
         $timeTable->delete();
         return redirect()->route('time-tables.index')->with('success', 'Time table deleted successfully.');
+    }
+
+    public function courseCountPerWeek(Request $request, CourseWeekCountService $courseWeekCountService)
+    {
+        $request->validate([
+            'file' => ['required', 'file', 'mimes:xlsx,xls,csv'],
+        ]);
+
+        return response()->json($courseWeekCountService->countPerWeek($request->file('file')));
     }
 
     public function reimport(\Illuminate\Http\Request $request, TimeTable $timeTable, CourseImportService $courseImportService)

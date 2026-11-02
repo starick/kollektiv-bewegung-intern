@@ -20,10 +20,8 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
-
+    Route::get('/dashboard', fn() => Inertia::render('Dashboard'))->name('dashboard');
+    Route::post('time-tables/course-count-per-week', [TimeTableController::class, 'courseCountPerWeek'])->name('time-tables.course-count-per-week');
     Route::resource('time-tables', TimeTableController::class);
     Route::post('time-tables/{time_table}/reimport', [TimeTableController::class, 'reimport'])->name('time-tables.reimport');
     Route::resource('time-tables.courses', CourseController::class)->only(['store', 'update', 'destroy']);

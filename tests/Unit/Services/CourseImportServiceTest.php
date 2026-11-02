@@ -5,6 +5,7 @@ namespace Tests\Unit\Services;
 use App\Models\Course;
 use App\Models\TimeTable;
 use App\Services\CourseImportService;
+use App\ValueObjects\CourseRow;
 use Carbon\Carbon;
 use DateTimeZone;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -120,7 +121,7 @@ class CourseImportServiceTest extends TestCase
             'end_datum'    => '02.01.2025 11:00',
         ]);
 
-        $this->assertNull($service->createCourse($row, $tt, new DateTimeZone('Europe/Berlin')));
+        $this->assertNull($service->createCourse(new CourseRow($row, new DateTimeZone('Europe/Berlin')), $tt));
     }
 
     public function test_create_course_returns_null_when_outside_timetable_range(): void
@@ -144,6 +145,6 @@ class CourseImportServiceTest extends TestCase
             'end_datum'    => '06.01.2025 09:00',
         ]);
 
-        $this->assertNull($service->createCourse($row, $tt, new DateTimeZone('Europe/Berlin')));
+        $this->assertNull($service->createCourse(new CourseRow($row, new DateTimeZone('Europe/Berlin')), $tt));
     }
 }
