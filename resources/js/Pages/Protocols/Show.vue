@@ -12,7 +12,7 @@ import { trans } from '@/Composables/use-translations';
 const props = defineProps<{
   protocol: Protocol;
   html: string;
-  can: { delete: boolean };
+  can: { update: boolean; delete: boolean };
 }>();
 
 const confirm = useConfirm();
@@ -56,6 +56,13 @@ const title = computed(() => trans('Protocol :date', { date: formattedDate.value
   <AppLayout :title="title">
     <Card :menu-items="menuItems">
       <template #menu-end>
+        <Button
+          v-if="can.update"
+          :label="$t('Edit')"
+          icon="pi pi-pencil"
+          text
+          @click="router.get(route('protocols.edit', { protocol: protocol.id }))"
+        />
         <Button
           v-if="can.delete"
           :label="$t('Delete')"

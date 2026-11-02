@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProtocolRequest;
+use App\Http\Requests\UpdateProtocolRequest;
 use App\Http\Resources\ProtocolResource;
 use App\Markdown\DropImagesExtension;
 use App\Models\Protocol;
@@ -96,9 +97,40 @@ class ProtocolController extends Controller
                 'allow_unsafe_links' => false,
             ], [new DropImagesExtension]),
             'can' => [
+                'update' => $request->user()->can('update', $protocol),
                 'delete' => $request->user()->can('delete', $protocol),
             ],
         ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Protocol $protocol)
+    {
+        Gate::authorize('update', $protocol);
+
+        return Inertia::render('Protocols/Edit', [
+            'protocol' => (new ProtocolResource($protocol))->resolve(),
+            'text' => $protocol->text,
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateProtocolRequest $request, Protocol $protocol)
+    {
+        $protocol->update([
+            'date' => $request->validated('date'),
+            'description' => $request->validated('description'),
+            'topics' => $request->topics(),
+            'text' => $request->validated('text'),
+            'edited_by' => auth()->id(),
+        ]);
+
+        return redirect()->route('protocols.show', $protocol)
+            ->with('success', __('Protocol updated successfully.'));
     }
 
     /**
