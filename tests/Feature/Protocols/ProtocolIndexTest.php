@@ -103,7 +103,7 @@ class ProtocolIndexTest extends TestCase
             );
     }
 
-    public function test_only_names_of_users_are_sent(): void
+    public function test_no_users_are_sent(): void
     {
         $user = $this->teamMember();
         Protocol::factory()->edited()->create();
@@ -112,7 +112,7 @@ class ProtocolIndexTest extends TestCase
             ->get(route('protocols.index'))
             ->assertInertia(fn (Assert $page) => $page
                 ->missing('protocols.data.0.uploader')
-                ->has('protocols.data.0.editor', fn (Assert $editor) => $editor->hasAll(['id', 'name'])->missing('email'))
+                ->missing('protocols.data.0.editor')
             );
     }
 
@@ -204,20 +204,6 @@ class ProtocolIndexTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page
                 ->where('protocols.meta.total', 25)
                 ->where('protocols.links.next', fn (string $url) => str_contains($url, 'search=plenum'))
-            );
-    }
-
-    public function test_deleted_editor_is_listed_as_null(): void
-    {
-        $user = $this->teamMember();
-        $protocol = Protocol::factory()->edited()->create();
-        $protocol->editor->delete();
-
-        $this->actingAs($user)
-            ->get(route('protocols.index'))
-            ->assertOk()
-            ->assertInertia(fn (Assert $page) => $page
-                ->where('protocols.data.0.editor', null)
             );
     }
 }

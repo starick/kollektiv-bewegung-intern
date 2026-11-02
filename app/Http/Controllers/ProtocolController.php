@@ -26,7 +26,7 @@ class ProtocolController extends Controller
         $direction = $request->input('direction') === 'asc' ? 'asc' : 'desc';
         $perPage = in_array($request->integer('per_page'), [10, 20, 50], true) ? $request->integer('per_page') : 20;
 
-        $protocols = Protocol::with('editor')
+        $protocols = Protocol::query()
             ->when($search !== '', function ($query) use ($search) {
                 $like = '%'.addcslashes($search, '%_\\').'%';
 
