@@ -141,7 +141,7 @@ const backgroundImages = [
       <AccordionContent>
         <div class="grid grid-cols-1 gap-3">
           <div class="col-span-2">
-            <label class="block text-xs mb-1">{{ $t('Font Family') }}</label>
+            <label class="block text-xs mb-1">{{ $t('Font') }}</label>
             <FontSelect v-model="modelValue.body.fontFamily" />
           </div>
           <div class="col-span-2">

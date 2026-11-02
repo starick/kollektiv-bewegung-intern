@@ -64,12 +64,10 @@ const {
           <template #form>
             <div v-if="detectingWeek" class="col-span-6">{{ $t('Reading week from file…') }}</div>
             <div v-else-if="weekDetected" class="col-span-6">
-              {{
-                $t(':week / :year (detected from file)', {
-                  week: formData.week,
-                  year: formData.year
-                })
-              }}
+              {{ formData.week }} / {{ formData.year }}
+              <span class="text-gray-500 dark:text-gray-400 ml-1">{{
+                $t('(detected from file)')
+              }}</span>
             </div>
             <div v-else class="col-span-6 flex flex-row">
               <div>
