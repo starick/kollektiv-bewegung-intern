@@ -74,6 +74,7 @@ class ProtocolController extends Controller
             'date' => $request->validated('date'),
             'description' => $request->validated('description'),
             'topics' => $request->topics(),
+            'participants' => $request->participants(),
             'text' => $text,
             'uploaded_by' => auth()->id(),
         ]);
@@ -125,6 +126,7 @@ class ProtocolController extends Controller
             'date' => $request->validated('date'),
             'description' => $request->validated('description'),
             'topics' => $request->topics(),
+            'participants' => $request->participants(),
             'text' => $request->validated('text'),
             'edited_by' => auth()->id(),
         ]);

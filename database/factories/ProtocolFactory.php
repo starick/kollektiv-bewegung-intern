@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Collection;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Protocol>
@@ -22,6 +23,7 @@ class ProtocolFactory extends Factory
             'date' => now()->subDays($this->faker->unique()->numberBetween(0, 3650))->toDateString(),
             'description' => $this->faker->sentence(),
             'topics' => $this->faker->words($this->faker->numberBetween(0, 3)),
+            'participants' => Collection::times($this->faker->numberBetween(0, 5), fn () => $this->faker->firstName())->unique()->values()->all(),
             'text' => "# {$this->faker->sentence(3)}\n\n{$this->faker->paragraphs(3, true)}",
             'uploaded_by' => User::factory(),
             'edited_by' => null,

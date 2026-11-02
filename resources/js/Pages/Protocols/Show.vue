@@ -97,6 +97,13 @@ const title = computed(() => trans('Protocol :date', { date: formattedDate.value
         </InfoField>
       </dl>
 
+      <section v-if="protocol.participants.length" class="mb-6">
+        <h2 class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">
+          {{ $t('Participants') }} ({{ protocol.participants.length }})
+        </h2>
+        <p>{{ protocol.participants.join(', ') }}</p>
+      </section>
+
       <article class="prose dark:prose-invert max-w-none" v-html="html" />
     </Card>
   </AppLayout>

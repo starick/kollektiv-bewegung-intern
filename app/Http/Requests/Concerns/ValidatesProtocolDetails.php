@@ -20,6 +20,7 @@ trait ValidatesProtocolDetails
             'date' => ['required', 'date_format:Y-m-d'],
             'description' => ['nullable', 'string', 'max:255'],
             'topics' => ['nullable', 'string', 'max:1000'],
+            'participants' => ['nullable', 'string', 'max:1000'],
         ];
     }
 
@@ -51,13 +52,33 @@ trait ValidatesProtocolDetails
     }
 
     /**
-     * Topics from the comma separated input, trimmed and without empty entries or duplicates.
+     * Topics from the comma separated input.
      *
      * @return array<int, string>
      */
     public function topics(): array
     {
-        return collect(explode(',', (string) $this->validated('topics')))
+        return $this->commaSeparated('topics');
+    }
+
+    /**
+     * Participants from the comma separated input.
+     *
+     * @return array<int, string>
+     */
+    public function participants(): array
+    {
+        return $this->commaSeparated('participants');
+    }
+
+    /**
+     * Entries of a comma separated input, trimmed and without empty entries or duplicates.
+     *
+     * @return array<int, string>
+     */
+    private function commaSeparated(string $key): array
+    {
+        return collect(explode(',', (string) $this->validated($key)))
             ->map(fn (string $topic) => trim($topic))
             ->filter()
             ->unique()

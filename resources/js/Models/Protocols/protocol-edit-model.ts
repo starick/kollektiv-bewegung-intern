@@ -9,12 +9,14 @@ export function protocolEditModel(protocol: Protocol, text: string) {
     date: Date;
     description: string;
     topics: string;
+    participants: string;
     text: string;
   }>({
     // parseISO reads a plain date as local midnight, so the calendar shows the stored day
     date: parseISO(protocol.date),
     description: protocol.description ?? '',
     topics: protocol.topics.join(', '),
+    participants: protocol.participants.join(', '),
     text
   });
 

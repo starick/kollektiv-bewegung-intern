@@ -64,6 +64,27 @@ class ProtocolCreateTest extends TestCase
         $this->assertSame(['Budget', 'Events'], Protocol::sole()->topics);
     }
 
+    public function test_participants_are_split_trimmed_and_deduplicated(): void
+    {
+        $this->actingAs($this->user())->post(route('protocols.store'), [
+            'date' => '2026-11-02',
+            'participants' => ' Anna, Ben,, Anna ,',
+            'file' => UploadedFile::fake()->createWithContent('plenum.md', '# Plenum'),
+        ])->assertSessionHasNoErrors();
+
+        $this->assertSame(['Anna', 'Ben'], Protocol::sole()->participants);
+    }
+
+    public function test_participants_are_optional(): void
+    {
+        $this->actingAs($this->user())->post(route('protocols.store'), [
+            'date' => '2026-11-02',
+            'file' => UploadedFile::fake()->createWithContent('plenum.md', '# Plenum'),
+        ])->assertSessionHasNoErrors();
+
+        $this->assertSame([], Protocol::sole()->participants);
+    }
+
     public function test_topics_are_optional(): void
     {
         $this->actingAs($this->user())->post(route('protocols.store'), [

@@ -8,11 +8,13 @@ export function protocolCreateModel() {
     date: Date;
     description: string;
     topics: string;
+    participants: string;
     file: File | null;
   }>({
     date: new Date(),
     description: '',
     topics: '',
+    participants: '',
     file: null
   });
 

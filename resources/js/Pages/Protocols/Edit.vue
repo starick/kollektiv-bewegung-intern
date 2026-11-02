@@ -76,6 +76,22 @@ const descriptionHint = trans(
                 {{ formData.errors.topics }}
               </div>
             </div>
+
+            <div class="col-span-6">
+              <InputLabel for="participants" :value="$t('Participants')" />
+              <InputText
+                id="participants"
+                v-model="formData.participants"
+                class="w-full"
+                :placeholder="$t('e.g. Anna, Ben, Chris')"
+              />
+              <small class="text-gray-600 dark:text-gray-400">{{
+                $t('Separate participants with commas')
+              }}</small>
+              <div v-if="formData.errors.participants" class="text-red-600 mt-2">
+                {{ formData.errors.participants }}
+              </div>
+            </div>
           </template>
         </FormSection>
 

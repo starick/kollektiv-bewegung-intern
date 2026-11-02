@@ -17,6 +17,7 @@ class Protocol extends Model
         'date',
         'description',
         'topics',
+        'participants',
         'text',
         'uploaded_by',
         'edited_by',
@@ -25,6 +26,7 @@ class Protocol extends Model
     protected $casts = [
         'date' => 'date',
         'topics' => 'array',
+        'participants' => 'array',
     ];
 
     public function uploader()

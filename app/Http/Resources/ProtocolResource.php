@@ -19,6 +19,7 @@ class ProtocolResource extends JsonResource
             'date' => $this->date->toDateString(),
             'description' => $this->description,
             'topics' => $this->topics ?? [],
+            'participants' => $this->participants ?? [],
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
             // Only id and name, other members' email addresses stay on the server

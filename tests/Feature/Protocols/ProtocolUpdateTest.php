@@ -19,6 +19,7 @@ class ProtocolUpdateTest extends TestCase
             'date' => '2026-11-03',
             'description' => 'Plenum Dezember',
             'topics' => 'Budget, Events',
+            'participants' => 'Anna, Ben',
             'text' => "# Plenum\n\n- Punkt 2",
             ...$overrides,
         ];
@@ -73,6 +74,7 @@ class ProtocolUpdateTest extends TestCase
         $this->assertSame('2026-11-03', $protocol->date->toDateString());
         $this->assertSame('Plenum Dezember', $protocol->description);
         $this->assertSame(['Budget', 'Events'], $protocol->topics);
+        $this->assertSame(['Anna', 'Ben'], $protocol->participants);
         $this->assertSame("# Plenum\n\n- Punkt 2", $protocol->text);
         $this->assertSame($editor->id, $protocol->edited_by);
     }
@@ -87,17 +89,18 @@ class ProtocolUpdateTest extends TestCase
         $this->assertSame($uploader->id, $protocol->fresh()->uploaded_by);
     }
 
-    public function test_description_and_topics_can_be_cleared(): void
+    public function test_description_topics_and_participants_can_be_cleared(): void
     {
-        $protocol = Protocol::factory()->create(['description' => 'Plenum', 'topics' => ['Budget']]);
+        $protocol = Protocol::factory()->create(['description' => 'Plenum', 'topics' => ['Budget'], 'participants' => ['Anna']]);
 
         $this->actingAs($this->teamMember())
-            ->put(route('protocols.update', $protocol), $this->payload(['description' => '', 'topics' => '']))
+            ->put(route('protocols.update', $protocol), $this->payload(['description' => '', 'topics' => '', 'participants' => '']))
             ->assertSessionHasNoErrors();
 
         $protocol->refresh();
         $this->assertNull($protocol->description);
         $this->assertSame([], $protocol->topics);
+        $this->assertSame([], $protocol->participants);
     }
 
     public function test_date_and_text_are_required(): void
