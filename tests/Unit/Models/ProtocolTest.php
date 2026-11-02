@@ -46,6 +46,15 @@ class ProtocolTest extends TestCase
         $this->assertNull($protocol->refresh()->description);
     }
 
+    public function test_date_and_description_are_unique_in_database(): void
+    {
+        Protocol::factory()->create(['date' => '2026-11-02', 'description' => 'Plenum']);
+
+        $this->expectException(\Illuminate\Database\UniqueConstraintViolationException::class);
+
+        Protocol::factory()->create(['date' => '2026-11-02', 'description' => 'Plenum']);
+    }
+
     public function test_user_references_are_nulled_when_user_is_deleted(): void
     {
         $protocol = Protocol::factory()->edited()->create();

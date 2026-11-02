@@ -10,15 +10,14 @@ class CreateTeamTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_teams_can_be_created(): void
+    public function test_teams_cannot_be_created(): void
     {
         $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
         $this->post('/teams', [
             'name' => 'Test Team',
-        ]);
+        ])->assertForbidden();
 
-        $this->assertCount(2, $user->fresh()->ownedTeams);
-        $this->assertEquals('Test Team', $user->fresh()->ownedTeams()->latest('id')->first()->name);
+        $this->assertCount(1, $user->fresh()->ownedTeams);
     }
 }

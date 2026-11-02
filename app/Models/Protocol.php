@@ -16,6 +16,7 @@ class Protocol extends Model
     protected $fillable = [
         'date',
         'description',
+        'topics',
         'text',
         'uploaded_by',
         'edited_by',
@@ -23,6 +24,7 @@ class Protocol extends Model
 
     protected $casts = [
         'date' => 'date',
+        'topics' => 'array',
     ];
 
     public function uploader()

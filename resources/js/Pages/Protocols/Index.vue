@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import Card from '@/Components/General/Card.vue';
 import AppLayout from '@/Components/Layout/AppLayout.vue';
+import { route } from 'ziggy-js';
 import { router } from '@inertiajs/vue3';
 import { toRef } from 'vue';
 import { Protocol } from '@/Types/protocol';
 import useAlert from '@/Composables/use-alerts';
-import { MenuItem } from 'primevue';
+import { MenuItem, Tag } from 'primevue';
 
 const props = defineProps<{
   protocols: { data: Protocol[] };
@@ -22,7 +23,16 @@ const reload = async () => {
   });
 };
 
+const rowClick = async (e: any) => {
+  router.get(route('protocols.show', { protocol: e.data.id }));
+};
+
 const menuItems: MenuItem[] = [
+  {
+    label: 'Create New',
+    icon: 'pi pi-plus',
+    command: () => router.get(route('protocols.create'))
+  },
   {
     label: 'Refresh',
     icon: 'pi pi-refresh',
@@ -41,7 +51,9 @@ const title = 'Protocols Overview';
         responsiveLayout="scroll"
         sortField="date"
         :sort-order="-1"
+        selectionMode="single"
         stripedRows
+        @row-click="rowClick"
       >
         <template #empty>No protocols yet.</template>
         <Column field="date" header="Protocol" sortable>
@@ -54,9 +66,11 @@ const title = 'Protocols Overview';
             </div>
           </template>
         </Column>
-        <Column field="uploader" header="Uploaded By" sortable sortField="uploader.name">
+        <Column field="topics" header="Topics">
           <template #body="{ data }: { data: Protocol }">
-            {{ data.uploader?.name }}
+            <div class="flex flex-wrap gap-1">
+              <Tag v-for="topic in data.topics" :key="topic" :value="topic" severity="secondary" />
+            </div>
           </template>
         </Column>
         <Column field="editor" header="Last Edited By" sortable sortField="editor.name">

@@ -34,20 +34,28 @@ class CreateNewUser implements CreatesNewUsers
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
             ]), function (User $user) {
-                $this->createTeam($user);
+                $this->joinSharedTeam($user);
             });
         });
     }
 
     /**
-     * Create a personal team for the user.
+     * Add the user to the shared team as editor. The first user creates and owns it.
      */
-    protected function createTeam(User $user): void
+    protected function joinSharedTeam(User $user): void
     {
-        $user->ownedTeams()->save(Team::forceCreate([
-            'user_id' => $user->id,
-            'name' => explode(' ', $user->name, 2)[0]."'s Team",
-            'personal_team' => true,
-        ]));
+        $team = Team::shared();
+
+        if ($team === null) {
+            $team = $user->ownedTeams()->save(Team::forceCreate([
+                'user_id' => $user->id,
+                'name' => config('app.name'),
+                'personal_team' => false,
+            ]));
+        } else {
+            $team->users()->attach($user, ['role' => 'editor']);
+        }
+
+        $user->forceFill(['current_team_id' => $team->id])->save();
     }
 }

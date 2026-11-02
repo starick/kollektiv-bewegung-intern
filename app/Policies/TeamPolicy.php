@@ -31,7 +31,8 @@ class TeamPolicy
      */
     public function create(User $user): bool
     {
-        return true;
+        // All users share a single team
+        return false;
     }
 
     /**
@@ -71,6 +72,7 @@ class TeamPolicy
      */
     public function delete(User $user, Team $team): bool
     {
-        return $user->ownsTeam($team);
+        // The shared team must never be deleted
+        return false;
     }
 }

@@ -18,6 +18,7 @@ class ProtocolResource extends JsonResource
             'id' => $this->id,
             'date' => $this->date->toDateString(),
             'description' => $this->description,
+            'topics' => $this->topics ?? [],
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
             'uploader' => $this->whenLoaded('uploader', fn () => $this->uploader

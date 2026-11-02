@@ -46,6 +46,20 @@ class ProtocolIndexTest extends TestCase
             );
     }
 
+    public function test_topics_are_listed(): void
+    {
+        $user = User::factory()->withPersonalTeam()->create();
+        Protocol::factory()->create(['topics' => ['Budget', 'Events']]);
+        Protocol::factory()->create(['date' => '2000-01-01', 'topics' => null]);
+
+        $this->actingAs($user)
+            ->get(route('protocols.index'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('protocols.data.0.topics', ['Budget', 'Events'])
+                ->where('protocols.data.1.topics', [])
+            );
+    }
+
     public function test_deleted_uploader_is_listed_as_null(): void
     {
         $user = User::factory()->withPersonalTeam()->create();

@@ -55,6 +55,17 @@ class User extends Authenticatable
     ];
 
     /**
+     * Owners and administrators of the shared team are super admins.
+     */
+    public function isSuperAdmin(): bool
+    {
+        $team = Team::shared();
+
+        // hasTeamRole() also returns true for the team owner
+        return $team !== null && $this->hasTeamRole($team, 'admin');
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
