@@ -11,11 +11,12 @@ use Tests\TestCase;
 
 class ProtocolCreateTest extends TestCase
 {
+    use CreatesTeamMembers;
     use RefreshDatabase;
 
     private function user(): User
     {
-        return User::factory()->withPersonalTeam()->create();
+        return $this->teamMember();
     }
 
     public function test_create_page_is_rendered(): void
@@ -146,6 +147,14 @@ class ProtocolCreateTest extends TestCase
         ])->assertSessionHasErrors('file');
 
         $this->assertDatabaseCount('protocols', 0);
+    }
+
+    public function test_non_file_value_is_rejected_without_error(): void
+    {
+        $this->actingAs($this->teamMember())->post(route('protocols.store'), [
+            'date' => '2026-11-02',
+            'file' => 'not a file',
+        ])->assertSessionHasErrors('file');
     }
 
     public function test_non_utf8_files_are_rejected(): void

@@ -55,6 +55,14 @@ class User extends Authenticatable
     ];
 
     /**
+     * Whether the user is the owner or a member of the shared team.
+     */
+    public function belongsToSharedTeam(): bool
+    {
+        return $this->belongsToTeam(Team::shared());
+    }
+
+    /**
      * Owners and administrators of the shared team are super admins.
      */
     public function isSuperAdmin(): bool

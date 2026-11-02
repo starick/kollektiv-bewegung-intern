@@ -18,12 +18,14 @@ class ProtocolController extends Controller
      */
     public function index(Request $request)
     {
-        $search = trim((string) $request->input('search'));
+        Gate::authorize('viewAny', Protocol::class);
+
+        $search = is_string($request->input('search')) ? trim($request->input('search')) : '';
         $sort = $request->input('sort') === 'updatedAt' ? 'updatedAt' : 'date';
         $direction = $request->input('direction') === 'asc' ? 'asc' : 'desc';
         $perPage = in_array($request->integer('per_page'), [10, 20, 50], true) ? $request->integer('per_page') : 20;
 
-        $protocols = Protocol::with('uploader', 'editor')
+        $protocols = Protocol::with('editor')
             ->when($search !== '', function ($query) use ($search) {
                 $like = '%'.addcslashes($search, '%_\\').'%';
 
@@ -54,6 +56,8 @@ class ProtocolController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', Protocol::class);
+
         return Inertia::render('Protocols/Create');
     }
 
@@ -82,6 +86,8 @@ class ProtocolController extends Controller
      */
     public function show(Request $request, Protocol $protocol)
     {
+        Gate::authorize('view', $protocol);
+
         return Inertia::render('Protocols/Show', [
             'protocol' => (new ProtocolResource($protocol->load('uploader', 'editor')))->resolve(),
             // Raw HTML in the Markdown is escaped so protocols can't inject markup or scripts.
@@ -100,6 +106,8 @@ class ProtocolController extends Controller
      */
     public function download(Protocol $protocol)
     {
+        Gate::authorize('view', $protocol);
+
         $filename = collect([$protocol->date->toDateString(), Str::slug($protocol->description ?? '')])
             ->filter()
             ->implode('-').'.md';

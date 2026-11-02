@@ -3,13 +3,13 @@
 namespace Tests\Feature\Protocols;
 
 use App\Models\Protocol;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class ProtocolIndexTest extends TestCase
 {
+    use CreatesTeamMembers;
     use RefreshDatabase;
 
     public function test_guests_are_redirected_to_login(): void
@@ -19,7 +19,7 @@ class ProtocolIndexTest extends TestCase
 
     public function test_protocols_are_listed_newest_first(): void
     {
-        $user = User::factory()->withPersonalTeam()->create();
+        $user = $this->teamMember();
         Protocol::factory()->create(['date' => '2026-01-10']);
         Protocol::factory()->create(['date' => '2026-03-05']);
 
@@ -36,7 +36,7 @@ class ProtocolIndexTest extends TestCase
 
     public function test_description_is_listed(): void
     {
-        $user = User::factory()->withPersonalTeam()->create();
+        $user = $this->teamMember();
         Protocol::factory()->create(['description' => 'Plenum November']);
 
         $this->actingAs($user)
@@ -48,7 +48,7 @@ class ProtocolIndexTest extends TestCase
 
     public function test_topics_are_listed(): void
     {
-        $user = User::factory()->withPersonalTeam()->create();
+        $user = $this->teamMember();
         Protocol::factory()->create(['topics' => ['Budget', 'Events']]);
         Protocol::factory()->create(['date' => '2000-01-01', 'topics' => null]);
 
@@ -62,7 +62,7 @@ class ProtocolIndexTest extends TestCase
 
     public function test_search_matches_description_topics_and_text(): void
     {
-        $user = User::factory()->withPersonalTeam()->create();
+        $user = $this->teamMember();
         Protocol::factory()->create(['description' => 'Plenum November', 'topics' => [], 'text' => 'x']);
         Protocol::factory()->create(['description' => 'Vorstand', 'topics' => ['Budget'], 'text' => 'x']);
         Protocol::factory()->create(['description' => 'Vorstand', 'topics' => [], 'text' => 'Wir planen das Sommerfest']);
@@ -81,7 +81,7 @@ class ProtocolIndexTest extends TestCase
 
     public function test_topic_search_ignores_case(): void
     {
-        $user = User::factory()->withPersonalTeam()->create();
+        $user = $this->teamMember();
         Protocol::factory()->create(['description' => 'Vorstand', 'topics' => ['Finanzen'], 'text' => 'x']);
 
         $this->actingAs($user)
@@ -89,9 +89,36 @@ class ProtocolIndexTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page->has('protocols.data', 1));
     }
 
+    public function test_non_string_search_is_ignored(): void
+    {
+        $user = $this->teamMember();
+        Protocol::factory()->count(2)->create();
+
+        $this->actingAs($user)
+            ->get('/protocols?search[]=x')
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('protocols.data', 2)
+                ->where('filters.search', '')
+            );
+    }
+
+    public function test_only_names_of_users_are_sent(): void
+    {
+        $user = $this->teamMember();
+        Protocol::factory()->edited()->create();
+
+        $this->actingAs($user)
+            ->get(route('protocols.index'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->missing('protocols.data.0.uploader')
+                ->has('protocols.data.0.editor', fn (Assert $editor) => $editor->hasAll(['id', 'name'])->missing('email'))
+            );
+    }
+
     public function test_empty_search_lists_everything(): void
     {
-        $user = User::factory()->withPersonalTeam()->create();
+        $user = $this->teamMember();
         Protocol::factory()->count(3)->create();
 
         $this->actingAs($user)
@@ -104,7 +131,7 @@ class ProtocolIndexTest extends TestCase
 
     public function test_list_is_paginated(): void
     {
-        $user = User::factory()->withPersonalTeam()->create();
+        $user = $this->teamMember();
         Protocol::factory()->count(25)->create();
 
         $this->actingAs($user)
@@ -123,7 +150,7 @@ class ProtocolIndexTest extends TestCase
 
     public function test_page_size_can_be_chosen_from_allowed_values(): void
     {
-        $user = User::factory()->withPersonalTeam()->create();
+        $user = $this->teamMember();
         Protocol::factory()->count(12)->create();
 
         $this->actingAs($user)
@@ -140,7 +167,7 @@ class ProtocolIndexTest extends TestCase
 
     public function test_list_can_be_sorted_by_date_ascending(): void
     {
-        $user = User::factory()->withPersonalTeam()->create();
+        $user = $this->teamMember();
         Protocol::factory()->create(['date' => '2026-03-05']);
         Protocol::factory()->create(['date' => '2026-01-10']);
 
@@ -154,7 +181,7 @@ class ProtocolIndexTest extends TestCase
 
     public function test_list_can_be_sorted_by_update_time(): void
     {
-        $user = User::factory()->withPersonalTeam()->create();
+        $user = $this->teamMember();
         $older = Protocol::factory()->create(['date' => '2026-03-05', 'updated_at' => '2026-01-01 10:00:00']);
         $newer = Protocol::factory()->create(['date' => '2026-01-10', 'updated_at' => '2026-06-01 10:00:00']);
 
@@ -168,7 +195,7 @@ class ProtocolIndexTest extends TestCase
 
     public function test_search_is_kept_across_pages(): void
     {
-        $user = User::factory()->withPersonalTeam()->create();
+        $user = $this->teamMember();
         Protocol::factory()->count(25)->create(['description' => 'Plenum']);
         Protocol::factory()->count(5)->create(['description' => 'Vorstand', 'topics' => [], 'text' => 'x']);
 
@@ -180,17 +207,17 @@ class ProtocolIndexTest extends TestCase
             );
     }
 
-    public function test_deleted_uploader_is_listed_as_null(): void
+    public function test_deleted_editor_is_listed_as_null(): void
     {
-        $user = User::factory()->withPersonalTeam()->create();
-        $protocol = Protocol::factory()->create();
-        $protocol->uploader->delete();
+        $user = $this->teamMember();
+        $protocol = Protocol::factory()->edited()->create();
+        $protocol->editor->delete();
 
         $this->actingAs($user)
             ->get(route('protocols.index'))
             ->assertOk()
             ->assertInertia(fn (Assert $page) => $page
-                ->where('protocols.data.0.uploader', null)
+                ->where('protocols.data.0.editor', null)
             );
     }
 }

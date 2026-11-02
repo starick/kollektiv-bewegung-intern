@@ -36,8 +36,10 @@ const menuItems = [
 
 const items = [
   {
-    label: `Team: ${pageProps.auth.user.current_team.name}`,
+    // Users removed from the shared team have no current team
+    label: `Team: ${pageProps.auth.user.current_team?.name ?? '–'}`,
     icon: 'pi pi-users',
+    visible: !!pageProps.auth.user.current_team,
     items: [
       {
         label: 'Team Settings',

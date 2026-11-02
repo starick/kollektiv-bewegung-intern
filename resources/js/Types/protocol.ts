@@ -5,14 +5,6 @@ export interface Protocol {
   topics: string[];
   createdAt: Date;
   updatedAt: Date;
-  uploader?: {
-    id: number;
-    name: string;
-    email: string;
-  } | null;
-  editor?: {
-    id: number;
-    name: string;
-    email: string;
-  } | null;
+  uploader?: { id: number; name: string } | null;
+  editor?: { id: number; name: string } | null;
 }

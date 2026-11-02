@@ -15,7 +15,7 @@ class StoreProtocolRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()->can('create', Protocol::class);
     }
 
     /**
@@ -30,6 +30,7 @@ class StoreProtocolRequest extends FormRequest
             'description' => ['nullable', 'string', 'max:255'],
             'topics' => ['nullable', 'string', 'max:1000'],
             'file' => [
+                'bail',
                 'required',
                 'file',
                 'extensions:md,markdown',

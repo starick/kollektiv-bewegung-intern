@@ -21,12 +21,9 @@ class ProtocolResource extends JsonResource
             'topics' => $this->topics ?? [],
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
-            'uploader' => $this->whenLoaded('uploader', fn () => $this->uploader
-                ? (new UserResource($this->uploader))->resolve()
-                : null),
-            'editor' => $this->whenLoaded('editor', fn () => $this->editor
-                ? (new UserResource($this->editor))->resolve()
-                : null),
+            // Only id and name, other members' email addresses stay on the server
+            'uploader' => $this->whenLoaded('uploader', fn () => $this->uploader?->only('id', 'name')),
+            'editor' => $this->whenLoaded('editor', fn () => $this->editor?->only('id', 'name')),
         ];
     }
 }

@@ -3,13 +3,13 @@
 namespace Tests\Feature\Protocols;
 
 use App\Models\Protocol;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class ProtocolShowTest extends TestCase
 {
+    use CreatesTeamMembers;
     use RefreshDatabase;
 
     public function test_guests_are_redirected_to_login(): void
@@ -21,7 +21,7 @@ class ProtocolShowTest extends TestCase
 
     public function test_protocol_is_shown_with_rendered_markdown(): void
     {
-        $user = User::factory()->withPersonalTeam()->create();
+        $user = $this->teamMember();
         $protocol = Protocol::factory()->create([
             'date' => '2026-11-02',
             'description' => 'Plenum',
@@ -43,7 +43,7 @@ class ProtocolShowTest extends TestCase
 
     public function test_raw_html_and_unsafe_links_are_neutralised(): void
     {
-        $user = User::factory()->withPersonalTeam()->create();
+        $user = $this->teamMember();
         $protocol = Protocol::factory()->create([
             'text' => "<script>alert(1)</script>\n\n[click](javascript:alert(1))",
         ]);
@@ -56,9 +56,22 @@ class ProtocolShowTest extends TestCase
             );
     }
 
+    public function test_only_names_of_users_are_sent(): void
+    {
+        $user = $this->teamMember();
+        $protocol = Protocol::factory()->edited()->create();
+
+        $this->actingAs($user)
+            ->get(route('protocols.show', $protocol))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('protocol.uploader', fn (Assert $uploader) => $uploader->hasAll(['id', 'name'])->missing('email'))
+                ->has('protocol.editor', fn (Assert $editor) => $editor->hasAll(['id', 'name'])->missing('email'))
+            );
+    }
+
     public function test_images_are_not_rendered(): void
     {
-        $user = User::factory()->withPersonalTeam()->create();
+        $user = $this->teamMember();
         $protocol = Protocol::factory()->create([
             'text' => "Before ![logo](https://example.com/logo.png) after\n\n![][image1]\n\n[image1]: <data:image/png;base64,iVBORw0KGgo=>",
         ]);
@@ -76,7 +89,7 @@ class ProtocolShowTest extends TestCase
 
     public function test_topics_are_shown(): void
     {
-        $user = User::factory()->withPersonalTeam()->create();
+        $user = $this->teamMember();
         $protocol = Protocol::factory()->create(['topics' => ['Budget', 'Events']]);
 
         $this->actingAs($user)
@@ -86,7 +99,7 @@ class ProtocolShowTest extends TestCase
 
     public function test_protocol_can_be_downloaded_as_markdown(): void
     {
-        $user = User::factory()->withPersonalTeam()->create();
+        $user = $this->teamMember();
         $protocol = Protocol::factory()->create([
             'date' => '2026-11-02',
             'description' => 'Plenum November',
@@ -103,7 +116,7 @@ class ProtocolShowTest extends TestCase
 
     public function test_download_filename_without_description_is_the_date(): void
     {
-        $user = User::factory()->withPersonalTeam()->create();
+        $user = $this->teamMember();
         $protocol = Protocol::factory()->create(['date' => '2026-11-02', 'description' => null]);
 
         $this->actingAs($user)
@@ -120,7 +133,7 @@ class ProtocolShowTest extends TestCase
 
     public function test_missing_protocol_returns_404(): void
     {
-        $user = User::factory()->withPersonalTeam()->create();
+        $user = $this->teamMember();
 
         $this->actingAs($user)->get(route('protocols.show', 999))->assertNotFound();
     }
