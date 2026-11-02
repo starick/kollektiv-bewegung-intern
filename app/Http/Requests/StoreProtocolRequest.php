@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Protocol;
 use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\Validator;
@@ -21,7 +22,7 @@ class StoreProtocolRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -37,7 +38,7 @@ class StoreProtocolRequest extends FormRequest
                 'max:2048',
                 function (string $attribute, UploadedFile $file, Closure $fail) {
                     if (! mb_check_encoding($file->get(), 'UTF-8')) {
-                        $fail('The file must be UTF-8 encoded text.');
+                        $fail(__('The file must be UTF-8 encoded text.'));
                     }
                 },
             ],
@@ -66,7 +67,7 @@ class StoreProtocolRequest extends FormRequest
                     ->exists();
 
                 if ($exists) {
-                    $validator->errors()->add('date', 'A protocol with this date and description already exists.');
+                    $validator->errors()->add('date', __('A protocol with this date and description already exists.'));
                 }
             },
         ];

@@ -4,6 +4,7 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import createServer from '@inertiajs/vue3/server';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from 'ziggy-js';
+import { TranslationPlugin } from '@/Composables/use-translations';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -17,6 +18,7 @@ createServer((page) =>
     setup({ App, props, plugin }) {
       return createSSRApp({ render: () => h(App, props) })
         .use(plugin)
+        .use(TranslationPlugin)
         .use(ZiggyVue, {
           ...page.props.ziggy,
           location: new URL(page.props.ziggy.location)

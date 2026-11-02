@@ -109,7 +109,7 @@ class ProtocolCreateTest extends TestCase
             'date' => '2026-11-02',
             'description' => 'Plenum',
             'file' => UploadedFile::fake()->createWithContent('plenum.md', '# Plenum'),
-        ])->assertSessionHasErrors(['date' => 'A protocol with this date and description already exists.']);
+        ])->assertSessionHasErrors(['date' => 'Ein Protokoll mit diesem Datum und dieser Beschreibung existiert bereits.']);
 
         $this->assertDatabaseCount('protocols', 1);
     }

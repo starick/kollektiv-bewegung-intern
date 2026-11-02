@@ -7,6 +7,7 @@ import { router } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import { Protocol } from '@/Types/protocol';
 import { MenuItem, Tag, useConfirm } from 'primevue';
+import { trans } from '@/Composables/use-translations';
 
 const props = defineProps<{
   protocol: Protocol;
@@ -22,11 +23,13 @@ const formattedDate = computed(() =>
 
 const confirmDelete = () => {
   confirm.require({
-    header: 'Delete protocol',
-    message: `Delete the protocol from ${formattedDate.value}? This cannot be undone.`,
+    header: trans('Delete protocol'),
+    message: trans('Delete the protocol from :date? This cannot be undone.', {
+      date: formattedDate.value
+    }),
     icon: 'pi pi-exclamation-triangle',
-    acceptLabel: 'Delete',
-    rejectLabel: 'Cancel',
+    acceptLabel: trans('Delete'),
+    rejectLabel: trans('Cancel'),
     acceptClass: 'p-button-danger',
     accept: () => router.delete(route('protocols.destroy', { protocol: props.protocol.id }))
   });
@@ -34,19 +37,19 @@ const confirmDelete = () => {
 
 const menuItems: MenuItem[] = [
   {
-    label: 'Back to Overview',
+    label: trans('Back to Overview'),
     icon: 'pi pi-arrow-left',
     command: () => router.get(route('protocols.index'))
   },
   {
-    label: 'Download',
+    label: trans('Download'),
     icon: 'pi pi-download',
     // Plain link instead of an Inertia visit, so the browser handles the file download
     url: route('protocols.download', { protocol: props.protocol.id })
   }
 ];
 
-const title = computed(() => `Protocol ${formattedDate.value}`);
+const title = computed(() => trans('Protocol :date', { date: formattedDate.value }));
 </script>
 
 <template>
@@ -55,7 +58,7 @@ const title = computed(() => `Protocol ${formattedDate.value}`);
       <template #menu-end>
         <Button
           v-if="can.delete"
-          label="Delete"
+          :label="$t('Delete')"
           icon="pi pi-trash"
           severity="danger"
           text
@@ -74,10 +77,12 @@ const title = computed(() => `Protocol ${formattedDate.value}`);
       </div>
 
       <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-sm">
-        <InfoField title="Uploaded">
-          {{ protocol.uploader?.name ?? '–' }} ({{ new Date(protocol.createdAt).toLocaleString('de-DE') }})
+        <InfoField :title="$t('Uploaded')">
+          {{ protocol.uploader?.name ?? '–' }} ({{
+            new Date(protocol.createdAt).toLocaleString('de-DE')
+          }})
         </InfoField>
-        <InfoField title="Last Edited">
+        <InfoField :title="$t('Last Edited')">
           <template v-if="protocol.editor">
             {{ protocol.editor.name }} ({{ new Date(protocol.updatedAt).toLocaleString('de-DE') }})
           </template>

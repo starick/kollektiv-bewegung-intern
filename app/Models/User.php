@@ -23,6 +23,22 @@ class User extends Authenticatable
     use TwoFactorAuthenticatable;
 
     /**
+     * The locales a user can choose from. The first one is the default.
+     *
+     * @var array<int, string>
+     */
+    public const LOCALES = ['de', 'en'];
+
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'locale' => self::LOCALES[0],
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -31,6 +47,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'locale',
     ];
 
     /**

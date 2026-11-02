@@ -78,7 +78,7 @@ class ProtocolController extends Controller
         ]);
 
         return redirect()->route('protocols.show', $protocol)
-            ->with('success', 'Protocol created successfully.');
+            ->with('success', __('Protocol created successfully.'));
     }
 
     /**
@@ -94,7 +94,7 @@ class ProtocolController extends Controller
             'html' => Str::markdown($protocol->text, [
                 'html_input' => 'escape',
                 'allow_unsafe_links' => false,
-            ], [new DropImagesExtension()]),
+            ], [new DropImagesExtension]),
             'can' => [
                 'delete' => $request->user()->can('delete', $protocol),
             ],
@@ -113,7 +113,7 @@ class ProtocolController extends Controller
             ->implode('-').'.md';
 
         return response()->streamDownload(
-            fn () => print($protocol->text),
+            fn () => print ($protocol->text),
             $filename,
             ['Content-Type' => 'text/markdown; charset=UTF-8'],
         );
@@ -128,6 +128,6 @@ class ProtocolController extends Controller
 
         $protocol->delete();
 
-        return redirect()->route('protocols.index')->with('success', 'Protocol deleted successfully.');
+        return redirect()->route('protocols.index')->with('success', __('Protocol deleted successfully.'));
     }
 }

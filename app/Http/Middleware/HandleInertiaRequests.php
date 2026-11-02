@@ -32,10 +32,24 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
+            'locale' => fn () => app()->getLocale(),
+            'translations' => fn () => $this->translations(app()->getLocale()),
             'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
         ];
+    }
+
+    /**
+     * Load the JSON translations used by the frontend for the given locale.
+     *
+     * @return array<string, string>
+     */
+    protected function translations(string $locale): array
+    {
+        $path = lang_path("{$locale}.json");
+
+        return is_file($path) ? json_decode(file_get_contents($path), true) : [];
     }
 }

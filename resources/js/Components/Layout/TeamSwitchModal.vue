@@ -56,7 +56,7 @@ const closeTeamSwitchModal = () => (showValue.value = false);
 <template>
   <DialogModal :show="showValue" @close="closeTeamSwitchModal">
     <template #title>
-      <div class="bg-red">Switch Teams</div>
+      <div class="bg-red">{{ $t('Switch Teams') }}</div>
     </template>
 
     <template #content>
@@ -106,15 +106,17 @@ const closeTeamSwitchModal = () => (showValue.value = false);
     </template>
     <template #footer>
       <div class="flex justify-between w-full">
-        <SecondaryButton @click="closeTeamSwitchModal">Cancel</SecondaryButton>
+        <SecondaryButton @click="closeTeamSwitchModal">{{ $t('Cancel') }}</SecondaryButton>
         <SecondaryButton
           v-if="usePage().props.jetstream.canCreateTeams"
           @click="createTeam"
           class="mx-4"
         >
-          Create New Team
+          {{ $t('Create New Team') }}
         </SecondaryButton>
-        <PrimaryButton @click="switchToTeam" :disabled="!selectedTeam">Switch Team</PrimaryButton>
+        <PrimaryButton @click="switchToTeam" :disabled="!selectedTeam">{{
+          $t('Switch Team')
+        }}</PrimaryButton>
       </div>
     </template>
   </DialogModal>

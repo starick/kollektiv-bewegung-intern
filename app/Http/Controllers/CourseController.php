@@ -16,21 +16,24 @@ class CourseController extends Controller
             ...$request->validated(),
             'time_table_id' => $timeTable->id,
         ]);
+
         return redirect()->route('time-tables.show', $timeTable)
-            ->with('success', 'Course created successfully.');
+            ->with('success', __('Course created successfully.'));
     }
 
     public function update(UpdateCourseRequest $request, TimeTable $timeTable, Course $course)
     {
         $course->update($request->validated());
+
         return redirect()->route('time-tables.show', $course->timeTable)
-            ->with('success', 'Course updated successfully.');
+            ->with('success', __('Course updated successfully.'));
     }
 
     public function destroy(Request $request, TimeTable $timeTable, Course $course)
     {
         $course->delete();
+
         return redirect()->route('time-tables.show', $course->timeTable)
-            ->with('success', 'Course deleted successfully.');
+            ->with('success', __('Course deleted successfully.'));
     }
 }

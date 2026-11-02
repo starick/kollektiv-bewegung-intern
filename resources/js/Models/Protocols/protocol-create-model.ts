@@ -1,6 +1,7 @@
 import { router, useForm } from '@inertiajs/vue3';
 import { format } from 'date-fns';
 import { route } from 'ziggy-js';
+import { trans } from '@/Composables/use-translations';
 
 export function protocolCreateModel() {
   const formData = useForm<{
@@ -41,7 +42,7 @@ export function protocolCreateModel() {
     router.get(route('protocols.index'));
   }
 
-  const title = 'Create New Protocol';
+  const title = trans('Create New Protocol');
 
   return {
     formData,
