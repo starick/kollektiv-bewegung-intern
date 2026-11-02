@@ -35,6 +35,14 @@ class Team extends JetstreamTeam
     ];
 
     /**
+     * The team every user belongs to. The app runs with this single team instead of personal teams.
+     */
+    public static function shared(): ?self
+    {
+        return static::where('personal_team', false)->oldest('id')->first();
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>

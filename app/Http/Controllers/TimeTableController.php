@@ -7,10 +7,10 @@ use App\Http\Requests\UpdateTimeTableRequest;
 use App\Http\Resources\CourseResource;
 use App\Http\Resources\TimeTableResource;
 use App\Models\TimeTable;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
 use App\Services\CourseImportService;
 use App\Services\CourseWeekCountService;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class TimeTableController extends Controller
 {
@@ -48,7 +48,7 @@ class TimeTableController extends Controller
 
         $timeTable = TimeTable::create(
             $validated->except('file')->merge([
-            'created_by' => auth()->id(),
+                'created_by' => auth()->id(),
             ])->toArray()
         );
 
@@ -57,7 +57,7 @@ class TimeTableController extends Controller
         }
 
         return redirect()->route('time-tables.show', $timeTable)
-            ->with('success', 'Time table created successfully.');
+            ->with('success', __('Time table created successfully.'));
     }
 
     /**
@@ -88,6 +88,7 @@ class TimeTableController extends Controller
     public function update(UpdateTimeTableRequest $request, TimeTable $timeTable)
     {
         $timeTable->update($request->validated());
+
         return redirect()->route('time-tables.show', $timeTable);
     }
 
@@ -97,7 +98,8 @@ class TimeTableController extends Controller
     public function destroy(TimeTable $timeTable)
     {
         $timeTable->delete();
-        return redirect()->route('time-tables.index')->with('success', 'Time table deleted successfully.');
+
+        return redirect()->route('time-tables.index')->with('success', __('Time table deleted successfully.'));
     }
 
     public function courseCountPerWeek(Request $request, CourseWeekCountService $courseWeekCountService)
@@ -109,7 +111,7 @@ class TimeTableController extends Controller
         return response()->json($courseWeekCountService->countPerWeek($request->file('file')));
     }
 
-    public function reimport(\Illuminate\Http\Request $request, TimeTable $timeTable, CourseImportService $courseImportService)
+    public function reimport(Request $request, TimeTable $timeTable, CourseImportService $courseImportService)
     {
         $request->validate([
             'file' => ['required', 'file', 'mimes:xlsx,xls,csv'],
@@ -119,6 +121,6 @@ class TimeTableController extends Controller
         $courseImportService->import($request->file('file'), $timeTable);
 
         return redirect()->route('time-tables.show', $timeTable)
-            ->with('success', 'Courses reimported successfully.');
+            ->with('success', __('Courses reimported successfully.'));
     }
 }

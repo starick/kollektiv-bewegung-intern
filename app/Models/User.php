@@ -23,6 +23,22 @@ class User extends Authenticatable
     use TwoFactorAuthenticatable;
 
     /**
+     * The locales a user can choose from. The first one is the default.
+     *
+     * @var array<int, string>
+     */
+    public const LOCALES = ['de', 'en'];
+
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'locale' => self::LOCALES[0],
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -31,6 +47,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'locale',
     ];
 
     /**
@@ -53,6 +70,25 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    /**
+     * Whether the user is the owner or a member of the shared team.
+     */
+    public function belongsToSharedTeam(): bool
+    {
+        return $this->belongsToTeam(Team::shared());
+    }
+
+    /**
+     * Owners and administrators of the shared team are super admins.
+     */
+    public function isSuperAdmin(): bool
+    {
+        $team = Team::shared();
+
+        // hasTeamRole() also returns true for the team owner
+        return $team !== null && $this->hasTeamRole($team, 'admin');
+    }
 
     /**
      * Get the attributes that should be cast.

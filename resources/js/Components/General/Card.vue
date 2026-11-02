@@ -22,7 +22,11 @@ defineProps({
         :model="menuItems.length ? menuItems : []"
         class="bg-transparent"
         style="border-radius: 0 !important; border-top: none; border-left: none; border-right: none"
-      />
+      >
+        <template #end>
+          <slot name="menu-end" />
+        </template>
+      </Menubar>
     </slot>
     <div class="p-4">
       <slot />

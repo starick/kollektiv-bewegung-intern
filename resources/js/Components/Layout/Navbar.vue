@@ -6,21 +6,15 @@ import { useDarkMode } from '@/Composables/use-dark-mode';
 import { Menubar, Menu, Avatar } from 'primevue';
 import ApplicationLogo from '@/Components/General/ApplicationLogo.vue';
 import ResponsiveNavLink from '@/Components/General/ResponsiveNavLink.vue';
-import TeamSwitchModal from '@/Components/Layout/TeamSwitchModal.vue';
+import { trans } from '@/Composables/use-translations';
 
 const pageProps = usePage().props as any;
 
 const menu = ref();
-const showTeamModal = ref(false);
-
 const { isDark, toggle: toggleDark } = useDarkMode();
 
 const toggle = (event) => {
   menu.value.toggle(event);
-};
-
-const toggleTeamModal = () => {
-  showTeamModal.value = !showTeamModal.value;
 };
 
 const logout = () => {
@@ -28,35 +22,30 @@ const logout = () => {
 };
 
 const menuItems = [
-  { label: 'Dashboard', icon: 'pi pi-home', command: () => router.get(route('dashboard')) },
+  { label: trans('Dashboard'), icon: 'pi pi-home', command: () => router.get(route('dashboard')) },
   {
-    label: 'Timetables',
+    label: trans('Timetables'),
     icon: 'pi pi-table',
     command: () => router.get(route('time-tables.index'))
+  },
+  {
+    label: trans('Protocols'),
+    icon: 'pi pi-file',
+    command: () => router.get(route('protocols.index'))
   }
 ];
 
 const items = [
   {
-    label: `Team: ${pageProps.auth.user.current_team.name}`,
+    // Users removed from the shared team have no current team
+    label: trans('Team: :name', { name: pageProps.auth.user.current_team?.name ?? '–' }),
     icon: 'pi pi-users',
+    visible: !!pageProps.auth.user.current_team,
     items: [
       {
-        label: 'Team Settings',
+        label: trans('Team Settings'),
         icon: 'pi pi-users',
         command: () => router.get(route('teams.show', pageProps.auth.user.current_team))
-      },
-      {
-        label: 'Create New Team',
-        icon: 'pi pi-plus-circle',
-        visible: pageProps.jetstream.canCreateTeams,
-        command: () => router.get(route('teams.create'))
-      },
-      {
-        label: 'Switch Team',
-        icon: 'pi pi-sync',
-        visible: pageProps.auth.user.all_teams.length > 1,
-        command: () => toggleTeamModal()
       }
     ]
   },
@@ -67,12 +56,12 @@ const items = [
     label: pageProps.auth.user.name,
     items: [
       {
-        label: 'Profile',
+        label: trans('Profile'),
         icon: 'pi pi-user',
         command: () => router.get(route('profile.show'))
       },
       {
-        label: 'Log Out',
+        label: trans('Log Out'),
         icon: 'pi pi-sign-out',
         command: logout
       }
@@ -91,12 +80,7 @@ const items = [
       </template>
       <template #end>
         <div class="flex items-center gap-2">
-          <Button
-            :icon="isDark ? 'pi pi-sun' : 'pi pi-moon'"
-            text
-            rounded
-            @click="toggleDark"
-          />
+          <Button :icon="isDark ? 'pi pi-sun' : 'pi pi-moon'" text rounded @click="toggleDark" />
           <Avatar
             :image="pageProps.auth.user.profile_photo_url"
             shape="circle"
@@ -107,6 +91,5 @@ const items = [
         </div>
       </template>
     </Menubar>
-    <TeamSwitchModal v-model:show="showTeamModal" />
   </div>
 </template>

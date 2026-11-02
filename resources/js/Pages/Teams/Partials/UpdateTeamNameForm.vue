@@ -26,14 +26,14 @@ const updateTeamName = () => {
 
 <template>
   <FormSection @submitted="updateTeamName">
-    <template #title> Team Name </template>
+    <template #title> {{ $t('Team Name') }} </template>
 
-    <template #description> The team's name and owner information. </template>
+    <template #description> {{ $t("The team's name and owner information.") }} </template>
 
     <template #form>
       <!-- Team Owner Information -->
       <div class="col-span-6">
-        <InputLabel value="Team Owner" />
+        <InputLabel :value="$t('Team Owner')" />
 
         <div class="flex items-center mt-2">
           <img
@@ -53,7 +53,7 @@ const updateTeamName = () => {
 
       <!-- Team Name -->
       <div class="col-span-6 sm:col-span-4">
-        <InputLabel for="name" value="Team Name" />
+        <InputLabel for="name" :value="$t('Team Name')" />
 
         <TextInput
           id="name"
@@ -68,10 +68,10 @@ const updateTeamName = () => {
     </template>
 
     <template v-if="permissions.canUpdateTeam" #actions>
-      <ActionMessage :on="form.recentlySuccessful" class="me-3"> Saved. </ActionMessage>
+      <ActionMessage :on="form.recentlySuccessful" class="me-3"> {{ $t('Saved.') }} </ActionMessage>
 
       <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-        Save
+        {{ $t('Save') }}
       </PrimaryButton>
     </template>
   </FormSection>

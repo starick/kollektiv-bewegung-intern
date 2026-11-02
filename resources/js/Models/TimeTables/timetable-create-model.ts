@@ -7,6 +7,7 @@ import { computed, ref, watch } from 'vue';
 import { route } from 'ziggy-js';
 import { DESIGN_TEMPLATES } from '@/Constants/design-templates';
 import { WeekCourseCount } from '@/Types/week-course-count';
+import { trans } from '@/Composables/use-translations';
 
 export function timetableCreateModel() {
   const confirm = useConfirm();
@@ -74,10 +75,11 @@ export function timetableCreateModel() {
 
   function warnMultipleWeeks(detected: WeekCourseCount) {
     confirm.require({
-      header: 'File spans multiple weeks',
-      message:
-        `Only courses in week ${detected.week} / ${detected.year} will be imported. ` +
-        `Courses in other weeks will be skipped.`,
+      header: trans('File spans multiple weeks'),
+      message: trans(
+        'Only courses in week :week / :year will be imported. Courses in other weeks will be skipped.',
+        { week: detected.week, year: detected.year }
+      ),
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'OK',
       rejectClass: 'hidden'
@@ -104,7 +106,7 @@ export function timetableCreateModel() {
   const startDate = computed<Date>(() => startOfWeek(formData.year, formData.week));
   const endDate = computed<Date>(() => endOfWeek(formData.year, formData.week));
 
-  const title = 'Create New Timetable';
+  const title = trans('Create New Timetable');
 
   return {
     currentDate,

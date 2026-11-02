@@ -7,6 +7,7 @@ import { toRef } from 'vue';
 import { TimeTable } from '@/Types/time-table';
 import useAlert from '@/Composables/use-alerts';
 import { MenuItem } from 'primevue';
+import { trans } from '@/Composables/use-translations';
 
 const props = defineProps<{
   timeTables: { data: TimeTable[] };
@@ -19,13 +20,17 @@ const alert = useAlert();
 const reload = async () => {
   router.reload({
     only: ['timeTables'],
-    onError: (e) => alert.error('Reload error:', e),
-    onSuccess: () => alert.add('reload successful', 'success')
+    onError: (e) => alert.error(trans('Reload error:'), e),
+    onSuccess: () => alert.add(trans('reload successful'), 'success')
   });
 };
 
 const toggleMine = (value: boolean) => {
-  router.get(route('time-tables.index'), { mine: value ? '1' : undefined }, { preserveState: true });
+  router.get(
+    route('time-tables.index'),
+    { mine: value ? '1' : undefined },
+    { preserveState: true }
+  );
 };
 
 const rowClick = async (e: any) => {
@@ -34,18 +39,18 @@ const rowClick = async (e: any) => {
 
 const menuItems: MenuItem[] = [
   {
-    label: 'Create New',
+    label: trans('Create New'),
     icon: 'pi pi-plus',
     command: () => router.get(route('time-tables.create'))
   },
   {
-    label: 'Refresh',
+    label: trans('Refresh'),
     icon: 'pi pi-refresh',
     command: reload
   }
 ];
 
-const title = 'Timetables Overview';
+const title = trans('Timetables Overview');
 </script>
 
 <template>
@@ -53,12 +58,22 @@ const title = 'Timetables Overview';
     <Card :menu-items="menuItems">
       <div class="flex items-center gap-4 mb-3">
         <div class="flex items-center gap-2">
-          <RadioButton input-id="filter-all" :model-value="filters.mine" :value="false" @change="() => toggleMine(false)" />
-          <label for="filter-all">All</label>
+          <RadioButton
+            input-id="filter-all"
+            :model-value="filters.mine"
+            :value="false"
+            @change="() => toggleMine(false)"
+          />
+          <label for="filter-all">{{ $t('All') }}</label>
         </div>
         <div class="flex items-center gap-2">
-          <RadioButton input-id="filter-mine" :model-value="filters.mine" :value="true" @change="() => toggleMine(true)" />
-          <label for="filter-mine">Mine</label>
+          <RadioButton
+            input-id="filter-mine"
+            :model-value="filters.mine"
+            :value="true"
+            @change="() => toggleMine(true)"
+          />
+          <label for="filter-mine">{{ $t('Mine') }}</label>
         </div>
       </div>
       <DataTable
@@ -70,22 +85,22 @@ const title = 'Timetables Overview';
         stripedRows
         @row-click="rowClick"
       >
-        <Column field="createdAt" header="Created At" sortable>
+        <Column field="createdAt" :header="$t('Created At')" sortable>
           <template #body="{ data }: { data: TimeTable }">
             {{ new Date(data.createdAt).toLocaleDateString('de-DE', { timeZone: 'UTC' }) }}
           </template>
         </Column>
-        <Column field="year" header="Year/Week" sortable>
+        <Column field="year" :header="$t('Year/Week')" sortable>
           <template #body="{ data }: { data: TimeTable }">
             {{ data.year }} / {{ data.week }}
           </template>
         </Column>
-        <Column field="coursesCount" header="Courses" sortable>
+        <Column field="coursesCount" :header="$t('Courses')" sortable>
           <template #body="{ data }: { data: TimeTable }">
             {{ data.coursesCount }}
           </template>
         </Column>
-        <Column field="creator" header="Author" sortable>
+        <Column field="creator" :header="$t('Author')" sortable>
           <template #body="{ data }: { data: TimeTable }">
             {{ data.creator?.name }}
           </template>

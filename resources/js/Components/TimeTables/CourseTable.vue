@@ -7,6 +7,7 @@ import { formatDate } from '@/Helpers/date-time-helper';
 import TimeInput from '../Form/TimeInput.vue';
 import { DataTableRowEditSaveEvent, useConfirm } from 'primevue';
 import CourseCreateModal from './CourseCreateModal.vue';
+import { trans } from '@/Composables/use-translations';
 
 const emit = defineEmits(['reload', 'row-save', 'row-cancel', 'row-delete', 'row-add']);
 
@@ -20,7 +21,7 @@ const confirm = useConfirm();
 const selectedRow = ref<Course | null>(null);
 const contextMenu = ref<any>(null);
 const contextMenuOptions = ref([
-  { label: 'Delete', icon: 'pi pi-trash', command: () => onDeleteRow(selectedRow.value) }
+  { label: trans('Delete'), icon: 'pi pi-trash', command: () => onDeleteRow(selectedRow.value) }
 ]);
 
 const coursesRef = ref([]);
@@ -67,11 +68,11 @@ function onAddRow(row: Course) {
 
 function onDeleteRow(row: Course) {
   confirm.require({
-    header: 'Confirm deletion',
-    message: 'Delete this course?',
+    header: trans('Confirm deletion'),
+    message: trans('Delete this course?'),
     icon: 'pi pi-exclamation-triangle',
-    acceptLabel: 'Delete',
-    rejectLabel: 'Cancel',
+    acceptLabel: trans('Delete'),
+    rejectLabel: trans('Cancel'),
     accept: () => {
       emit('row-delete', row);
       coursesRef.value = coursesRef.value.filter((r) => r.id !== row.id);
@@ -129,7 +130,7 @@ watch(
           <Button icon="pi pi-plus" rounded @click="toggleCreateModal" />
         </div>
       </template>
-      <Column field="date" header="Date" sortable>
+      <Column field="date" :header="$t('Date')" sortable>
         <template #editor="{ data, field }">
           <Calendar v-model="data[field]" dateFormat="dd.mm.yy" showIcon />
         </template>
@@ -138,7 +139,7 @@ watch(
         </template>
       </Column>
 
-      <Column field="startTime" header="Start" sortable>
+      <Column field="startTime" :header="$t('Start')" sortable>
         <template #editor="{ data }: { data: Course }">
           <TimeInput v-model="data.startTime" />
         </template>
@@ -147,7 +148,7 @@ watch(
         </template>
       </Column>
 
-      <Column field="endTime" header="End" sortable>
+      <Column field="endTime" :header="$t('End')" sortable>
         <template #editor="{ data, field }">
           <TimeInput v-model="data[field]" />
         </template>
@@ -156,19 +157,19 @@ watch(
         </template>
       </Column>
 
-      <Column field="name" header="Title" sortable>
+      <Column field="name" :header="$t('Title')" sortable>
         <template #editor="{ data, field }">
           <InputText v-model="data[field]" />
         </template>
       </Column>
 
-      <Column field="instructor" header="Instructor" sortable>
+      <Column field="instructor" :header="$t('Instructor')" sortable>
         <template #editor="{ data, field }">
           <InputText v-model="data[field]" />
         </template>
       </Column>
 
-      <Column field="location" header="Location" sortable>
+      <Column field="location" :header="$t('Location')" sortable>
         <template #editor="{ data, field }">
           <InputText v-model="data[field]" />
         </template>
