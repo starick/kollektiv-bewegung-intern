@@ -6,8 +6,13 @@ import PrimaryButton from '@/Components/General/PrimaryButton.vue';
 import SecondaryButton from '@/Components/General/SecondaryButton.vue';
 import AppLayout from '@/Components/Layout/AppLayout.vue';
 import { protocolCreateModel } from '@/Models/Protocols/protocol-create-model';
+import { trans } from '@/Composables/use-translations';
 
 const { formData, title, onFileSelect, onFileClear, submit, cancel } = protocolCreateModel();
+
+const descriptionHint = trans(
+  "For special cases like 'Neue Leute Treffen' or 'Finanz-AK'. Leave empty for regular plenaries."
+);
 </script>
 
 <template>
@@ -51,7 +56,15 @@ const { formData, title, onFileSelect, onFileClear, submit, cancel } = protocolC
             </div>
 
             <div class="col-span-6">
-              <InputLabel for="description" :value="$t('Description')" />
+              <div class="flex items-center gap-2">
+                <InputLabel for="description" :value="$t('Description')" />
+                <span
+                  v-tooltip.top="descriptionHint"
+                  class="inline-flex items-center justify-center size-4 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs font-semibold cursor-help"
+                  tabindex="0"
+                  >?</span
+                >
+              </div>
               <InputText
                 id="description"
                 v-model="formData.description"

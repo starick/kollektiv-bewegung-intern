@@ -30,7 +30,8 @@ import {
   TabPanels,
   RadioButton,
   Tabs,
-  ToggleButton
+  ToggleButton,
+  Tooltip
 } from 'primevue';
 
 export function addComponents(app: App): App {
@@ -64,6 +65,7 @@ export function addComponents(app: App): App {
   app.component('ConfirmDialog', ConfirmDialog);
   app.component('RadioButton', RadioButton);
   app.component('ToggleButton', ToggleButton);
+  app.directive('tooltip', Tooltip);
 
   return app;
 }
