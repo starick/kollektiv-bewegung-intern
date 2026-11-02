@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/starick/kollektiv-bewegung-intern/compare/v1.4.0...v1.5.0) (2026-11-02)
+
+
+### Features
+
+* adding participants field to protocols ([687b381](https://github.com/starick/kollektiv-bewegung-intern/commit/687b3817be3ef7caf30ddb32909bcf7f2a6a527d))
+* editing protocols ([d10f38d](https://github.com/starick/kollektiv-bewegung-intern/commit/d10f38d13bfe8a4f424fd0d01ec618520673b64e))
+* styling protocol view improved ([4d3ba96](https://github.com/starick/kollektiv-bewegung-intern/commit/4d3ba9604f95620f0d69cdeb2688e77bcbf116a9))
+
 ## [1.4.0](https://github.com/starick/kollektiv-bewegung-intern/compare/v1.3.0...v1.4.0) (2026-11-02)
 
 
