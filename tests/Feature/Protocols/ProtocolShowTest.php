@@ -97,6 +97,26 @@ class ProtocolShowTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page->where('protocol.topics', ['Budget', 'Events']));
     }
 
+    public function test_participants_are_shown(): void
+    {
+        $user = $this->teamMember();
+        $protocol = Protocol::factory()->create(['participants' => ['Anna', 'Ben']]);
+
+        $this->actingAs($user)
+            ->get(route('protocols.show', $protocol))
+            ->assertInertia(fn (Assert $page) => $page->where('protocol.participants', ['Anna', 'Ben']));
+    }
+
+    public function test_protocol_without_participants_shows_empty_list(): void
+    {
+        $user = $this->teamMember();
+        $protocol = Protocol::factory()->create(['participants' => null]);
+
+        $this->actingAs($user)
+            ->get(route('protocols.show', $protocol))
+            ->assertInertia(fn (Assert $page) => $page->where('protocol.participants', []));
+    }
+
     public function test_protocol_can_be_downloaded_as_markdown(): void
     {
         $user = $this->teamMember();

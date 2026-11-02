@@ -3,6 +3,7 @@ export interface Protocol {
   date: string;
   description: string | null;
   topics: string[];
+  participants: string[];
   createdAt: Date;
   updatedAt: Date;
   uploader?: { id: number; name: string } | null;

@@ -32,6 +32,15 @@ class ProtocolPolicy
     }
 
     /**
+     * Determine whether the user can update the model.
+     * Every team member may edit, so protocols can be corrected collaboratively.
+     */
+    public function update(User $user, Protocol $protocol): bool
+    {
+        return $user->belongsToSharedTeam();
+    }
+
+    /**
      * Determine whether the user can delete the model.
      */
     public function delete(User $user, Protocol $protocol): bool
