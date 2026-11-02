@@ -165,11 +165,6 @@ const title = trans('Protocols Overview');
             </div>
           </template>
         </Column>
-        <Column field="editor" :header="$t('Last Edited By')">
-          <template #body="{ data }: { data: Protocol }">
-            {{ data.editor?.name }}
-          </template>
-        </Column>
         <Column field="updatedAt" :header="$t('Updated At')" sortable>
           <template #body="{ data }: { data: Protocol }">
             {{ new Date(data.updatedAt).toLocaleDateString('de-DE') }}

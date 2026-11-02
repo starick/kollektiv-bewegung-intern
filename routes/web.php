@@ -29,5 +29,5 @@ Route::middleware([
     Route::post('time-tables/{time_table}/reimport', [TimeTableController::class, 'reimport'])->name('time-tables.reimport');
     Route::resource('time-tables.courses', CourseController::class)->only(['store', 'update', 'destroy']);
     Route::get('protocols/{protocol}/download', [ProtocolController::class, 'download'])->name('protocols.download');
-    Route::resource('protocols', ProtocolController::class)->only(['index', 'create', 'store', 'show', 'destroy']);
+    Route::resource('protocols', ProtocolController::class);
 });
