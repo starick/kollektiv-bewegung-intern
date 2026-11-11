@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PreviewProtocolRequest;
 use App\Http\Requests\StoreProtocolRequest;
 use App\Http\Requests\UpdateProtocolRequest;
 use App\Http\Resources\ProtocolResource;
-use App\Markdown\DropImagesExtension;
+use App\Markdown\ProtocolMarkdown;
 use App\Models\Protocol;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -92,11 +93,7 @@ class ProtocolController extends Controller
 
         return Inertia::render('Protocols/Show', [
             'protocol' => (new ProtocolResource($protocol->load('uploader', 'editor')))->resolve(),
-            // Raw HTML in the Markdown is escaped so protocols can't inject markup or scripts.
-            'html' => Str::markdown($protocol->text, [
-                'html_input' => 'escape',
-                'allow_unsafe_links' => false,
-            ], [new DropImagesExtension]),
+            'html' => ProtocolMarkdown::toHtml($protocol->text),
             'can' => [
                 'update' => $request->user()->can('update', $protocol),
                 'delete' => $request->user()->can('delete', $protocol),
@@ -112,7 +109,7 @@ class ProtocolController extends Controller
         Gate::authorize('update', $protocol);
 
         return Inertia::render('Protocols/Edit', [
-            'protocol' => (new ProtocolResource($protocol))->resolve(),
+            'protocol' => (new ProtocolResource($protocol->load('uploader', 'editor')))->resolve(),
             'text' => $protocol->text,
         ]);
     }
@@ -133,6 +130,16 @@ class ProtocolController extends Controller
 
         return redirect()->route('protocols.show', $protocol)
             ->with('success', __('Protocol updated successfully.'));
+    }
+
+    /**
+     * Render Markdown for the edit preview without saving anything.
+     */
+    public function preview(PreviewProtocolRequest $request)
+    {
+        return response()->json([
+            'html' => ProtocolMarkdown::toHtml((string) $request->validated('text')),
+        ]);
     }
 
     /**

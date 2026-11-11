@@ -1,8 +1,24 @@
 import { router, useForm } from '@inertiajs/vue3';
+import axios from 'axios';
 import { format, parseISO } from 'date-fns';
+import { computed, ref, watch } from 'vue';
 import { route } from 'ziggy-js';
 import { trans } from '@/Composables/use-translations';
 import { Protocol } from '@/Types/protocol';
+
+export type EditMode = 'edit' | 'preview';
+
+// Mirrors how the server splits the comma separated inputs, so the chips match what gets saved
+function commaSeparated(value: string): string[] {
+  return [
+    ...new Set(
+      value
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean)
+    )
+  ];
+}
 
 export function protocolEditModel(protocol: Protocol, text: string) {
   const formData = useForm<{
@@ -20,6 +36,56 @@ export function protocolEditModel(protocol: Protocol, text: string) {
     text
   });
 
+  const participants = computed(() => commaSeparated(formData.participants));
+  const topics = computed(() => commaSeparated(formData.topics));
+
+  const mode = ref<EditMode>('edit');
+  const previewHtml = ref('');
+  const previewLoading = ref(false);
+  const previewError = ref<string | null>(null);
+  let previewedText: string | null = null;
+  let previewRequest = 0;
+
+  // Renders on the server, so the preview matches the saved protocol exactly
+  async function loadPreview() {
+    if (formData.text === previewedText) {
+      return;
+    }
+
+    const request = ++previewRequest;
+    const textToRender = formData.text;
+    previewLoading.value = true;
+    previewError.value = null;
+
+    try {
+      const { data } = await axios.post<{ html: string }>(route('protocols.preview'), {
+        text: textToRender
+      });
+
+      // Ignore responses that were overtaken by a newer request
+      if (request !== previewRequest) {
+        return;
+      }
+
+      previewHtml.value = data.html;
+      previewedText = textToRender;
+    } catch {
+      if (request === previewRequest) {
+        previewError.value = trans('The preview could not be loaded.');
+      }
+    } finally {
+      if (request === previewRequest) {
+        previewLoading.value = false;
+      }
+    }
+  }
+
+  watch(mode, (value) => {
+    if (value === 'preview') {
+      loadPreview();
+    }
+  });
+
   function submit() {
     formData
       .transform((data) => ({
@@ -29,7 +95,13 @@ export function protocolEditModel(protocol: Protocol, text: string) {
       }))
       .put(route('protocols.update', { protocol: protocol.id }), {
         errorBag: 'updateProtocol',
-        preserveScroll: true
+        preserveScroll: true,
+        // Show the text field again if saving fails because of it
+        onError: (errors) => {
+          if (errors.text) {
+            mode.value = 'edit';
+          }
+        }
       });
   }
 
@@ -42,6 +114,12 @@ export function protocolEditModel(protocol: Protocol, text: string) {
   return {
     formData,
     title,
+    participants,
+    topics,
+    mode,
+    previewHtml,
+    previewLoading,
+    previewError,
     submit,
     cancel
   };
