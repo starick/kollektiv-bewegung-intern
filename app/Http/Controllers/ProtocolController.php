@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PreviewProtocolRequest;
 use App\Http\Requests\StoreProtocolRequest;
 use App\Http\Requests\UpdateProtocolRequest;
+use App\Http\Resources\AuditResource;
 use App\Http\Resources\ProtocolResource;
 use App\Markdown\ProtocolMarkdown;
 use App\Models\Protocol;
@@ -94,6 +95,7 @@ class ProtocolController extends Controller
         return Inertia::render('Protocols/Show', [
             'protocol' => (new ProtocolResource($protocol->load('uploader', 'editor')))->resolve(),
             'html' => ProtocolMarkdown::toHtml($protocol->text),
+            'audits' => AuditResource::collection($protocol->auditTrail())->resolve(),
             'can' => [
                 'update' => $request->user()->can('update', $protocol),
                 'delete' => $request->user()->can('delete', $protocol),

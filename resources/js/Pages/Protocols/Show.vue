@@ -8,12 +8,15 @@ import { route } from 'ziggy-js';
 import { router } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import { Protocol } from '@/Types/protocol';
+import { Audit } from '@/Types/audit';
+import AuditTrail from '@/Components/Audits/AuditTrail.vue';
 import { MenuItem, Tag, useConfirm } from 'primevue';
 import { trans } from '@/Composables/use-translations';
 
 const props = defineProps<{
   protocol: Protocol;
   html: string;
+  audits: Audit[];
   can: { update: boolean; delete: boolean };
 }>();
 
@@ -32,6 +35,14 @@ const longDate = computed(() =>
 const formattedDate = computed(() =>
   new Date(props.protocol.date).toLocaleDateString('de-DE', { timeZone: 'UTC' })
 );
+
+const auditLabels = {
+  date: trans('Date'),
+  description: trans('Description'),
+  participants: trans('Participants'),
+  topics: trans('Topics'),
+  text: trans('Content')
+};
 
 const confirmDelete = () => {
   confirm.require({
@@ -134,6 +145,30 @@ const title = computed(() => trans('Protocol :date', { date: formattedDate.value
         </div>
 
         <ProtocolContent :html="html" />
+
+        <details
+          v-if="audits.length"
+          class="group mt-10 rounded-xl border border-gray-200 dark:border-gray-700"
+        >
+          <summary
+            class="flex cursor-pointer list-none items-center gap-2 p-4 sm:px-5 text-lg font-semibold"
+          >
+            <i class="pi pi-history" aria-hidden="true" />
+            {{ $t('History') }}
+            <span
+              class="rounded-full bg-gray-200 dark:bg-gray-700 px-2 py-0.5 text-xs font-medium text-gray-700 dark:text-gray-200"
+            >
+              {{ audits.length }}
+            </span>
+            <i
+              class="pi pi-chevron-down ml-auto text-sm transition-transform group-open:rotate-180"
+              aria-hidden="true"
+            />
+          </summary>
+          <div class="px-4 pb-5 sm:px-5 pt-2">
+            <AuditTrail :audits="audits" :labels="auditLabels" />
+          </div>
+        </details>
       </div>
     </Card>
   </AppLayout>

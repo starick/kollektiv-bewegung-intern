@@ -2,12 +2,17 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasAuditTrail;
+use Database\Factories\ProtocolFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Protocol extends Model
+class Protocol extends Model implements Auditable
 {
-    /** @use HasFactory<\Database\Factories\ProtocolFactory> */
+    use HasAuditTrail;
+
+    /** @use HasFactory<ProtocolFactory> */
     use HasFactory;
 
     /**
@@ -21,6 +26,20 @@ class Protocol extends Model
         'text',
         'uploaded_by',
         'edited_by',
+    ];
+
+    /**
+     * The audit's user already says who edited, so the editor column would only add noise.
+     */
+    protected $auditExclude = [
+        'edited_by',
+    ];
+
+    /**
+     * The full text is kept in the audit, but too long to show old and new value side by side.
+     */
+    protected $auditSummarized = [
+        'text',
     ];
 
     protected $casts = [
