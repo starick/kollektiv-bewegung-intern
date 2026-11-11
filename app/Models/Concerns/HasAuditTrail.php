@@ -11,8 +11,8 @@ use OwenIt\Auditing\Models\Audit;
  *
  * Usage: implement OwenIt\Auditing\Contracts\Auditable and use this trait.
  * Optionally set `$auditExclude` for attributes that should not be recorded and
- * `$auditSummarized` for large attributes (e.g. long texts) whose values are
- * stored, but only shown as "changed" in the trail.
+ * `$auditDiffed` for long text attributes, which the trail shows as a line diff
+ * instead of the full old and new value.
  */
 trait HasAuditTrail
 {
@@ -29,12 +29,12 @@ trait HasAuditTrail
     }
 
     /**
-     * Attributes whose values are left out when the trail is displayed.
+     * Text attributes the trail shows as a line diff.
      *
      * @return array<int, string>
      */
-    public function getAuditSummarized(): array
+    public function getAuditDiffed(): array
     {
-        return $this->auditSummarized ?? [];
+        return $this->auditDiffed ?? [];
     }
 }

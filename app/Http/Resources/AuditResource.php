@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Auditing\LineDiff;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -27,7 +28,7 @@ class AuditResource extends JsonResource
 
         // A fresh instance works even when the audited record has been deleted since
         $model = class_exists($this->auditable_type) ? new $this->auditable_type : null;
-        $summarized = $model && method_exists($model, 'getAuditSummarized') ? $model->getAuditSummarized() : [];
+        $diffed = $model && method_exists($model, 'getAuditDiffed') ? $model->getAuditDiffed() : [];
 
         return [
             'id' => $this->id,
@@ -37,11 +38,15 @@ class AuditResource extends JsonResource
             'user' => $this->user?->only('id', 'name'),
             'changes' => collect(array_unique([...array_keys($old), ...array_keys($new)]))
                 ->reject(fn (string $attribute) => $model && $attribute === $model->getKeyName())
-                ->map(fn (string $attribute) => in_array($attribute, $summarized, true)
-                    ? ['attribute' => $attribute, 'summarized' => true]
+                ->map(fn (string $attribute) => in_array($attribute, $diffed, true)
+                    ? [
+                        'attribute' => $attribute,
+                        'type' => 'diff',
+                        ...LineDiff::between($old[$attribute] ?? null, $new[$attribute] ?? null),
+                    ]
                     : [
                         'attribute' => $attribute,
-                        'summarized' => false,
+                        'type' => 'value',
                         'old' => $this->present($model, $attribute, $old[$attribute] ?? null),
                         'new' => $this->present($model, $attribute, $new[$attribute] ?? null),
                     ])

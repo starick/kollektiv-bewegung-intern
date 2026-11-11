@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Audit, AuditChange, AuditEvent } from '@/Types/audit';
+import { Audit, AuditChange, AuditEvent, DiffLine } from '@/Types/audit';
 import { trans } from '@/Composables/use-translations';
 
 const props = defineProps<{
@@ -47,6 +47,19 @@ const formatValue = (value: unknown): string => {
   return String(value);
 };
 
+const diffLineClass: Record<DiffLine['type'], string> = {
+  context: 'text-gray-600 dark:text-gray-400',
+  added: 'bg-emerald-50 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-200',
+  removed: 'bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-200'
+};
+
+// Screen readers get the meaning from the prefix, colour alone isn't enough
+const diffLinePrefix: Record<DiffLine['type'], string> = {
+  context: ' ',
+  added: '+',
+  removed: '−'
+};
+
 // Creation shows no field list, the current values are on the page anyway
 const visibleChanges = (audit: Audit): AuditChange[] =>
   audit.event === 'updated'
@@ -86,8 +99,43 @@ const visibleChanges = (audit: Audit): AuditChange[] =>
           <dt class="font-medium text-gray-600 dark:text-gray-400 shrink-0">
             {{ labels[change.attribute] }}:
           </dt>
-          <dd v-if="change.summarized" class="italic text-gray-600 dark:text-gray-400">
-            {{ $t('changed') }}
+          <dd v-if="change.type === 'diff'" class="min-w-0 flex-1">
+            <details class="group/diff">
+              <summary class="cursor-pointer list-none inline-flex items-center gap-2">
+                <span class="font-mono text-xs">
+                  <span class="text-emerald-700 dark:text-emerald-400">+{{ change.added }}</span>
+                  <span class="ml-1 text-red-700 dark:text-red-400">−{{ change.removed }}</span>
+                </span>
+                <span class="text-gray-600 dark:text-gray-400 underline decoration-dotted">
+                  <span class="group-open/diff:hidden">{{ $t('Show changes') }}</span>
+                  <span class="hidden group-open/diff:inline">{{ $t('Hide changes') }}</span>
+                </span>
+              </summary>
+              <div
+                class="mt-2 max-h-96 overflow-auto rounded-lg border border-gray-200 dark:border-gray-700 font-mono text-xs"
+              >
+                <template v-for="(hunk, hunkIndex) in change.hunks" :key="hunkIndex">
+                  <div
+                    v-if="hunkIndex > 0"
+                    class="px-3 py-0.5 text-center text-gray-400 bg-gray-50 dark:bg-gray-800/50"
+                    aria-hidden="true"
+                  >
+                    ⋯
+                  </div>
+                  <div
+                    v-for="(line, lineIndex) in hunk"
+                    :key="lineIndex"
+                    class="flex whitespace-pre-wrap break-words"
+                    :class="diffLineClass[line.type]"
+                  >
+                    <span class="w-6 shrink-0 select-none text-center opacity-60">{{
+                      diffLinePrefix[line.type]
+                    }}</span>
+                    <span class="flex-1 pr-3">{{ line.text || ' ' }}</span>
+                  </div>
+                </template>
+              </div>
+            </details>
           </dd>
           <dd v-else class="break-words">
             <span class="line-through text-gray-500 dark:text-gray-400">{{

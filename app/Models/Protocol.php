@@ -36,9 +36,9 @@ class Protocol extends Model implements Auditable
     ];
 
     /**
-     * The full text is kept in the audit, but too long to show old and new value side by side.
+     * Too long to show old and new value side by side, the trail shows the changed lines instead.
      */
-    protected $auditSummarized = [
+    protected $auditDiffed = [
         'text',
     ];
 

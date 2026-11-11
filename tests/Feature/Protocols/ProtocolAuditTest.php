@@ -92,9 +92,12 @@ class ProtocolAuditTest extends TestCase
                 ->where('audits.0.event', 'updated')
                 ->where('audits.0.user', ['id' => $user->id, 'name' => $user->name])
                 ->where('audits.0.changes', fn ($changes) => collect($changes)->keyBy('attribute')->all() == [
-                    'date' => ['attribute' => 'date', 'summarized' => false, 'old' => '2026-11-02', 'new' => '2026-11-03'],
-                    'topics' => ['attribute' => 'topics', 'summarized' => false, 'old' => ['Budget'], 'new' => ['Budget', 'Events']],
-                    'text' => ['attribute' => 'text', 'summarized' => true],
+                    'date' => ['attribute' => 'date', 'type' => 'value', 'old' => '2026-11-02', 'new' => '2026-11-03'],
+                    'topics' => ['attribute' => 'topics', 'type' => 'value', 'old' => ['Budget'], 'new' => ['Budget', 'Events']],
+                    'text' => ['attribute' => 'text', 'type' => 'diff', 'added' => 1, 'removed' => 1, 'hunks' => [[
+                        ['type' => 'removed', 'text' => '# Alt'],
+                        ['type' => 'added', 'text' => '# Neu'],
+                    ]]],
                 ])
                 ->where('audits.1.event', 'created')
             );
