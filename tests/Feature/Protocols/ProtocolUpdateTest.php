@@ -103,13 +103,37 @@ class ProtocolUpdateTest extends TestCase
         $this->assertSame([], $protocol->participants);
     }
 
-    public function test_date_and_text_are_required(): void
+    public function test_date_is_required(): void
     {
         $protocol = Protocol::factory()->create();
 
         $this->actingAs($this->teamMember())
-            ->put(route('protocols.update', $protocol), $this->payload(['date' => '', 'text' => '']))
-            ->assertSessionHasErrors(['date', 'text']);
+            ->put(route('protocols.update', $protocol), $this->payload(['date' => '']))
+            ->assertSessionHasErrors('date');
+    }
+
+    public function test_text_can_be_emptied(): void
+    {
+        $protocol = Protocol::factory()->create(['text' => '# Alt']);
+
+        $this->actingAs($this->teamMember())
+            ->put(route('protocols.update', $protocol), $this->payload(['text' => '']))
+            ->assertSessionHasNoErrors();
+
+        $this->assertSame('', $protocol->fresh()->text);
+    }
+
+    public function test_text_field_must_be_sent(): void
+    {
+        $protocol = Protocol::factory()->create(['text' => '# Alt']);
+        $payload = $this->payload();
+        unset($payload['text']);
+
+        $this->actingAs($this->teamMember())
+            ->put(route('protocols.update', $protocol), $payload)
+            ->assertSessionHasErrors('text');
+
+        $this->assertSame('# Alt', $protocol->fresh()->text);
     }
 
     public function test_protocol_can_keep_its_own_date_and_description(): void

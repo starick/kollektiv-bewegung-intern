@@ -144,7 +144,22 @@ const title = computed(() => trans('Protocol :date', { date: formattedDate.value
           </section>
         </div>
 
-        <ProtocolContent :html="html" />
+        <ProtocolContent v-if="html.trim()" :html="html" />
+        <div
+          v-else
+          class="rounded-xl border border-dashed border-gray-300 dark:border-gray-600 p-8 text-center text-gray-500 dark:text-gray-400"
+        >
+          <i class="pi pi-file-edit text-2xl mb-2" aria-hidden="true" />
+          <p>{{ $t('This protocol has no content yet.') }}</p>
+          <Button
+            v-if="can.update"
+            class="mt-3"
+            :label="$t('Write protocol')"
+            icon="pi pi-pencil"
+            text
+            @click="router.get(route('protocols.edit', { protocol: protocol.id }))"
+          />
+        </div>
 
         <details
           v-if="audits.length"

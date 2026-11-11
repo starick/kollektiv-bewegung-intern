@@ -70,7 +70,9 @@ class ProtocolController extends Controller
     public function store(StoreProtocolRequest $request)
     {
         // Strip a UTF-8 byte order mark, which some editors prepend to exported files.
-        $text = preg_replace('/^\xEF\xBB\xBF/', '', $request->file('file')->get());
+        $text = $request->hasFile('file')
+            ? preg_replace('/^\xEF\xBB\xBF/', '', $request->file('file')->get())
+            : '';
 
         $protocol = Protocol::create([
             'date' => $request->validated('date'),
@@ -81,7 +83,8 @@ class ProtocolController extends Controller
             'uploaded_by' => auth()->id(),
         ]);
 
-        return redirect()->route('protocols.show', $protocol)
+        // An empty protocol is written right away, so open it in the editor
+        return redirect()->route($text === '' ? 'protocols.edit' : 'protocols.show', $protocol)
             ->with('success', __('Protocol created successfully.'));
     }
 
@@ -126,7 +129,8 @@ class ProtocolController extends Controller
             'description' => $request->validated('description'),
             'topics' => $request->topics(),
             'participants' => $request->participants(),
-            'text' => $request->validated('text'),
+            // Empty input arrives as null, the column holds an empty string instead
+            'text' => $request->validated('text') ?? '',
             'edited_by' => auth()->id(),
         ]);
 

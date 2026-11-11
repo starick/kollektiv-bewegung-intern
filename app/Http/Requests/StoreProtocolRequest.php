@@ -32,7 +32,8 @@ class StoreProtocolRequest extends FormRequest
             ...$this->detailRules(),
             'file' => [
                 'bail',
-                'required',
+                // Without a file the protocol starts with an empty text
+                'nullable',
                 'file',
                 'extensions:md,markdown',
                 'max:2048',

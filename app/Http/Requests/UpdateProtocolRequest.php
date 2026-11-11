@@ -28,7 +28,7 @@ class UpdateProtocolRequest extends FormRequest
         return [
             ...$this->detailRules(),
             // Same size limit as the uploaded Markdown file (2 MB)
-            'text' => ['required', 'string', 'max:2097152'],
+            'text' => ['present', 'nullable', 'string', 'max:2097152'],
         ];
     }
 

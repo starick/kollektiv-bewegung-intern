@@ -115,11 +115,28 @@ class ProtocolCreateTest extends TestCase
         $this->assertSame('# Plenum', Protocol::sole()->text);
     }
 
-    public function test_date_and_file_are_required(): void
+    public function test_date_is_required(): void
     {
         $this->actingAs($this->user())
             ->post(route('protocols.store'), [])
-            ->assertSessionHasErrors(['date', 'file']);
+            ->assertSessionHasErrors('date')
+            ->assertSessionDoesntHaveErrors('file');
+    }
+
+    public function test_protocol_without_file_starts_empty_and_opens_the_editor(): void
+    {
+        $user = $this->user();
+
+        $response = $this->actingAs($user)->post(route('protocols.store'), [
+            'date' => '2026-11-02',
+            'participants' => 'Anna',
+        ])->assertSessionHasNoErrors();
+
+        $protocol = Protocol::sole();
+        $response->assertRedirect(route('protocols.edit', $protocol));
+        $this->assertSame('', $protocol->text);
+        $this->assertSame(['Anna'], $protocol->participants);
+        $this->assertSame($user->id, $protocol->uploaded_by);
     }
 
     public function test_date_and_description_must_be_unique_together(): void

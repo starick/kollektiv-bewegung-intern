@@ -21,21 +21,27 @@ const descriptionHint = trans(
       <form @submit.prevent="submit">
         <FormSection class="mb-4">
           <template #title>{{ $t('File Upload') }}</template>
-          <template #description>{{ $t('Upload the protocol as Markdown (.md) file') }}</template>
+          <template #description>{{
+            $t(
+              'Optional: upload the protocol as Markdown (.md) file. Without a file, the protocol starts empty.'
+            )
+          }}</template>
 
           <template #form>
-            <FileUpload
-              name="file"
-              mode="basic"
-              :auto="false"
-              :customUpload="false"
-              :multiple="false"
-              accept=".md,.markdown"
-              @select="onFileSelect"
-              @clear="onFileClear"
-            />
-            <div v-if="formData.errors.file" class="text-red-600 mt-2">
-              {{ formData.errors.file }}
+            <div class="col-span-6">
+              <FileUpload
+                name="file"
+                mode="basic"
+                :auto="false"
+                :customUpload="false"
+                :multiple="false"
+                accept=".md,.markdown"
+                @select="onFileSelect"
+                @clear="onFileClear"
+              />
+              <div v-if="formData.errors.file" class="text-red-600 mt-2">
+                {{ formData.errors.file }}
+              </div>
             </div>
           </template>
         </FormSection>

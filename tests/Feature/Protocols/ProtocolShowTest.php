@@ -97,6 +97,16 @@ class ProtocolShowTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page->where('protocol.topics', ['Budget', 'Events']));
     }
 
+    public function test_empty_protocol_renders_no_html(): void
+    {
+        $protocol = Protocol::factory()->create(['text' => '']);
+
+        $this->actingAs($this->teamMember())
+            ->get(route('protocols.show', $protocol))
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page->where('html', ''));
+    }
+
     public function test_participants_are_shown(): void
     {
         $user = $this->teamMember();
