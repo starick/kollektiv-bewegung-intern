@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Models\User;
 use App\Models\WikiCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\WikiPage>
@@ -23,7 +22,6 @@ class WikiPageFactory extends Factory
 
         return [
             'title' => $title,
-            'slug' => Str::slug($title),
             'category_id' => null,
             'text' => "# {$title}\n\n{$this->faker->paragraphs(2, true)}",
             'pinned' => false,
