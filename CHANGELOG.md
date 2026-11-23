@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/starick/kollektiv-bewegung-intern/compare/v1.6.0...v1.7.0) (2026-11-23)
+
+
+### Features
+
+* add design and plan for layered timetable export ([bf49d73](https://github.com/starick/kollektiv-bewegung-intern/commit/bf49d735253905e72f18312963d6f64b243a577f))
+* add pptx unit and color helpers with vitest setup ([9481ac7](https://github.com/starick/kollektiv-bewegung-intern/commit/9481ac7d0d217fe8519936fa32073b25c757ea2d))
+* collect timetable layers from the rendered DOM ([64a2f0f](https://github.com/starick/kollektiv-bewegung-intern/commit/64a2f0f9cee35316bfe68dc6e01bc7c6c7ef8200))
+* export timetables as layered pptx for canva ([5877024](https://github.com/starick/kollektiv-bewegung-intern/commit/5877024b32b35e64daad6c77e565a13922a6b3f3))
+* link sharing qol ([1c819f3](https://github.com/starick/kollektiv-bewegung-intern/commit/1c819f3f0d74ce78ec21155be48e411620164f56))
+* link sharing qol ([baf5945](https://github.com/starick/kollektiv-bewegung-intern/commit/baf594518c86777e8d8c04f1cf1074f21153bad7))
+* make protocol routes via slug ([bb7db6d](https://github.com/starick/kollektiv-bewegung-intern/commit/bb7db6d4dc2e9c870c90a78a98de3157aeb4ec14))
+* make protocols shareable (no login required) ([7f817f4](https://github.com/starick/kollektiv-bewegung-intern/commit/7f817f40f4a22f7710271b04735be2aa7f6b9470))
+* replace design menu with save button and download split button ([4b2c914](https://github.com/starick/kollektiv-bewegung-intern/commit/4b2c914acda1096d41ecdba3f60ee93119e6c426))
+* respect z-index order, split wrapped text and export the timetable element itself ([d813047](https://github.com/starick/kollektiv-bewegung-intern/commit/d813047e3216ca7f5ead77a4e376f8989b4d3d3c))
+
 ## [1.6.0](https://github.com/starick/kollektiv-bewegung-intern/compare/v1.5.0...v1.6.0) (2026-11-23)
 
 
