@@ -46,6 +46,10 @@ class ProtocolShareController extends Controller
         return Inertia::render('Protocols/Public', [
             'protocol' => (new PublicProtocolResource($protocol))->resolve(),
             'html' => ProtocolMarkdown::toHtml($protocol->text),
+            // Only team members who are logged in learn where the internal page is
+            'internalUrl' => $request->user()?->can('view', $protocol) ? route('protocols.show', $protocol) : null,
+            // The login continues on the internal page, see FortifyServiceProvider
+            'loginUrl' => $request->user() ? null : route('login', ['shared' => $token]),
         ])->toResponse($request)->withHeaders([
             // Shared links are for the people they were sent to, not for search engines
             'X-Robots-Tag' => 'noindex, nofollow',

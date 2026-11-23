@@ -131,6 +131,65 @@ class ProtocolShareTest extends TestCase
             );
     }
 
+    public function test_logged_in_team_members_get_a_link_to_the_internal_page(): void
+    {
+        $protocol = Protocol::factory()->create();
+        $protocol->share();
+
+        $this->actingAs($this->teamMember())
+            ->get($protocol->shareUrl())
+            ->assertInertia(fn (Assert $page) => $page->where('internalUrl', route('protocols.show', $protocol)));
+    }
+
+    public function test_guests_and_outsiders_get_no_link_to_the_internal_page(): void
+    {
+        $this->sharedTeam();
+        $protocol = Protocol::factory()->create();
+        $protocol->share();
+
+        $this->get($protocol->shareUrl())
+            ->assertInertia(fn (Assert $page) => $page->where('internalUrl', null));
+
+        $this->actingAs(User::factory()->create())
+            ->get($protocol->shareUrl())
+            ->assertInertia(fn (Assert $page) => $page->where('internalUrl', null));
+    }
+
+    public function test_guests_get_a_login_link_that_leads_to_the_internal_page(): void
+    {
+        $protocol = Protocol::factory()->create();
+        $protocol->share();
+        $loginUrl = route('login', ['shared' => $protocol->share_token]);
+
+        $this->get($protocol->shareUrl())
+            ->assertInertia(fn (Assert $page) => $page->where('loginUrl', $loginUrl));
+
+        $this->get($loginUrl)->assertOk()->assertInertia(fn (Assert $page) => $page->component('Auth/Login'));
+
+        $user = $this->teamMember();
+        $this->post(route('login'), ['email' => $user->email, 'password' => 'password'])
+            ->assertRedirect(route('protocols.show', $protocol));
+    }
+
+    public function test_logged_in_users_get_no_login_link(): void
+    {
+        $protocol = Protocol::factory()->create();
+        $protocol->share();
+
+        $this->actingAs($this->teamMember())
+            ->get($protocol->shareUrl())
+            ->assertInertia(fn (Assert $page) => $page->where('loginUrl', null));
+    }
+
+    public function test_login_with_an_unknown_token_continues_as_usual(): void
+    {
+        $this->get(route('login', ['shared' => 'does-not-exist']))->assertOk();
+
+        $user = $this->teamMember();
+        $this->post(route('login'), ['email' => $user->email, 'password' => 'password'])
+            ->assertRedirect(config('fortify.home'));
+    }
+
     public function test_unknown_or_unshared_tokens_are_not_found(): void
     {
         Protocol::factory()->create();

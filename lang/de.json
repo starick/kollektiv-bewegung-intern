@@ -385,5 +385,7 @@
     "The current link stops working. Create a new link?": "Der aktuelle Link funktioniert dann nicht mehr. Neuen Link erstellen?",
     "Stop sharing the protocol? The link stops working.": "Protokoll nicht mehr teilen? Der Link funktioniert dann nicht mehr.",
     "Shared protocol": "Geteiltes Protokoll",
-    "Share link created and copied.": "Freigabelink erstellt und kopiert."
+    "Share link created and copied.": "Freigabelink erstellt und kopiert.",
+    "Open in internal area": "Im internen Bereich öffnen",
+    "Log in to edit the protocol and see its history": "Logge dich ein, um das Protokoll zu bearbeiten und den Verlauf zu sehen"
 }

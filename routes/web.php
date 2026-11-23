@@ -23,6 +23,7 @@ Route::prefix('share')->middleware('throttle:60,1')->group(function () {
     Route::get('protocols/{token}', [ProtocolShareController::class, 'show'])->name('protocols.public');
 });
 
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
