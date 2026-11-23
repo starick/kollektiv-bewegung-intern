@@ -68,7 +68,8 @@ class ProtocolUpdateTest extends TestCase
                 'topics' => ' Budget, Events,, Budget ,',
             ]))
             ->assertSessionHasNoErrors()
-            ->assertRedirect(route('protocols.show', $protocol));
+            // The date changed, so the slug is rebuilt from the new date and description
+            ->assertRedirect('/protocols/2026-11-03-plenum-dezember');
 
         $protocol->refresh();
         $this->assertSame('2026-11-03', $protocol->date->toDateString());

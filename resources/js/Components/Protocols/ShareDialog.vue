@@ -7,7 +7,7 @@ import useAlert from '@/Composables/use-alerts';
 import { trans } from '@/Composables/use-translations';
 
 const props = defineProps<{
-  protocolId: string;
+  protocolSlug: string;
   shareUrl: string | null;
   canManage: boolean;
 }>();
@@ -20,7 +20,7 @@ const processing = ref(false);
 const linkInput = ref<{ $el: HTMLInputElement } | null>(null);
 
 const visit = (method: 'post' | 'delete', name: string) => {
-  router.visit(route(name, { protocol: props.protocolId }), {
+  router.visit(route(name, { protocol: props.protocolSlug }), {
     method,
     preserveScroll: true,
     onStart: () => (processing.value = true),

@@ -16,6 +16,7 @@ class ProtocolResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'slug' => $this->slug,
             'date' => $this->date->toDateString(),
             'description' => $this->description,
             'topics' => $this->topics ?? [],

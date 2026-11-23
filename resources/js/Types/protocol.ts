@@ -1,5 +1,6 @@
 export interface Protocol {
   id: string;
+  slug: string;
   date: string;
   description: string | null;
   topics: string[];

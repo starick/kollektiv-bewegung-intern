@@ -83,7 +83,7 @@ const reload = async () => {
 };
 
 const rowClick = async (e: any) => {
-  router.get(route('protocols.show', { protocol: e.data.id }));
+  router.get(route('protocols.show', { protocol: e.data.slug }));
 };
 
 const menuItems: MenuItem[] = [

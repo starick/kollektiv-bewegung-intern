@@ -85,8 +85,9 @@ class ProtocolAuditTest extends TestCase
             'text' => '# Neu',
         ])->assertSessionHasNoErrors();
 
+        // The date is part of the slug, so the URL changed
         $this->actingAs($user)
-            ->get(route('protocols.show', $protocol))
+            ->get(route('protocols.show', $protocol->refresh()))
             ->assertInertia(fn (Assert $page) => $page
                 ->has('audits', 2)
                 ->where('audits.0.event', 'updated')
@@ -114,7 +115,7 @@ class ProtocolAuditTest extends TestCase
         $user->delete();
 
         $this->actingAs($this->teamMember())
-            ->get(route('protocols.show', $protocol))
+            ->get(route('protocols.show', $protocol->refresh()))
             ->assertInertia(fn (Assert $page) => $page->where('audits.0.user', null));
     }
 }

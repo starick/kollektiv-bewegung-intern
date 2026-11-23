@@ -93,7 +93,7 @@ export function protocolEditModel(protocol: Protocol, text: string) {
         // Format locally; toISOString() would shift the day for timezones ahead of UTC
         date: data.date ? format(data.date, 'yyyy-MM-dd') : null
       }))
-      .put(route('protocols.update', { protocol: protocol.id }), {
+      .put(route('protocols.update', { protocol: protocol.slug }), {
         errorBag: 'updateProtocol',
         preserveScroll: true,
         // Show the text field again if saving fails because of it
@@ -106,7 +106,7 @@ export function protocolEditModel(protocol: Protocol, text: string) {
   }
 
   function cancel() {
-    router.get(route('protocols.show', { protocol: protocol.id }));
+    router.get(route('protocols.show', { protocol: protocol.slug }));
   }
 
   const title = trans('Edit Protocol');

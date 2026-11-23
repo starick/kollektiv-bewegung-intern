@@ -47,7 +47,7 @@ const confirmDelete = () => {
     acceptLabel: trans('Delete'),
     rejectLabel: trans('Cancel'),
     acceptClass: 'p-button-danger',
-    accept: () => router.delete(route('protocols.destroy', { protocol: props.protocol.id }))
+    accept: () => router.delete(route('protocols.destroy', { protocol: props.protocol.slug }))
   });
 };
 
@@ -61,7 +61,7 @@ const menuItems: MenuItem[] = [
     label: trans('Download'),
     icon: 'pi pi-download',
     // Plain link instead of an Inertia visit, so the browser handles the file download
-    url: route('protocols.download', { protocol: props.protocol.id })
+    url: route('protocols.download', { protocol: props.protocol.slug })
   }
 ];
 
@@ -85,7 +85,7 @@ const title = computed(() => trans('Protocol :date', { date: formattedDate.value
           :label="$t('Edit')"
           icon="pi pi-pencil"
           text
-          @click="router.get(route('protocols.edit', { protocol: protocol.id }))"
+          @click="router.get(route('protocols.edit', { protocol: protocol.slug }))"
         />
         <Button
           v-if="can.delete"
@@ -115,7 +115,7 @@ const title = computed(() => trans('Protocol :date', { date: formattedDate.value
             :label="$t('Write protocol')"
             icon="pi pi-pencil"
             text
-            @click="router.get(route('protocols.edit', { protocol: protocol.id }))"
+            @click="router.get(route('protocols.edit', { protocol: protocol.slug }))"
           />
         </div>
 
@@ -147,7 +147,7 @@ const title = computed(() => trans('Protocol :date', { date: formattedDate.value
 
     <ShareDialog
       v-model:visible="shareVisible"
-      :protocol-id="protocol.id"
+      :protocol-slug="protocol.slug"
       :share-url="shareUrl"
       :can-manage="can.update"
     />
