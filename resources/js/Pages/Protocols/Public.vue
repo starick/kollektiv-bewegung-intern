@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
 import { computed } from 'vue';
-import ProtocolContent from '@/Components/Protocols/ProtocolContent.vue';
+import MarkdownContent from '@/Components/Markdown/MarkdownContent.vue';
 import ProtocolHeader from '@/Components/Protocols/ProtocolHeader.vue';
 import { trans } from '@/Composables/use-translations';
 
@@ -59,7 +59,7 @@ const title = computed(() =>
       <article class="rounded-lg bg-default-background p-4 sm:p-8">
         <ProtocolHeader :protocol="protocol" />
 
-        <ProtocolContent v-if="html.trim()" :html="html" />
+        <MarkdownContent v-if="html.trim()" :html="html" />
         <p v-else class="text-center text-gray-500 dark:text-gray-400">
           {{ $t('This protocol has no content yet.') }}
         </p>
