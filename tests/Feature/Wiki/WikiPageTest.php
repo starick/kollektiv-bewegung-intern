@@ -237,4 +237,21 @@ class WikiPageTest extends TestCase
 
         $this->assertSame('', WikiPage::sole()->text);
     }
+
+    public function test_long_titles_give_slugs_that_fit_the_column(): void
+    {
+        $user = $this->teamMember();
+        $title = str_repeat('Größenübersicht ', 15).'Ende';
+
+        $this->createPage($user, ['title' => $title])->assertSessionHasNoErrors();
+        $this->createPage($user, ['title' => $title])->assertSessionHasNoErrors();
+
+        [$first, $second] = WikiPage::pluck('slug')->sortBy(fn (string $slug) => strlen($slug))->values();
+        $this->assertLessThanOrEqual(255, strlen($second));
+        $this->assertStringEndsWith('-2', $second);
+        $this->assertStringStartsWith('groessenuebersicht-groessenuebersicht', $first);
+        $this->assertStringEndsNotWith('-', $first);
+        // Cut at a word boundary, so no half word remains
+        $this->assertStringEndsWith('groessenuebersicht', $first);
+    }
 }

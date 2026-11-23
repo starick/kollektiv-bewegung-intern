@@ -31,6 +31,12 @@ class WikiPage extends Model implements Auditable
     public const FALLBACK_SLUG = 'seite';
 
     /**
+     * Longest slug before a counter is added, so even `-123` stays within the 255 character column.
+     * Transliteration makes slugs longer than titles (`ä` becomes `ae`).
+     */
+    public const SLUG_LENGTH = 240;
+
+    /**
      * `text` holds the page body as raw Markdown, not HTML.
      */
     protected $fillable = [
@@ -94,7 +100,7 @@ class WikiPage extends Model implements Auditable
      */
     public function generateSlug(): string
     {
-        $base = Str::slug($this->title ?? '', '-', 'de') ?: self::FALLBACK_SLUG;
+        $base = self::shorten(Str::slug($this->title ?? '', '-', 'de')) ?: self::FALLBACK_SLUG;
 
         $slug = $base;
         for ($suffix = 2; in_array($slug, self::RESERVED_SLUGS, true) || static::where('slug', $slug)->exists(); $suffix++) {
@@ -102,6 +108,21 @@ class WikiPage extends Model implements Auditable
         }
 
         return $slug;
+    }
+
+    /**
+     * Cuts an overlong slug at a word boundary, only a single overlong word is cut in the middle.
+     */
+    private static function shorten(string $slug): string
+    {
+        if (strlen($slug) <= self::SLUG_LENGTH) {
+            return $slug;
+        }
+
+        $cut = substr($slug, 0, self::SLUG_LENGTH + 1);
+        $lastSeparator = strrpos($cut, '-');
+
+        return $lastSeparator ? substr($cut, 0, $lastSeparator) : substr($slug, 0, self::SLUG_LENGTH);
     }
 
     /**

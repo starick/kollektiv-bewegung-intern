@@ -68,6 +68,11 @@ class AuditResource extends JsonResource
             return json_decode($value, true);
         }
 
+        // The old value comes from the database as 0/1, the new one as a PHP boolean
+        if ($model->hasCast($attribute, ['bool', 'boolean'])) {
+            return (bool) $value;
+        }
+
         if ($model->hasCast($attribute, ['date', 'immutable_date'])) {
             return Carbon::parse($value)->toDateString();
         }

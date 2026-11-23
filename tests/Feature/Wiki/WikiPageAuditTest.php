@@ -109,4 +109,21 @@ class WikiPageAuditTest extends TestCase
                 ->where('audits.0.changes.0.old', 'X')
                 ->where('audits.0.changes.0.new', null));
     }
+
+    public function test_pin_changes_are_shown_as_booleans_on_both_sides(): void
+    {
+        $page = WikiPage::factory()->create(['pinned' => false]);
+
+        $this->update($page, ['pinned' => true]);
+        $this->update($page->fresh(), ['pinned' => false]);
+
+        $this->actingAs($this->teamMember())
+            ->get(route('wiki.show', $page))
+            ->assertInertia(fn (Assert $inertia) => $inertia
+                ->where('audits.0.changes.0.attribute', 'pinned')
+                ->where('audits.0.changes.0.old', true)
+                ->where('audits.0.changes.0.new', false)
+                ->where('audits.1.changes.0.old', false)
+                ->where('audits.1.changes.0.new', true));
+    }
 }
