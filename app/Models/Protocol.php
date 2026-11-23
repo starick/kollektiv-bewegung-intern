@@ -7,6 +7,7 @@ use Database\Factories\ProtocolFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Protocol extends Model implements Auditable
@@ -36,6 +37,11 @@ class Protocol extends Model implements Auditable
      */
     protected $auditExclude = [
         'edited_by',
+        'share_token',
+    ];
+
+    protected $hidden = [
+        'share_token',
     ];
 
     /**
@@ -59,5 +65,24 @@ class Protocol extends Model implements Auditable
     public function editor()
     {
         return $this->belongsTo(User::class, 'edited_by');
+    }
+
+    /**
+     * Gives the protocol a new public share token, replacing any previous one.
+     */
+    public function share(): void
+    {
+        // Saved quietly, sharing is not an edit of the protocol and must not touch updated_at
+        static::withoutTimestamps(fn () => $this->forceFill(['share_token' => Str::random(40)])->saveQuietly());
+    }
+
+    public function unshare(): void
+    {
+        static::withoutTimestamps(fn () => $this->forceFill(['share_token' => null])->saveQuietly());
+    }
+
+    public function shareUrl(): ?string
+    {
+        return $this->share_token ? route('protocols.public', $this->share_token) : null;
     }
 }

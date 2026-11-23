@@ -99,6 +99,7 @@ class ProtocolController extends Controller
             'protocol' => (new ProtocolResource($protocol->load('uploader', 'editor')))->resolve(),
             'html' => ProtocolMarkdown::toHtml($protocol->text),
             'audits' => AuditResource::collection($protocol->auditTrail())->resolve(),
+            'shareUrl' => $protocol->shareUrl(),
             'can' => [
                 'update' => $request->user()->can('update', $protocol),
                 'delete' => $request->user()->can('delete', $protocol),

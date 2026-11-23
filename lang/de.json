@@ -368,5 +368,21 @@
     "results": "Ergebnissen",
     "start time": "Startzeit",
     "title": "Titel",
-    "to": "bis"
+    "to": "bis",
+    "Share": "Teilen",
+    "Share protocol": "Protokoll teilen",
+    "Share link created.": "Freigabelink erstellt.",
+    "Protocol is no longer shared.": "Protokoll wird nicht mehr geteilt.",
+    "Create share link": "Freigabelink erstellen",
+    "Anyone with this link can read the protocol without logging in. Author and history stay hidden.": "Jede Person mit diesem Link kann das Protokoll ohne Anmeldung lesen. Autor und Verlauf bleiben verborgen.",
+    "The protocol is not shared yet. A share link lets anyone read it without logging in.": "Das Protokoll wird noch nicht geteilt. Mit einem Freigabelink kann es jede Person ohne Anmeldung lesen.",
+    "Copy link": "Link kopieren",
+    "Link copied.": "Link kopiert.",
+    "Could not copy the link.": "Der Link konnte nicht kopiert werden.",
+    "New link": "Neuer Link",
+    "Stop sharing": "Nicht mehr teilen",
+    "Shared": "Geteilt",
+    "The current link stops working. Create a new link?": "Der aktuelle Link funktioniert dann nicht mehr. Neuen Link erstellen?",
+    "Stop sharing the protocol? The link stops working.": "Protokoll nicht mehr teilen? Der Link funktioniert dann nicht mehr.",
+    "Shared protocol": "Geteiltes Protokoll"
 }
