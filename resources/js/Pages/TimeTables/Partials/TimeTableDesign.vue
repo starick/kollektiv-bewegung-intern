@@ -4,13 +4,14 @@ import TimeTableDisplay from '@/Components/TimeTables/TimeTableDisplay.vue';
 import TimeTableBubbleDisplay from '@/Components/TimeTables/TimeTableBubbleDisplay.vue';
 import { computed, reactive, ref, watch } from 'vue';
 import { toJpeg } from 'html-to-image';
+import { exportTimetablePptx } from '@/Helpers/timetable-pptx-export';
 import Card from '@/Components/General/Card.vue';
 import { Course } from '@/Types/course';
 import TimeTableDesignControls from './TimeTableDesignControls.vue';
 import useTimeTableActions from '@/Composables/use-timetable-actions';
 import useAlert from '@/Composables/use-alerts';
 import { DEFAULT_DISPLAY_CONFIG } from '@/Constants/default-display-config';
-import { useConfirm } from 'primevue';
+import { SplitButton, useConfirm } from 'primevue';
 import { trans } from '@/Composables/use-translations';
 
 const props = defineProps<{
@@ -49,6 +50,20 @@ const doDownload = async () => {
   link.click();
 };
 
+const doDownloadPptx = async () => {
+  // The ref is the flex wrapper; the slide must match the timetable itself (size × size).
+  const timetable = timetableRef.value?.firstElementChild;
+  if (!(timetable instanceof HTMLElement)) return;
+  try {
+    await exportTimetablePptx(
+      timetable,
+      `timetable_${props.timeTable.year}-${props.timeTable.week}.pptx`
+    );
+  } catch (e) {
+    alert.error(trans('Error exporting file'), e);
+  }
+};
+
 const onSave = () => {
   timeTableActions
     .update(props.timeTable.id, { display_config: JSON.stringify(displayConfig) })
@@ -61,9 +76,10 @@ const onSave = () => {
     });
 };
 
-const onDownload = () => {
+const onDownload = (kind: 'jpeg' | 'pptx' = 'jpeg') => {
+  const download = kind === 'pptx' ? doDownloadPptx : doDownload;
   if (!hasUnsavedChanges.value) {
-    doDownload();
+    download();
     return;
   }
   confirm.require({
@@ -77,24 +93,24 @@ const onDownload = () => {
         .update(props.timeTable.id, { display_config: JSON.stringify(displayConfig) })
         .then(() => {
           savedSnapshot.value = JSON.stringify(displayConfig);
-          doDownload();
+          download();
         })
         .catch((e) => alert.error(trans('Error saving design'), e));
     },
-    reject: () => doDownload()
+    reject: () => download()
   });
 };
 
-const menuItems = [
+const downloadOptions = [
   {
-    label: trans('Save Changes'),
-    icon: 'pi pi-save',
-    command: onSave
+    label: trans('Image (JPG)'),
+    icon: 'pi pi-image',
+    command: () => onDownload('jpeg')
   },
   {
-    label: trans('Download Image'),
-    icon: 'pi pi-download',
-    command: onDownload
+    label: trans('For Canva (PPTX)'),
+    icon: 'pi pi-file-export',
+    command: () => onDownload('pptx')
   }
 ];
 
@@ -116,12 +132,23 @@ watch(
       <Card
         :class="`flex-1 flex-col rounded-r-none overflow-y-scroll h-[${size}px]`"
         border
-        :menuItems="menuItems"
       >
+        <template #header>
+          <div class="flex items-center justify-between gap-2 px-4 py-3 border-b border-border">
+            <Button :label="$t('Save')" icon="pi pi-save" @click="onSave" />
+            <SplitButton
+              :label="$t('Download')"
+              icon="pi pi-download"
+              :model="downloadOptions"
+              severity="secondary"
+              @click="onDownload('jpeg')"
+            />
+          </div>
+        </template>
         <TimeTableDesignControls
           v-model="displayConfig"
           @onSave="onSave"
-          @onDownload="onDownload"
+          @onDownload="onDownload()"
         />
       </Card>
       <div ref="timetableRef" class="flex-1">
