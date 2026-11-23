@@ -31,7 +31,26 @@ const INLINE_DISPLAYS = new Set(['inline', 'inline-block', 'contents', '']);
 
 export function collectTimetableLayers(root: HTMLElement): Layer[] {
   const origin = root.getBoundingClientRect();
-  const layers: Layer[] = [];
+  const keyed: Array<{ layer: Layer; key: number }> = [];
+  let currentKey = Number.NEGATIVE_INFINITY;
+  const layers = { push: (layer: Layer) => keyed.push({ layer, key: currentKey }) };
+
+  /**
+   * Approximates CSS paint order: in-flow content (0) < positioned with z-index auto/0 (0.5)
+   * < positive z-index (n). The nearest ancestor that sets a z-index decides the bucket.
+   */
+  const stackingKey = (el: Element): number => {
+    let positioned = false;
+    for (let cur: Element | null = el; cur && cur !== root; cur = cur.parentElement) {
+      const style = getComputedStyle(cur);
+      if (style.position && style.position !== 'static') {
+        positioned = true;
+        const z = parseInt(style.zIndex, 10);
+        if (!Number.isNaN(z)) return z === 0 ? 0.5 : z;
+      }
+    }
+    return positioned ? 0.5 : 0;
+  };
 
   const relative = (r: DOMRect): Box => ({
     x: r.left - origin.left,
@@ -138,10 +157,47 @@ export function collectTimetableLayers(root: HTMLElement): Layer[] {
     return lines.join('\n');
   };
 
+  /**
+   * A text node that wraps has a bounding rect spanning all its lines. If it starts mid-line,
+   * that rect starts at the container's left edge and the text would overlap its predecessor,
+   * so wrapped text is split into one rect per rendered line.
+   */
+  const textLines = (node: Text): Array<{ text: string; rect: DOMRect }> => {
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    const rect = range.getBoundingClientRect();
+    if (rect.width === 0 && rect.height === 0) return [];
+    const content = node.textContent ?? '';
+    const lineCount = typeof range.getClientRects === 'function' ? range.getClientRects().length : 1;
+    if (lineCount <= 1) return [{ text: content, rect }];
+
+    const lines: Array<{ words: string[]; left: number; top: number; right: number; bottom: number }> = [];
+    for (const match of content.matchAll(/\S+/g)) {
+      const wordRange = document.createRange();
+      wordRange.setStart(node, match.index!);
+      wordRange.setEnd(node, match.index! + match[0].length);
+      const r = wordRange.getBoundingClientRect();
+      const last = lines[lines.length - 1];
+      if (last && Math.abs(r.top - last.top) < r.height / 2) {
+        last.words.push(match[0]);
+        last.left = Math.min(last.left, r.left);
+        last.right = Math.max(last.right, r.right);
+        last.bottom = Math.max(last.bottom, r.bottom);
+      } else {
+        lines.push({ words: [match[0]], left: r.left, top: r.top, right: r.right, bottom: r.bottom });
+      }
+    }
+    return lines.map((l) => ({
+      text: l.words.join(' '),
+      rect: new DOMRect(l.left, l.top, l.right - l.left, l.bottom - l.top)
+    }));
+  };
+
   const visit = (el: HTMLElement) => {
     const style = getComputedStyle(el);
     if (isHidden(style)) return;
 
+    currentKey = el === root ? Number.NEGATIVE_INFINITY : stackingKey(el);
     const rotate = rotationFromTransform(style.transform || 'none');
     if (rotate !== 0) {
       // Bounding rects of rotated elements are axis-aligned; rebuild the unrotated box around the center.
@@ -166,12 +222,11 @@ export function collectTimetableLayers(root: HTMLElement): Layer[] {
     el.childNodes.forEach((child) => {
       if (child.nodeType === Node.TEXT_NODE) {
         if (!child.textContent?.trim()) return;
-        const range = document.createRange();
-        range.selectNodeContents(child);
-        const rect = range.getBoundingClientRect();
-        if (rect.width === 0 && rect.height === 0) return;
-        const layer = textLayer(el, child.textContent, relative(rect), 0);
-        if (layer) layers.push(layer);
+        currentKey = el === root ? 0 : stackingKey(el);
+        for (const line of textLines(child as Text)) {
+          const layer = textLayer(el, line.text, relative(line.rect), 0);
+          if (layer) layers.push(layer);
+        }
       } else if (child instanceof HTMLElement) {
         visit(child);
       }
@@ -179,5 +234,6 @@ export function collectTimetableLayers(root: HTMLElement): Layer[] {
   };
 
   visit(root);
-  return layers;
+  // Array.prototype.sort is stable, so DOM order is kept within each stacking bucket.
+  return keyed.sort((a, b) => a.key - b.key).map((k) => k.layer);
 }

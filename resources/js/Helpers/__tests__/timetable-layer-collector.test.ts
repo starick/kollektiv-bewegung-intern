@@ -107,4 +107,49 @@ describe('collectTimetableLayers', () => {
     const root = mount('<h1>KOLLEKTIV:BEWEGUNG</h1><div><p>Alle Angebote sind nach Pay-What-You-Can-Prinzip.</p></div>');
     expect(texts(collectTimetableLayers(root))).toHaveLength(2);
   });
+
+  it('orders layers by z-index like the browser paints them', () => {
+    const root = mount(`
+      <h1>Header</h1>
+      <div style="position: absolute; z-index: 20"><p>Footer</p></div>
+      <div>
+        <div style="position: absolute; z-index: 0; background-color: rgb(0, 0, 0)"></div>
+        <div style="position: relative; z-index: 10"><p>Row</p></div>
+      </div>
+    `);
+    root.style.position = 'relative';
+    const order = collectTimetableLayers(root).map((l) => (l.kind === 'text' ? l.text : l.kind));
+    expect(order).toEqual(['Header', 'shape', 'Row', 'Footer']);
+  });
+
+  it('splits text that wraps across lines into one box per line', () => {
+    const root = mount('<p id="f">Alle Angebote <span>Bitte vorher anmelden</span></p>');
+    const span = root.querySelector('span')!;
+    const spanText = span.firstChild!;
+    // "Bitte vorher" ends line 1 (starting mid-line at x=300), "anmelden" wraps to line 2 at x=0.
+    const proto = Range.prototype as any;
+    const origRects = proto.getClientRects;
+    const origBox = proto.getBoundingClientRect;
+    proto.getClientRects = function (this: Range) {
+      return this.startContainer === spanText
+        ? [domRect({ x: 310, y: 20, w: 490, h: 20 }), domRect({ x: 10, y: 40, w: 100, h: 20 })]
+        : [domRect(rectOf(this.startContainer.parentElement))];
+    };
+    proto.getBoundingClientRect = function (this: Range) {
+      if (this.startContainer !== spanText) return origBox.call(this);
+      if (this.collapsed || this.toString() === spanText.textContent) return domRect({ x: 10, y: 20, w: 790, h: 40 });
+      return this.startOffset < 'Bitte vorher '.length
+        ? domRect({ x: 310 + this.startOffset * 10, y: 20, w: 50, h: 20 })
+        : domRect({ x: 10, y: 40, w: 100, h: 20 });
+    };
+    try {
+      const spanLayers = texts(collectTimetableLayers(root)).filter((t) => t.text !== 'Alle Angebote');
+      expect(spanLayers.map((t) => t.text)).toEqual(['Bitte vorher', 'anmelden']);
+      expect(spanLayers[0].box).toMatchObject({ x: 300, y: 0, h: 20 });
+      expect(spanLayers[1].box).toMatchObject({ x: 0, y: 20, h: 20 });
+    } finally {
+      proto.getClientRects = origRects;
+      proto.getBoundingClientRect = origBox;
+    }
+  });
 });

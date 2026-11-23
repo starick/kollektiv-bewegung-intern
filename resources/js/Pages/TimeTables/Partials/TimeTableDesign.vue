@@ -51,10 +51,12 @@ const doDownload = async () => {
 };
 
 const doDownloadPptx = async () => {
-  if (!timetableRef.value) return;
+  // The ref is the flex wrapper; the slide must match the timetable itself (size × size).
+  const timetable = timetableRef.value?.firstElementChild;
+  if (!(timetable instanceof HTMLElement)) return;
   try {
     await exportTimetablePptx(
-      timetableRef.value,
+      timetable,
       `timetable_${props.timeTable.year}-${props.timeTable.week}.pptx`
     );
   } catch (e) {
