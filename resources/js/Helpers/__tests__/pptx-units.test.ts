@@ -31,6 +31,7 @@ describe('pptx-units', () => {
   it('reads rotation from a transform matrix', () => {
     expect(rotationFromTransform('matrix(0.866025, 0.5, -0.5, 0.866025, 0, 0)')).toBe(30);
     expect(rotationFromTransform('none')).toBe(0);
+    expect(rotationFromTransform('rotate(30deg)')).toBe(30);
   });
 
   it('extracts the first font family', () => {

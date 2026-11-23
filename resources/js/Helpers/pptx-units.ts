@@ -45,6 +45,8 @@ export function toTransparency(alpha: number, opacity: number): number {
 }
 
 export function rotationFromTransform(transform: string): number {
+  const rot = transform.match(/^rotate\((-?[\d.]+)deg\)$/);
+  if (rot) return parseFloat(rot[1]);
   const m = transform.match(/^matrix\(([^)]+)\)$/);
   if (!m) return 0;
   const [a, b] = m[1].split(',').map(parseFloat);
