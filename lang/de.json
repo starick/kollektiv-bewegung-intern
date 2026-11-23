@@ -384,5 +384,6 @@
     "Shared": "Geteilt",
     "The current link stops working. Create a new link?": "Der aktuelle Link funktioniert dann nicht mehr. Neuen Link erstellen?",
     "Stop sharing the protocol? The link stops working.": "Protokoll nicht mehr teilen? Der Link funktioniert dann nicht mehr.",
-    "Shared protocol": "Geteiltes Protokoll"
+    "Shared protocol": "Geteiltes Protokoll",
+    "Share link created and copied.": "Freigabelink erstellt und kopiert."
 }

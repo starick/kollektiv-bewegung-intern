@@ -126,11 +126,16 @@ class Protocol extends Model implements Auditable
 
     /**
      * Gives the protocol a new public share token, replacing any previous one.
+     *
+     * The token is the date plus a random part, like `2026-11-02-x7Kq…`, so the link shows which
+     * protocol it is. The date is fixed when the link is created, a later date change keeps the link working.
      */
     public function share(): void
     {
+        $token = $this->date->toDateString().'-'.Str::random(32);
+
         // Saved quietly, sharing is not an edit of the protocol and must not touch updated_at
-        static::withoutTimestamps(fn () => $this->forceFill(['share_token' => Str::random(40)])->saveQuietly());
+        static::withoutTimestamps(fn () => $this->forceFill(['share_token' => $token])->saveQuietly());
     }
 
     public function unshare(): void

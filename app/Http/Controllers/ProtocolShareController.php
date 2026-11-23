@@ -20,7 +20,8 @@ class ProtocolShareController extends Controller
 
         $protocol->share();
 
-        return back()->with('success', __('Share link created.'));
+        // No flash message, the dialog reports it together with copying the link
+        return back();
     }
 
     /**

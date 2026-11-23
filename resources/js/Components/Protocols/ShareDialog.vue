@@ -2,7 +2,7 @@
 import { router } from '@inertiajs/vue3';
 import { route } from 'ziggy-js';
 import { Dialog, InputText, useConfirm } from 'primevue';
-import { ref } from 'vue';
+import { nextTick, ref } from 'vue';
 import useAlert from '@/Composables/use-alerts';
 import { trans } from '@/Composables/use-translations';
 
@@ -19,16 +19,26 @@ const confirm = useConfirm();
 const processing = ref(false);
 const linkInput = ref<{ $el: HTMLInputElement } | null>(null);
 
-const visit = (method: 'post' | 'delete', name: string) => {
+const visit = (method: 'post' | 'delete', name: string, onSuccess?: () => void) => {
   router.visit(route(name, { protocol: props.protocolSlug }), {
     method,
     preserveScroll: true,
+    // Keeps the page's local state, so the dialog stays open with the new link
+    preserveState: true,
     onStart: () => (processing.value = true),
-    onFinish: () => (processing.value = false)
+    onFinish: () => (processing.value = false),
+    onSuccess
   });
 };
 
-const createLink = () => visit('post', 'protocols.share');
+const createLink = () =>
+  visit('post', 'protocols.share', async () => {
+    // Wait until the link field is rendered, the legacy copy needs it
+    await nextTick();
+
+    const copied = props.shareUrl ? await writeToClipboard(props.shareUrl) : false;
+    alert.add(trans(copied ? 'Share link created and copied.' : 'Share link created.'), 'success');
+  });
 
 const copyLink = async () => {
   if (!props.shareUrl) return;

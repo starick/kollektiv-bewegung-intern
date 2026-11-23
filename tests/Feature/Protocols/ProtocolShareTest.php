@@ -15,14 +15,14 @@ class ProtocolShareTest extends TestCase
 
     public function test_team_member_can_share_a_protocol(): void
     {
-        $protocol = Protocol::factory()->create(['updated_at' => '2026-01-01 10:00:00']);
+        $protocol = Protocol::factory()->create(['date' => '2026-11-02', 'updated_at' => '2026-01-01 10:00:00']);
 
         $this->actingAs($this->teamMember())
             ->post(route('protocols.share', $protocol))
             ->assertRedirect();
 
         $protocol->refresh();
-        $this->assertSame(40, strlen($protocol->share_token));
+        $this->assertMatchesRegularExpression('/^2026-11-02-[A-Za-z0-9]{32}$/', $protocol->share_token);
         // Sharing is not an edit
         $this->assertSame('2026-01-01 10:00:00', $protocol->updated_at->toDateTimeString());
         $this->assertSame(1, $protocol->audits()->count());
@@ -38,6 +38,18 @@ class ProtocolShareTest extends TestCase
 
         $this->get($oldUrl)->assertNotFound();
         $this->get($protocol->refresh()->shareUrl())->assertOk();
+    }
+
+    public function test_link_keeps_working_when_the_date_changes(): void
+    {
+        $protocol = Protocol::factory()->create(['date' => '2026-11-02']);
+        $protocol->share();
+        $url = $protocol->shareUrl();
+
+        $protocol->update(['date' => '2026-11-09']);
+
+        $this->assertSame($url, $protocol->refresh()->shareUrl());
+        $this->get($url)->assertOk();
     }
 
     public function test_team_member_can_stop_sharing(): void
