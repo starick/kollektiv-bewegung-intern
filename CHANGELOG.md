@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/starick/kollektiv-bewegung-intern/compare/v1.5.0...v1.6.0) (2026-11-23)
+
+
+### Features
+
+* add a generic audit trail based on laravel-auditing and show the protocol history on the protocol page ([ea9e468](https://github.com/starick/kollektiv-bewegung-intern/commit/ea9e468ced949a52ee44c9333a9ef6ac184cc5a0))
+* align the protocol edit view with the protocol page and add a Markdown preview that works without saving ([8cb73c2](https://github.com/starick/kollektiv-bewegung-intern/commit/8cb73c269083844b0cdd4a9e4aa835433c415dd5))
+* allow creating protocols without an initial file so the Markdown starts empty ([d73c64c](https://github.com/starick/kollektiv-bewegung-intern/commit/d73c64c20957fb36cbf8f53c9de1fa5e5696d577))
+* show text changes in the audit trail as a line diff instead of only marking them as changed ([f97bde7](https://github.com/starick/kollektiv-bewegung-intern/commit/f97bde744fc8fd3ffc1e3e621138b02bb97b060b))
+
 ## [1.5.0](https://github.com/starick/kollektiv-bewegung-intern/compare/v1.4.0...v1.5.0) (2026-11-02)
 
 
