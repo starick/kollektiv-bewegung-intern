@@ -1,5 +1,5 @@
 export interface Protocol {
-  id: number;
+  id: string;
   date: string;
   description: string | null;
   topics: string[];

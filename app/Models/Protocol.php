@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Concerns\HasAuditTrail;
 use Database\Factories\ProtocolFactory;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -14,6 +15,8 @@ class Protocol extends Model implements Auditable
 
     /** @use HasFactory<ProtocolFactory> */
     use HasFactory;
+
+    use HasUlids;
 
     /**
      * `text` holds the protocol body as raw Markdown, not HTML.
