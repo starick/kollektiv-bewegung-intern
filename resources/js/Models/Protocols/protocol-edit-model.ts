@@ -58,7 +58,7 @@ export function protocolEditModel(protocol: Protocol, text: string) {
     previewError.value = null;
 
     try {
-      const { data } = await axios.post<{ html: string }>(route('protocols.preview'), {
+      const { data } = await axios.post<{ html: string }>(route('markdown.preview'), {
         text: textToRender
       });
 

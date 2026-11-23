@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-  // Rendered and sanitised on the server, see App\Markdown\ProtocolMarkdown
+  // Rendered and sanitised on the server, see App\Markdown\Markdown
   html: string;
 }>();
 </script>

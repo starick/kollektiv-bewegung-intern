@@ -2,18 +2,17 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Protocol;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PreviewProtocolRequest extends FormRequest
+class PreviewMarkdownRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return $this->user()->can('viewAny', Protocol::class);
+        return $this->user()->belongsToSharedTeam();
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\MarkdownPreviewController;
 use App\Http\Controllers\ProtocolController;
 use App\Http\Controllers\ProtocolShareController;
 use App\Http\Controllers\TimeTableController;
@@ -31,6 +32,7 @@ Route::middleware([
 ])->group(function () {
     Route::put('user/locale', [UserLocaleController::class, 'update'])->name('user-locale.update');
     Route::get('/dashboard', fn() => Inertia::render('Dashboard'))->name('dashboard');
+    Route::post('markdown/preview', MarkdownPreviewController::class)->name('markdown.preview');
 
     Route::prefix('time-tables')->name('time-tables.')->group(function () {
         Route::post('course-count-per-week', [TimeTableController::class, 'courseCountPerWeek'])->name('course-count-per-week');
@@ -40,7 +42,6 @@ Route::middleware([
     Route::resource('time-tables.courses', CourseController::class)->only(['store', 'update', 'destroy']);
 
     Route::prefix('protocols')->name('protocols.')->group(function () {
-        Route::post('preview', [ProtocolController::class, 'preview'])->name('preview');
         Route::get('{protocol}/download', [ProtocolController::class, 'download'])->name('download');
 
         Route::controller(ProtocolShareController::class)->group(function () {

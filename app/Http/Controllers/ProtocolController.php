@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PreviewProtocolRequest;
 use App\Http\Requests\StoreProtocolRequest;
 use App\Http\Requests\UpdateProtocolRequest;
 use App\Http\Resources\AuditResource;
 use App\Http\Resources\ProtocolResource;
-use App\Markdown\ProtocolMarkdown;
+use App\Markdown\Markdown;
 use App\Models\Protocol;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -97,7 +96,7 @@ class ProtocolController extends Controller
 
         return Inertia::render('Protocols/Show', [
             'protocol' => (new ProtocolResource($protocol->load('uploader', 'editor')))->resolve(),
-            'html' => ProtocolMarkdown::toHtml($protocol->text),
+            'html' => Markdown::toHtml($protocol->text),
             'audits' => AuditResource::collection($protocol->auditTrail())->resolve(),
             'shareUrl' => $protocol->shareUrl(),
             'can' => [
@@ -137,16 +136,6 @@ class ProtocolController extends Controller
 
         return redirect()->route('protocols.show', $protocol)
             ->with('success', __('Protocol updated successfully.'));
-    }
-
-    /**
-     * Render Markdown for the edit preview without saving anything.
-     */
-    public function preview(PreviewProtocolRequest $request)
-    {
-        return response()->json([
-            'html' => ProtocolMarkdown::toHtml((string) $request->validated('text')),
-        ]);
     }
 
     /**

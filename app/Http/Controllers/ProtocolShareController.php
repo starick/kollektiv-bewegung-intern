@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\PublicProtocolResource;
-use App\Markdown\ProtocolMarkdown;
+use App\Markdown\Markdown;
 use App\Models\Protocol;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -45,7 +45,7 @@ class ProtocolShareController extends Controller
 
         return Inertia::render('Protocols/Public', [
             'protocol' => (new PublicProtocolResource($protocol))->resolve(),
-            'html' => ProtocolMarkdown::toHtml($protocol->text),
+            'html' => Markdown::toHtml($protocol->text),
             // Only team members who are logged in learn where the internal page is
             'internalUrl' => $request->user()?->can('view', $protocol) ? route('protocols.show', $protocol) : null,
             // The login continues on the internal page, see FortifyServiceProvider
