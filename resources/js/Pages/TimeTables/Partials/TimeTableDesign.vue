@@ -11,7 +11,7 @@ import TimeTableDesignControls from './TimeTableDesignControls.vue';
 import useTimeTableActions from '@/Composables/use-timetable-actions';
 import useAlert from '@/Composables/use-alerts';
 import { DEFAULT_DISPLAY_CONFIG } from '@/Constants/default-display-config';
-import { useConfirm } from 'primevue';
+import { SplitButton, useConfirm } from 'primevue';
 import { trans } from '@/Composables/use-translations';
 
 const props = defineProps<{
@@ -101,19 +101,14 @@ const onDownload = (kind: 'jpeg' | 'pptx' = 'jpeg') => {
   });
 };
 
-const menuItems = [
+const downloadOptions = [
   {
-    label: trans('Save Changes'),
-    icon: 'pi pi-save',
-    command: onSave
-  },
-  {
-    label: trans('Download Image'),
-    icon: 'pi pi-download',
+    label: trans('Image (JPG)'),
+    icon: 'pi pi-image',
     command: () => onDownload('jpeg')
   },
   {
-    label: trans('Download for Canva (PPTX)'),
+    label: trans('For Canva (PPTX)'),
     icon: 'pi pi-file-export',
     command: () => onDownload('pptx')
   }
@@ -137,8 +132,19 @@ watch(
       <Card
         :class="`flex-1 flex-col rounded-r-none overflow-y-scroll h-[${size}px]`"
         border
-        :menuItems="menuItems"
       >
+        <template #header>
+          <div class="flex items-center justify-between gap-2 px-4 py-3 border-b border-border">
+            <Button :label="$t('Save')" icon="pi pi-save" @click="onSave" />
+            <SplitButton
+              :label="$t('Download')"
+              icon="pi pi-download"
+              :model="downloadOptions"
+              severity="secondary"
+              @click="onDownload('jpeg')"
+            />
+          </div>
+        </template>
         <TimeTableDesignControls
           v-model="displayConfig"
           @onSave="onSave"
