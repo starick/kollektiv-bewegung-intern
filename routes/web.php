@@ -6,6 +6,7 @@ use App\Http\Controllers\ProtocolController;
 use App\Http\Controllers\ProtocolShareController;
 use App\Http\Controllers\TimeTableController;
 use App\Http\Controllers\UserLocaleController;
+use App\Http\Controllers\WikiCategoryController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -50,4 +51,6 @@ Route::middleware([
         });
     });
     Route::resource('protocols', ProtocolController::class);
+
+    Route::resource('wiki-categories', WikiCategoryController::class)->only(['store', 'update', 'destroy']);
 });
