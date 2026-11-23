@@ -4,6 +4,7 @@ import TimeTableDisplay from '@/Components/TimeTables/TimeTableDisplay.vue';
 import TimeTableBubbleDisplay from '@/Components/TimeTables/TimeTableBubbleDisplay.vue';
 import { computed, reactive, ref, watch } from 'vue';
 import { toJpeg } from 'html-to-image';
+import { exportTimetablePptx } from '@/Helpers/timetable-pptx-export';
 import Card from '@/Components/General/Card.vue';
 import { Course } from '@/Types/course';
 import TimeTableDesignControls from './TimeTableDesignControls.vue';
@@ -49,6 +50,18 @@ const doDownload = async () => {
   link.click();
 };
 
+const doDownloadPptx = async () => {
+  if (!timetableRef.value) return;
+  try {
+    await exportTimetablePptx(
+      timetableRef.value,
+      `timetable_${props.timeTable.year}-${props.timeTable.week}.pptx`
+    );
+  } catch (e) {
+    alert.error(trans('Error exporting file'), e);
+  }
+};
+
 const onSave = () => {
   timeTableActions
     .update(props.timeTable.id, { display_config: JSON.stringify(displayConfig) })
@@ -61,9 +74,10 @@ const onSave = () => {
     });
 };
 
-const onDownload = () => {
+const onDownload = (kind: 'jpeg' | 'pptx' = 'jpeg') => {
+  const download = kind === 'pptx' ? doDownloadPptx : doDownload;
   if (!hasUnsavedChanges.value) {
-    doDownload();
+    download();
     return;
   }
   confirm.require({
@@ -77,11 +91,11 @@ const onDownload = () => {
         .update(props.timeTable.id, { display_config: JSON.stringify(displayConfig) })
         .then(() => {
           savedSnapshot.value = JSON.stringify(displayConfig);
-          doDownload();
+          download();
         })
         .catch((e) => alert.error(trans('Error saving design'), e));
     },
-    reject: () => doDownload()
+    reject: () => download()
   });
 };
 
@@ -94,7 +108,12 @@ const menuItems = [
   {
     label: trans('Download Image'),
     icon: 'pi pi-download',
-    command: onDownload
+    command: () => onDownload('jpeg')
+  },
+  {
+    label: trans('Download for Canva (PPTX)'),
+    icon: 'pi pi-file-export',
+    command: () => onDownload('pptx')
   }
 ];
 
@@ -121,7 +140,7 @@ watch(
         <TimeTableDesignControls
           v-model="displayConfig"
           @onSave="onSave"
-          @onDownload="onDownload"
+          @onDownload="onDownload()"
         />
       </Card>
       <div ref="timetableRef" class="flex-1">
