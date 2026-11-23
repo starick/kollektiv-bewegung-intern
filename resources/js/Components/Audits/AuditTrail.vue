@@ -38,6 +38,9 @@ const formatValue = (value: unknown): string => {
   if (value === null || value === undefined || value === '') {
     return '–';
   }
+  if (typeof value === 'boolean') {
+    return value ? trans('Yes') : trans('No');
+  }
   if (Array.isArray(value)) {
     return value.length ? value.join(', ') : '–';
   }
