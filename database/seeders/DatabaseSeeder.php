@@ -18,7 +18,9 @@ class DatabaseSeeder extends Seeder
         User::factory()->withPersonalTeam()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
-            'password' => 'test'
+            'password' => 'test',
         ]);
+
+        $this->call(WikiSeeder::class);
     }
 }
