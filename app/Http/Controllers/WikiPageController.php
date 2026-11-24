@@ -44,12 +44,7 @@ class WikiPageController extends Controller
 
         return Inertia::render('Wiki/Index', [
             ...$tree->build(),
-            'pinned' => WikiPage::where('pinned', true)
-                ->get(['id', 'title', 'slug', 'updated_at'])
-                ->sortBy(fn (WikiPage $page) => mb_strtolower($page->title))
-                ->map(fn (WikiPage $page) => WikiTree::link($page))
-                ->values()
-                ->all(),
+            'pinned' => WikiTree::pinned(),
             'results' => $results,
             'filters' => ['search' => $search],
             'categoryOptions' => $tree->categoryOptions(),
@@ -95,6 +90,7 @@ class WikiPageController extends Controller
             'html' => Markdown::toHtml($page->text),
             // Shown as a sidebar on wide screens
             'tree' => (new WikiTree)->build(),
+            'pinned' => WikiTree::pinned(),
             'audits' => AuditResource::collection($page->auditTrail())->resolve(),
             'can' => [
                 'update' => $request->user()->can('update', $page),

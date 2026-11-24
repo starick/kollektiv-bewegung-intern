@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\WikiCategory;
 use App\Models\WikiPage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Testing\TestResponse;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\Feature\Protocols\CreatesTeamMembers;
 use Tests\TestCase;
@@ -23,7 +24,7 @@ class WikiPageTest extends TestCase
         $this->withoutVite();
     }
 
-    private function createPage(User $user, array $data = []): \Illuminate\Testing\TestResponse
+    private function createPage(User $user, array $data = []): TestResponse
     {
         return $this->actingAs($user)->post(route('wiki.store'), [
             'title' => 'Stundenplan anlegen',
@@ -146,6 +147,18 @@ class WikiPageTest extends TestCase
                 ->where('tree.categories.0.name', 'Anleitungen')
                 ->where('tree.categories.0.pages.0.slug', $page->slug)
                 ->where('tree.rootPages.0.title', 'Links'));
+    }
+
+    public function test_show_receives_the_pinned_pages_for_the_sidebar(): void
+    {
+        $page = WikiPage::factory()->create();
+        WikiPage::factory()->pinned()->create(['title' => 'Links']);
+
+        $this->actingAs($this->teamMember())
+            ->get(route('wiki.show', $page))
+            ->assertInertia(fn (Assert $inertia) => $inertia
+                ->has('pinned', 1)
+                ->where('pinned.0.title', 'Links'));
     }
 
     public function test_raw_html_is_escaped(): void

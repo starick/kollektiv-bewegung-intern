@@ -83,6 +83,21 @@ class WikiTree
     }
 
     /**
+     * Pinned pages, shown on top of the overview and the sidebar.
+     *
+     * @return list<array{title: string, slug: string, updatedAt: mixed}>
+     */
+    public static function pinned(): array
+    {
+        return WikiPage::where('pinned', true)
+            ->get(['id', 'title', 'slug', 'updated_at'])
+            ->sortBy(fn (WikiPage $page) => mb_strtolower($page->title))
+            ->map(fn (WikiPage $page) => self::link($page))
+            ->values()
+            ->all();
+    }
+
+    /**
      * @return array{title: string, slug: string, updatedAt: mixed}
      */
     public static function link(WikiPage $page): array
