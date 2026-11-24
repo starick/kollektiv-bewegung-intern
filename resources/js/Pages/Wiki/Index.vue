@@ -151,7 +151,7 @@ const menuItems = computed<MenuItem[]>(() =>
       </template>
 
       <div class="max-w-4xl mx-auto py-2 sm:py-4 space-y-6">
-        <section v-if="pinned.length" class="grid gap-3 sm:grid-cols-2">
+        <section v-if="results === null && pinned.length" class="grid gap-3 sm:grid-cols-2">
           <Link
             v-for="page in pinned"
             :key="page.slug"
