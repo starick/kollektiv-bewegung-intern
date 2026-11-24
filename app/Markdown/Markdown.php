@@ -15,6 +15,6 @@ class Markdown
         return Str::markdown($markdown, [
             'html_input' => 'escape',
             'allow_unsafe_links' => false,
-        ], [new DropImagesExtension]);
+        ], [new DropImagesExtension, new VideoEmbedExtension]);
     }
 }

@@ -428,5 +428,7 @@
     "Write page": "Seite schreiben",
     "Something went wrong.": "Etwas ist schiefgelaufen.",
     "Yes": "Ja",
-    "No": "Nein"
+    "No": "Nein",
+    "Load video": "Video laden",
+    "Nothing loads from :provider until you click.": "Erst wenn du klickst, wird etwas von :provider geladen."
 }
