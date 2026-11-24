@@ -7,7 +7,7 @@ import WikiTree from '@/Components/Wiki/WikiTree.vue';
 import { trans } from '@/Composables/use-translations';
 import { Audit } from '@/Types/audit';
 import { WikiCategoryNode, WikiPage, WikiPageLink } from '@/Types/wiki';
-import { Link, router } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
 import { MenuItem, useConfirm } from 'primevue';
 import { route } from 'ziggy-js';
 
@@ -85,12 +85,12 @@ const menuItems: MenuItem[] = [
 
         <div class="min-w-0 flex-1 max-w-4xl mx-auto py-2 sm:py-4">
           <nav
+            v-if="breadcrumbs.length"
             :aria-label="$t('Category')"
             class="flex flex-wrap items-center gap-1 text-sm text-gray-500 dark:text-gray-400 mb-2"
           >
-            <Link :href="route('wiki.index')" class="hover:underline">{{ $t('Wiki') }}</Link>
-            <template v-for="crumb in breadcrumbs" :key="crumb.id">
-              <i class="pi pi-angle-right text-xs" aria-hidden="true" />
+            <template v-for="(crumb, index) in breadcrumbs" :key="crumb.id">
+              <i v-if="index > 0" class="pi pi-angle-right text-xs" aria-hidden="true" />
               <span>{{ crumb.name }}</span>
             </template>
           </nav>
