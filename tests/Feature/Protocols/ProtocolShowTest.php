@@ -167,4 +167,16 @@ class ProtocolShowTest extends TestCase
 
         $this->actingAs($user)->get(route('protocols.show', 999))->assertNotFound();
     }
+
+    public function test_edit_page_includes_uploader_and_editor(): void
+    {
+        $protocol = Protocol::factory()->edited()->create();
+
+        $this->actingAs($this->teamMember())
+            ->get(route('protocols.edit', $protocol))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('protocol.uploader.id', $protocol->uploaded_by)
+                ->where('protocol.editor.id', $protocol->edited_by)
+                ->missing('protocol.editor.email'));
+    }
 }

@@ -32,6 +32,11 @@ const menuItems = [
     label: trans('Protocols'),
     icon: 'pi pi-file',
     command: () => router.get(route('protocols.index'))
+  },
+  {
+    label: trans('Wiki'),
+    icon: 'pi pi-book',
+    command: () => router.get(route('wiki.index'))
   }
 ];
 

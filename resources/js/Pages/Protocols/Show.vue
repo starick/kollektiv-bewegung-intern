@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Card from '@/Components/General/Card.vue';
 import AppLayout from '@/Components/Layout/AppLayout.vue';
-import ProtocolContent from '@/Components/Protocols/ProtocolContent.vue';
+import MarkdownContent from '@/Components/Markdown/MarkdownContent.vue';
 import ProtocolHeader from '@/Components/Protocols/ProtocolHeader.vue';
 import ProtocolMeta from '@/Components/Protocols/ProtocolMeta.vue';
 import ShareDialog from '@/Components/Protocols/ShareDialog.vue';
@@ -102,7 +102,7 @@ const title = computed(() => trans('Protocol :date', { date: formattedDate.value
 
         <ProtocolHeader :protocol="protocol" />
 
-        <ProtocolContent v-if="html.trim()" :html="html" />
+        <MarkdownContent v-if="html.trim()" :html="html" />
         <div
           v-else
           class="rounded-xl border border-dashed border-gray-300 dark:border-gray-600 p-8 text-center text-gray-500 dark:text-gray-400"

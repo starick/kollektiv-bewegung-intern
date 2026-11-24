@@ -1,12 +1,10 @@
 import { router, useForm } from '@inertiajs/vue3';
-import axios from 'axios';
 import { format, parseISO } from 'date-fns';
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
+import { EditMode } from '@/Composables/use-markdown-preview';
 import { route } from 'ziggy-js';
 import { trans } from '@/Composables/use-translations';
 import { Protocol } from '@/Types/protocol';
-
-export type EditMode = 'edit' | 'preview';
 
 // Mirrors how the server splits the comma separated inputs, so the chips match what gets saved
 function commaSeparated(value: string): string[] {
@@ -40,51 +38,6 @@ export function protocolEditModel(protocol: Protocol, text: string) {
   const topics = computed(() => commaSeparated(formData.topics));
 
   const mode = ref<EditMode>('edit');
-  const previewHtml = ref('');
-  const previewLoading = ref(false);
-  const previewError = ref<string | null>(null);
-  let previewedText: string | null = null;
-  let previewRequest = 0;
-
-  // Renders on the server, so the preview matches the saved protocol exactly
-  async function loadPreview() {
-    if (formData.text === previewedText) {
-      return;
-    }
-
-    const request = ++previewRequest;
-    const textToRender = formData.text;
-    previewLoading.value = true;
-    previewError.value = null;
-
-    try {
-      const { data } = await axios.post<{ html: string }>(route('protocols.preview'), {
-        text: textToRender
-      });
-
-      // Ignore responses that were overtaken by a newer request
-      if (request !== previewRequest) {
-        return;
-      }
-
-      previewHtml.value = data.html;
-      previewedText = textToRender;
-    } catch {
-      if (request === previewRequest) {
-        previewError.value = trans('The preview could not be loaded.');
-      }
-    } finally {
-      if (request === previewRequest) {
-        previewLoading.value = false;
-      }
-    }
-  }
-
-  watch(mode, (value) => {
-    if (value === 'preview') {
-      loadPreview();
-    }
-  });
 
   function submit() {
     formData
@@ -117,9 +70,6 @@ export function protocolEditModel(protocol: Protocol, text: string) {
     participants,
     topics,
     mode,
-    previewHtml,
-    previewLoading,
-    previewError,
     submit,
     cancel
   };

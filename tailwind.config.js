@@ -10,7 +10,10 @@ export default {
     './vendor/laravel/jetstream/**/*.blade.php',
     './storage/framework/views/*.php',
     './resources/views/**/*.blade.php',
-    './resources/js/**/*.vue'
+    './resources/js/**/*.vue',
+    './resources/js/**/*.ts',
+    // Rendered Markdown carries classes, e.g. the video placeholder
+    './app/Markdown/**/*.php'
   ],
 
   theme: {

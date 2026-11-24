@@ -2,7 +2,7 @@
 import Card from '@/Components/General/Card.vue';
 import AppLayout from '@/Components/Layout/AppLayout.vue';
 import ParticipantChips from '@/Components/Protocols/ParticipantChips.vue';
-import ProtocolContent from '@/Components/Protocols/ProtocolContent.vue';
+import MarkdownEditor from '@/Components/Markdown/MarkdownEditor.vue';
 import ProtocolMeta from '@/Components/Protocols/ProtocolMeta.vue';
 import { protocolEditModel } from '@/Models/Protocols/protocol-edit-model';
 import { trans } from '@/Composables/use-translations';
@@ -14,18 +14,10 @@ const props = defineProps<{
   text: string;
 }>();
 
-const {
-  formData,
-  title,
-  participants,
-  topics,
-  mode,
-  previewHtml,
-  previewLoading,
-  previewError,
-  submit,
-  cancel
-} = protocolEditModel(props.protocol, props.text);
+const { formData, title, participants, topics, mode, submit, cancel } = protocolEditModel(
+  props.protocol,
+  props.text
+);
 
 const descriptionHint = trans(
   "For special cases like 'Neue Leute Treffen' or 'Finanz-AK'. Leave empty for regular plenaries."
@@ -157,40 +149,7 @@ const menuItems: MenuItem[] = [
           </section>
         </div>
 
-        <Tabs v-model:value="mode">
-          <TabList>
-            <Tab value="edit">
-              <i class="pi pi-pencil mr-2" aria-hidden="true" />{{ $t('Edit') }}
-            </Tab>
-            <Tab value="preview">
-              <i class="pi pi-eye mr-2" aria-hidden="true" />{{ $t('Preview') }}
-            </Tab>
-          </TabList>
-          <TabPanels class="px-0">
-            <TabPanel value="edit">
-              <Textarea
-                id="text"
-                v-model="formData.text"
-                class="w-full font-mono text-sm"
-                rows="25"
-                :aria-label="$t('Content')"
-              />
-            </TabPanel>
-            <TabPanel value="preview">
-              <div v-if="previewLoading" class="flex justify-center py-12">
-                <ProgressSpinner style="width: 2.5rem; height: 2.5rem" />
-              </div>
-              <div v-else-if="previewError" class="text-red-600 py-4">{{ previewError }}</div>
-              <ProtocolContent v-else-if="previewHtml" :html="previewHtml" />
-              <p v-else class="italic text-gray-500 dark:text-gray-400 py-4">
-                {{ $t('Nothing to preview yet.') }}
-              </p>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-        <div v-if="formData.errors.text" class="text-red-600 mt-2">
-          {{ formData.errors.text }}
-        </div>
+        <MarkdownEditor v-model="formData.text" v-model:mode="mode" :error="formData.errors.text" />
 
         <div class="flex flex-row justify-center gap-4 mt-8">
           <Button
