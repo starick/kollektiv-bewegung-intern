@@ -26,13 +26,23 @@ class WikiSeederTest extends TestCase
         $this->assertTrue($category->pages()->get()->every(fn (WikiPage $page) => trim($page->text) !== ''));
     }
 
+    public function test_it_creates_a_pinned_link_collection_on_the_top_level(): void
+    {
+        $this->seed(WikiSeeder::class);
+
+        $page = WikiPage::where('title', 'Linksammlung')->firstOrFail();
+        $this->assertNull($page->category_id);
+        $this->assertTrue($page->pinned);
+        $this->assertNotSame('', trim($page->text));
+    }
+
     public function test_running_it_twice_creates_nothing_twice(): void
     {
         $this->seed(WikiSeeder::class);
         $this->seed(WikiSeeder::class);
 
         $this->assertSame(2, WikiCategory::count());
-        $this->assertSame(4, WikiPage::count());
+        $this->assertSame(5, WikiPage::count());
     }
 
     public function test_it_leaves_edited_pages_alone(): void
