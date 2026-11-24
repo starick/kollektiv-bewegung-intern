@@ -134,6 +134,20 @@ class WikiPageTest extends TestCase
                 ->has('audits'));
     }
 
+    public function test_show_receives_the_tree_for_the_sidebar(): void
+    {
+        $category = WikiCategory::factory()->create(['name' => 'Anleitungen']);
+        $page = WikiPage::factory()->inCategory($category)->create(['title' => 'Stunden loggen']);
+        WikiPage::factory()->create(['title' => 'Links']);
+
+        $this->actingAs($this->teamMember())
+            ->get(route('wiki.show', $page))
+            ->assertInertia(fn (Assert $inertia) => $inertia
+                ->where('tree.categories.0.name', 'Anleitungen')
+                ->where('tree.categories.0.pages.0.slug', $page->slug)
+                ->where('tree.rootPages.0.title', 'Links'));
+    }
+
     public function test_raw_html_is_escaped(): void
     {
         $page = WikiPage::factory()->create(['text' => '<script>alert(1)</script>']);

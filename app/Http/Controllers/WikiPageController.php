@@ -93,6 +93,8 @@ class WikiPageController extends Controller
                     ->all()
                 : [],
             'html' => Markdown::toHtml($page->text),
+            // Shown as a sidebar on wide screens
+            'tree' => (new WikiTree)->build(),
             'audits' => AuditResource::collection($page->auditTrail())->resolve(),
             'can' => [
                 'update' => $request->user()->can('update', $page),

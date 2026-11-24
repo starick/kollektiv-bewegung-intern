@@ -6,10 +6,17 @@ import { route } from 'ziggy-js';
 
 defineOptions({ name: 'WikiTree' });
 
-defineProps<{
-  categories: WikiCategoryNode[];
-  pages: WikiPageLink[];
-}>();
+withDefaults(
+  defineProps<{
+    categories: WikiCategoryNode[];
+    pages: WikiPageLink[];
+    // Highlighted as the page being read
+    currentSlug?: string | null;
+    // The sidebar shows the tree for navigation only
+    actions?: boolean;
+  }>(),
+  { currentSlug: null, actions: true }
+);
 
 const emit = defineEmits<{ menu: [event: Event, category: WikiCategoryNode] }>();
 
@@ -39,6 +46,7 @@ const toggle = (id: string) => (collapsed.value[id] = !collapsed.value[id]);
           <span class="truncate">{{ category.name }}</span>
         </button>
         <Button
+          v-if="actions"
           icon="pi pi-ellipsis-v"
           text
           rounded
@@ -54,13 +62,21 @@ const toggle = (id: string) => (collapsed.value[id] = !collapsed.value[id]);
         class="ml-4 pl-2 border-l border-gray-200 dark:border-gray-700"
         :categories="category.children"
         :pages="category.pages"
+        :current-slug="currentSlug"
+        :actions="actions"
         @menu="(event, child) => emit('menu', event, child)"
       />
     </li>
     <li v-for="page in pages" :key="page.slug">
       <Link
         :href="route('wiki.show', { page: page.slug })"
-        class="flex items-center gap-2 rounded-md py-1.5 pl-6 pr-2 hover:bg-gray-100 dark:hover:bg-gray-800"
+        class="flex items-center gap-2 rounded-md py-1.5 pl-6 pr-2"
+        :class="
+          page.slug === currentSlug
+            ? 'bg-gray-100 font-semibold dark:bg-gray-800'
+            : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+        "
+        :aria-current="page.slug === currentSlug ? 'page' : undefined"
       >
         <i class="pi pi-file text-gray-500" aria-hidden="true" />
         <span class="truncate">{{ page.title }}</span>
