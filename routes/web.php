@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MarkdownPreviewController;
 use App\Http\Controllers\ProtocolController;
 use App\Http\Controllers\ProtocolShareController;
@@ -33,7 +34,7 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::put('user/locale', [UserLocaleController::class, 'update'])->name('user-locale.update');
-    Route::get('/dashboard', fn() => Inertia::render('Dashboard'))->name('dashboard');
+    Route::get('/dashboard', DashboardController::class)->name('dashboard');
     Route::post('markdown/preview', MarkdownPreviewController::class)->name('markdown.preview');
 
     Route::prefix('time-tables')->name('time-tables.')->group(function () {

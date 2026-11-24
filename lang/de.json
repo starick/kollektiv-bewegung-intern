@@ -430,5 +430,15 @@
     "Yes": "Ja",
     "No": "Nein",
     "Load video": "Video laden",
-    "Nothing loads from :provider until you click.": "Erst wenn du klickst, wird etwas von :provider geladen."
+    "Nothing loads from :provider until you click.": "Erst wenn du klickst, wird etwas von :provider geladen.",
+    "Week :week / :year": "KW :week / :year",
+    "Open": "Öffnen",
+    ":count courses": ":count Kurse",
+    "No timetables yet.": "Noch keine Stundenpläne.",
+    "Create timetable": "Stundenplan erstellen",
+    "Latest protocol": "Letztes Protokoll",
+    ":count participants": ":count Teilnehmende",
+    "Create protocol": "Protokoll anlegen",
+    "Latest changes in the wiki": "Zuletzt im Wiki geändert",
+    "No wiki changes yet.": "Noch keine Änderungen im Wiki."
 }
