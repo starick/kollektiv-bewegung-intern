@@ -3,16 +3,18 @@ import Card from '@/Components/General/Card.vue';
 import AppLayout from '@/Components/Layout/AppLayout.vue';
 import TimeTablePreview from '@/Components/TimeTables/TimeTablePreview.vue';
 import { currentLocale, trans } from '@/Composables/use-translations';
+import { toCourse } from '@/Helpers/course-mapper';
 import { relativeTime } from '@/Helpers/relative-time';
 import { AuditEvent } from '@/Types/audit';
-import { Course } from '@/Types/course';
 import { TimeTable } from '@/Types/time-table';
 import { Link } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import { Tag } from 'primevue';
 import { route } from 'ziggy-js';
 
-defineProps<{
-  timeTable: (TimeTable & { courses: Course[] }) | null;
+const props = defineProps<{
+  // Courses arrive as JSON, the display needs them with Time values like on the timetable page
+  timeTable: (TimeTable & { courses: unknown[] }) | null;
   // null for people outside the team, who can't open protocols or the wiki
   protocol: {
     slug: string;
@@ -31,6 +33,8 @@ defineProps<{
     createdAt: string;
   }> | null;
 }>();
+
+const courses = computed(() => props.timeTable?.courses.map(toCourse) ?? []);
 
 const locale = currentLocale();
 const ago = (value: string) => relativeTime(value, locale);
@@ -85,7 +89,7 @@ const events: Record<AuditEvent, { label: string; icon: string }> = {
               class="block"
               :aria-label="$t('Open')"
             >
-              <TimeTablePreview :time-table="timeTable" :courses="timeTable.courses" />
+              <TimeTablePreview :time-table="timeTable" :courses="courses" />
             </Link>
             <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">
               {{ $t(':count courses', { count: timeTable.coursesCount }) }}
