@@ -22,7 +22,6 @@ const logout = () => {
 };
 
 const menuItems = [
-  { label: trans('Dashboard'), icon: 'pi pi-home', command: () => router.get(route('dashboard')) },
   {
     label: trans('Timetables'),
     icon: 'pi pi-table',
