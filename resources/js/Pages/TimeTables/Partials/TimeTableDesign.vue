@@ -2,7 +2,7 @@
 import { TimeTable } from '@/Types/time-table';
 import TimeTableDisplay from '@/Components/TimeTables/TimeTableDisplay.vue';
 import TimeTableBubbleDisplay from '@/Components/TimeTables/TimeTableBubbleDisplay.vue';
-import { computed, reactive, ref, watch } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue';
 import { toJpeg } from 'html-to-image';
 import { exportTimetablePptx } from '@/Helpers/timetable-pptx-export';
 import Card from '@/Components/General/Card.vue';
@@ -26,6 +26,21 @@ const confirm = useConfirm();
 
 const size = ref(800);
 const timetableRef = ref<HTMLElement | null>(null);
+
+// The timetable is always rendered at `size` (that is what gets exported) and scaled down to fit narrow screens.
+const previewBox = ref<HTMLElement | null>(null);
+const previewWidth = ref(0);
+const exporting = ref(false);
+const scale = computed(() =>
+  exporting.value || !previewWidth.value ? 1 : Math.min(1, previewWidth.value / size.value)
+);
+let resizeObserver: ResizeObserver | undefined;
+
+onMounted(() => {
+  resizeObserver = new ResizeObserver(([entry]) => (previewWidth.value = entry.contentRect.width));
+  if (previewBox.value) resizeObserver.observe(previewBox.value);
+});
+onBeforeUnmount(() => resizeObserver?.disconnect());
 const displayConfig = reactive(DEFAULT_DISPLAY_CONFIG);
 const savedSnapshot = ref(JSON.stringify(DEFAULT_DISPLAY_CONFIG));
 
@@ -54,13 +69,19 @@ const doDownloadPptx = async () => {
   // The ref is the flex wrapper; the slide must match the timetable itself (size × size).
   const timetable = timetableRef.value?.firstElementChild;
   if (!(timetable instanceof HTMLElement)) return;
+  // Layers are measured with getBoundingClientRect, so the preview must be unscaled while exporting.
+  exporting.value = true;
   try {
+    await nextTick();
+    await new Promise(requestAnimationFrame);
     await exportTimetablePptx(
       timetable,
       `timetable_${props.timeTable.year}-${props.timeTable.week}.pptx`
     );
   } catch (e) {
     alert.error(trans('Error exporting file'), e);
+  } finally {
+    exporting.value = false;
   }
 };
 
@@ -127,54 +148,71 @@ watch(
 </script>
 
 <template>
-  <div>
-    <div class="flex flex-row" style="letter-spacing: 0.01px">
-      <Card
-        :class="`flex-1 flex-col rounded-r-none overflow-y-scroll h-[${size}px]`"
-        border
-      >
-        <template #header>
-          <div class="flex items-center justify-between gap-2 px-4 py-3 border-b border-border">
-            <Button :label="$t('Save')" icon="pi pi-save" @click="onSave" />
-            <SplitButton
-              :label="$t('Download')"
-              icon="pi pi-download"
-              :model="downloadOptions"
-              severity="secondary"
-              @click="onDownload('jpeg')"
-            />
-          </div>
-        </template>
-        <TimeTableDesignControls
-          v-model="displayConfig"
-          @onSave="onSave"
-          @onDownload="onDownload()"
-        />
-      </Card>
-      <div ref="timetableRef" class="flex-1">
+  <div
+    class="flex flex-col xl:flex-row gap-4 xl:gap-0"
+    :style="{ letterSpacing: '0.01px', '--tt-size': `${size}px` }"
+  >
+    <Card
+      class="flex flex-col min-w-0 border border-border xl:flex-1 xl:h-[var(--tt-size)] xl:overflow-y-auto xl:border-r-0 xl:rounded-r-none"
+    >
+      <template #header>
         <div
-          v-if="isLoading"
-          :class="`flex flex-1 flex-col justify-center bg-gray-100 dark:bg-gray-800 items-center h-[${size}px] w-[${size}px]`"
+          class="flex flex-wrap items-center justify-between gap-2 px-4 py-3 border-b border-border"
         >
-          <ProgressSpinner />
+          <Button :label="$t('Save')" icon="pi pi-save" @click="onSave" />
+          <SplitButton
+            :label="$t('Download')"
+            icon="pi pi-download"
+            :model="downloadOptions"
+            severity="secondary"
+            @click="onDownload('jpeg')"
+          />
         </div>
+      </template>
+      <TimeTableDesignControls
+        v-model="displayConfig"
+        @onSave="onSave"
+        @onDownload="onDownload()"
+      />
+    </Card>
+    <div
+      ref="previewBox"
+      class="w-full max-w-[var(--tt-size)] mx-auto xl:mx-0 shrink-0 overflow-hidden"
+      :style="{ height: `${size * scale}px` }"
+    >
+      <div
+        class="origin-top-left"
+        :style="{
+          width: `${size}px`,
+          transform: scale < 1 ? `scale(${scale})` : undefined
+        }"
+      >
+        <div ref="timetableRef">
+          <div
+            v-if="isLoading"
+            class="flex flex-col justify-center bg-gray-100 dark:bg-gray-800 items-center"
+            :style="{ width: `${size}px`, height: `${size}px` }"
+          >
+            <ProgressSpinner />
+          </div>
 
-        <TimeTableBubbleDisplay
-          v-else-if="displayConfig.layout === 'bubble'"
-          :designConfig="displayConfig"
-          :courses="courses"
-          :year="timeTable.year"
-          :week="timeTable.week"
-          :size="size"
-        />
-        <TimeTableDisplay
-          v-else
-          :designConfig="displayConfig"
-          :courses="courses"
-          :year="timeTable.year"
-          :week="timeTable.week"
-          :size="size"
-        />
+          <TimeTableBubbleDisplay
+            v-else-if="displayConfig.layout === 'bubble'"
+            :designConfig="displayConfig"
+            :courses="courses"
+            :year="timeTable.year"
+            :week="timeTable.week"
+            :size="size"
+          />
+          <TimeTableDisplay
+            v-else
+            :designConfig="displayConfig"
+            :courses="courses"
+            :year="timeTable.year"
+            :week="timeTable.week"
+            :size="size"
+          />
+        </div>
       </div>
     </div>
   </div>
