@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/starick/kollektiv-bewegung-intern/compare/v1.7.0...v1.8.0) (2026-11-26)
+
+
+### Features
+
+* add design for the wiki module ([90790f9](https://github.com/starick/kollektiv-bewegung-intern/commit/90790f9076ac15b50792ee4608f2f9dd7d97cf1c))
+* add implementation plan for the wiki module ([61ec813](https://github.com/starick/kollektiv-bewegung-intern/commit/61ec8137cb504cf366c50be4d551ce2fa22267d0))
+* add wiki categories as a tree ([dae377f](https://github.com/starick/kollektiv-bewegung-intern/commit/dae377fb9b1ec135d5924c1471d8d130141deb8b))
+* add wiki pages with slugs, search and audit trail ([95a7d1c](https://github.com/starick/kollektiv-bewegung-intern/commit/95a7d1c9bc5c3f36ded2a372f827409b99fabce2))
+* add wiki pages, category tree and navigation ([2d77f82](https://github.com/starick/kollektiv-bewegung-intern/commit/2d77f82d27a4bc259671208198621aeb37a562b5))
+* drop the redundant wiki link from page breadcrumbs ([e2ba03d](https://github.com/starick/kollektiv-bewegung-intern/commit/e2ba03d2ff7e0d16ad56ce93b1bfe06b6f19bddc))
+* drop the wiki seeder tests ([0fca8a9](https://github.com/starick/kollektiv-bewegung-intern/commit/0fca8a957e37fa8d282f3814625314aeb2e3741c))
+* embed youtube and vimeo links as click-to-load videos ([ec84e7d](https://github.com/starick/kollektiv-bewegung-intern/commit/ec84e7d0ef46d910d143476e38fdc180a0af4b46))
+* hide pinned wiki pages while searching ([eb747d3](https://github.com/starick/kollektiv-bewegung-intern/commit/eb747d399281c7adba57a2137cb911c659aa1a7b))
+* list pinned wiki pages on top of the page sidebar ([e881108](https://github.com/starick/kollektiv-bewegung-intern/commit/e881108beacf0bd99b44a23d624cc3f798aba626))
+* seed a pinned link collection stub ([7e8c7fc](https://github.com/starick/kollektiv-bewegung-intern/commit/7e8c7fc8fcd65ae2bc99dcd9180c753360830265))
+* seed german wiki guides about timetables, protocols, the wiki and markdown ([7335aca](https://github.com/starick/kollektiv-bewegung-intern/commit/7335aca9622a9180369edc05c55ba5b13305cd26))
+* show the wiki tree beside a page on desktop ([4891140](https://github.com/starick/kollektiv-bewegung-intern/commit/48911403675de28b2a817ec8455e561818538501))
+
+
+### Bug Fixes
+
+* responsive design for timetable controls ([4d98012](https://github.com/starick/kollektiv-bewegung-intern/commit/4d98012ce68a4df8aefa33747c5e9324fd899d3a))
+* show pin changes as booleans in the history and cap wiki slug length ([30ee577](https://github.com/starick/kollektiv-bewegung-intern/commit/30ee577bf442a7fc82a6bcfde33a76591dadc515))
+
 ## [1.7.0](https://github.com/starick/kollektiv-bewegung-intern/compare/v1.6.0...v1.7.0) (2026-11-23)
 
 
