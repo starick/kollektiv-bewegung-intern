@@ -2,6 +2,7 @@
 
 namespace App\Models\Concerns;
 
+use App\Auditing\AuditSquasher;
 use Illuminate\Database\Eloquent\Collection;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Models\Audit;
@@ -20,12 +21,16 @@ trait HasAuditTrail
 
     /**
      * Audits of this model, newest first, with the user who made the change.
+     * Updates one user saved in quick succession are shown as one entry.
      *
      * @return Collection<int, Audit>
      */
     public function auditTrail(): Collection
     {
-        return $this->audits()->with('user')->latest()->latest('id')->get();
+        return AuditSquasher::squash(
+            $this->audits()->with('user')->latest()->latest('id')->get(),
+            (int) config('audit.squash_minutes', 10),
+        );
     }
 
     /**

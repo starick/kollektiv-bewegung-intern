@@ -145,6 +145,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Squash Window
+    |--------------------------------------------------------------------------
+    |
+    | Updates one user saves less than this many minutes apart are shown as one
+    | entry in the trail. The audits themselves are stored unchanged.
+    |
+    */
+
+    'squash_minutes' => 30,
+
+    /*
+    |--------------------------------------------------------------------------
     | Audit Driver
     |--------------------------------------------------------------------------
     |

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Wiki;
 
+use App\Models\User;
 use App\Models\WikiCategory;
 use App\Models\WikiPage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -22,9 +23,10 @@ class WikiPageAuditTest extends TestCase
         $this->withoutVite();
     }
 
-    private function update(WikiPage $page, array $data = []): void
+    private function update(WikiPage $page, array $data = [], ?User $user = null): void
     {
-        $this->actingAs($this->teamMember())->put(route('wiki.update', $page), [
+        // The audit reads the web guard; after the first request actingAs() alone only switches the sanctum guard
+        $this->actingAs($user ?? $this->teamMember(), 'web')->put(route('wiki.update', $page), [
             'title' => $page->title,
             'category_id' => $page->category_id,
             'text' => $page->text,
@@ -125,5 +127,89 @@ class WikiPageAuditTest extends TestCase
                 ->where('audits.0.changes.0.new', false)
                 ->where('audits.1.changes.0.old', false)
                 ->where('audits.1.changes.0.new', true));
+    }
+
+    public function test_quick_saves_of_one_user_are_shown_as_one_entry(): void
+    {
+        $user = $this->teamMember();
+        $page = WikiPage::factory()->create(['title' => 'Alt', 'text' => 'eins', 'pinned' => false]);
+
+        $this->update($page, ['text' => 'zwei'], $user);
+        $this->travel(8)->minutes();
+        $this->update($page->fresh(), ['text' => 'drei', 'title' => 'Neu'], $user);
+        // The window counts from the previous save, so a long session stays one entry
+        $this->travel(8)->minutes();
+        $this->update($page->fresh(), ['pinned' => true], $user);
+
+        $this->actingAs($user)
+            ->get(route('wiki.show', $page))
+            ->assertInertia(fn (Assert $inertia) => $inertia
+                ->has('audits', 2)
+                ->where('audits.0.id', $page->audits()->max('id'))
+                ->where('audits.0.changes', fn ($changes) => collect($changes)->keyBy('attribute')->map(fn ($change) => [
+                    $change['old'] ?? $change['hunks'][0][0]['text'],
+                    $change['new'] ?? $change['hunks'][0][1]['text'],
+                ])->all() == [
+                    'text' => ['eins', 'drei'],
+                    'title' => ['Alt', 'Neu'],
+                    'pinned' => [false, true],
+                ])
+                ->where('audits.1.event', 'created'));
+    }
+
+    public function test_saves_further_apart_stay_separate(): void
+    {
+        $user = $this->teamMember();
+        $page = WikiPage::factory()->create(['text' => 'eins']);
+
+        $this->update($page, ['text' => 'zwei'], $user);
+        $this->travel(10)->minutes();
+        $this->update($page->fresh(), ['text' => 'drei'], $user);
+
+        $this->actingAs($user)
+            ->get(route('wiki.show', $page))
+            ->assertInertia(fn (Assert $inertia) => $inertia->has('audits', 3));
+    }
+
+    public function test_quick_saves_of_different_users_stay_separate(): void
+    {
+        $page = WikiPage::factory()->create(['text' => 'eins']);
+
+        $this->update($page, ['text' => 'zwei']);
+        $this->update($page->fresh(), ['text' => 'drei']);
+
+        $this->actingAs($this->teamMember())
+            ->get(route('wiki.show', $page))
+            ->assertInertia(fn (Assert $inertia) => $inertia->has('audits', 3));
+    }
+
+    public function test_a_change_undone_right_away_disappears_from_the_trail(): void
+    {
+        $user = $this->teamMember();
+        $page = WikiPage::factory()->create(['title' => 'Alt', 'text' => 'eins', 'pinned' => false]);
+
+        $this->update($page, ['title' => 'Neu', 'pinned' => true], $user);
+        $this->update($page->fresh(), ['title' => 'Alt', 'pinned' => false], $user);
+
+        $this->actingAs($user)
+            ->get(route('wiki.show', $page))
+            ->assertInertia(fn (Assert $inertia) => $inertia
+                ->has('audits', 1)
+                ->where('audits.0.event', 'created'));
+        $this->assertSame(3, $page->audits()->count());
+    }
+
+    public function test_creating_is_not_merged_with_a_quick_edit(): void
+    {
+        $user = $this->teamMember();
+
+        $this->actingAs($user)->post(route('wiki.store'), ['title' => 'Links', 'text' => 'a']);
+        $this->update(WikiPage::sole(), ['text' => 'b'], $user);
+
+        $this->actingAs($user)
+            ->get(route('wiki.show', WikiPage::sole()))
+            ->assertInertia(fn (Assert $inertia) => $inertia
+                ->where('audits.0.event', 'updated')
+                ->where('audits.1.event', 'created'));
     }
 }
