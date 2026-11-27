@@ -23,7 +23,7 @@ class WikiPage extends Model implements Auditable
     /**
      * Slugs that would collide with fixed routes like `/wiki/create`.
      */
-    public const RESERVED_SLUGS = ['create'];
+    public const RESERVED_SLUGS = ['create', 'changelog'];
 
     /**
      * Used when the title has nothing a slug can be made of, like `???`.

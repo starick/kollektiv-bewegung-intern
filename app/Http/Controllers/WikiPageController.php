@@ -9,6 +9,7 @@ use App\Http\Resources\WikiPageResource;
 use App\Markdown\Markdown;
 use App\Models\WikiCategory;
 use App\Models\WikiPage;
+use App\Wiki\Changelog;
 use App\Wiki\WikiTree;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -45,6 +46,7 @@ class WikiPageController extends Controller
         return Inertia::render('Wiki/Index', [
             ...$tree->build(),
             'pinned' => WikiTree::pinned(),
+            'changelog' => Changelog::fromRepository()->link(),
             'results' => $results,
             'filters' => ['search' => $search],
             'categoryOptions' => $tree->categoryOptions(),
@@ -91,6 +93,7 @@ class WikiPageController extends Controller
             // Shown as a sidebar on wide screens
             'tree' => (new WikiTree)->build(),
             'pinned' => WikiTree::pinned(),
+            'changelog' => Changelog::fromRepository()->link(),
             'audits' => AuditResource::collection($page->auditTrail())->resolve(),
             'can' => [
                 'update' => $request->user()->can('update', $page),

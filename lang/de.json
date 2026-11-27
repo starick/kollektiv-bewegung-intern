@@ -440,5 +440,8 @@
     ":count participants": ":count Teilnehmende",
     "Create protocol": "Protokoll anlegen",
     "Latest changes in the wiki": "Zuletzt im Wiki geändert",
-    "No wiki changes yet.": "Noch keine Änderungen im Wiki."
+    "No wiki changes yet.": "Noch keine Änderungen im Wiki.",
+    "Changelog": "Änderungsprotokoll",
+    "Version :version": "Version :version",
+    "What changed in the app": "Was sich in der App geändert hat"
 }

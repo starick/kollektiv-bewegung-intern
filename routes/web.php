@@ -8,6 +8,7 @@ use App\Http\Controllers\ProtocolShareController;
 use App\Http\Controllers\TimeTableController;
 use App\Http\Controllers\UserLocaleController;
 use App\Http\Controllers\WikiCategoryController;
+use App\Http\Controllers\WikiChangelogController;
 use App\Http\Controllers\WikiPageController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -54,6 +55,8 @@ Route::middleware([
     });
     Route::resource('protocols', ProtocolController::class);
 
+    // Before the resource, so `changelog` isn't taken for a page slug
+    Route::get('wiki/changelog', WikiChangelogController::class)->name('wiki.changelog');
     Route::resource('wiki', WikiPageController::class)->parameters(['wiki' => 'page']);
     Route::resource('wiki-categories', WikiCategoryController::class)->only(['store', 'update', 'destroy']);
 });

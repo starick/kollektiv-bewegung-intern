@@ -3,11 +3,11 @@ import AuditTrail from '@/Components/Audits/AuditTrail.vue';
 import Card from '@/Components/General/Card.vue';
 import AppLayout from '@/Components/Layout/AppLayout.vue';
 import MarkdownContent from '@/Components/Markdown/MarkdownContent.vue';
-import WikiTree from '@/Components/Wiki/WikiTree.vue';
+import WikiSidebar from '@/Components/Wiki/WikiSidebar.vue';
 import { trans } from '@/Composables/use-translations';
 import { Audit } from '@/Types/audit';
-import { WikiCategoryNode, WikiPage, WikiPageLink } from '@/Types/wiki';
-import { Link, router } from '@inertiajs/vue3';
+import { WikiCategoryNode, WikiChangelogLink, WikiPage, WikiPageLink } from '@/Types/wiki';
+import { router } from '@inertiajs/vue3';
 import { MenuItem, useConfirm } from 'primevue';
 import { route } from 'ziggy-js';
 
@@ -17,6 +17,7 @@ const props = defineProps<{
   html: string;
   tree: { categories: WikiCategoryNode[]; rootPages: WikiPageLink[] };
   pinned: WikiPageLink[];
+  changelog: WikiChangelogLink | null;
   audits: Audit[];
   can: { update: boolean; delete: boolean };
 }>();
@@ -72,38 +73,12 @@ const menuItems: MenuItem[] = [
       </template>
 
       <div class="lg:flex lg:gap-8">
-        <aside
-          class="hidden lg:block w-64 shrink-0 self-start sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto py-4 pr-4 border-r border-gray-200 dark:border-gray-700 text-sm"
-          :aria-label="$t('Wiki')"
-        >
-          <ul
-            v-if="pinned.length"
-            class="space-y-0.5 pb-3 mb-3 border-b border-gray-200 dark:border-gray-700"
-            :aria-label="$t('Pinned')"
-          >
-            <li v-for="link in pinned" :key="link.slug">
-              <Link
-                :href="route('wiki.show', { page: link.slug })"
-                class="flex items-center gap-2 rounded-md py-1.5 px-2"
-                :class="
-                  link.slug === page.slug
-                    ? 'bg-gray-100 font-semibold dark:bg-gray-800'
-                    : 'hover:bg-gray-100 dark:hover:bg-gray-800'
-                "
-                :aria-current="link.slug === page.slug ? 'page' : undefined"
-              >
-                <i class="pi pi-thumbtack text-gray-500" aria-hidden="true" />
-                <span class="truncate">{{ link.title }}</span>
-              </Link>
-            </li>
-          </ul>
-          <WikiTree
-            :categories="tree.categories"
-            :pages="tree.rootPages"
-            :current-slug="page.slug"
-            :actions="false"
-          />
-        </aside>
+        <WikiSidebar
+          :tree="tree"
+          :pinned="pinned"
+          :changelog="changelog"
+          :current-slug="page.slug"
+        />
 
         <div class="min-w-0 flex-1 max-w-4xl mx-auto py-2 sm:py-4">
           <nav

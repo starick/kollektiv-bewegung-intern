@@ -14,6 +14,10 @@ export interface WikiCategoryNode {
   pages: WikiPageLink[];
 }
 
+export interface WikiChangelogLink {
+  version: string | null;
+}
+
 export interface WikiCategoryOption {
   id: string;
   path: string;

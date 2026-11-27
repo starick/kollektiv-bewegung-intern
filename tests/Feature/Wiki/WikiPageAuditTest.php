@@ -135,10 +135,10 @@ class WikiPageAuditTest extends TestCase
         $page = WikiPage::factory()->create(['title' => 'Alt', 'text' => 'eins', 'pinned' => false]);
 
         $this->update($page, ['text' => 'zwei'], $user);
-        $this->travel(8)->minutes();
+        $this->travel(config('audit.squash_minutes') - 1)->minutes();
         $this->update($page->fresh(), ['text' => 'drei', 'title' => 'Neu'], $user);
         // The window counts from the previous save, so a long session stays one entry
-        $this->travel(8)->minutes();
+        $this->travel(config('audit.squash_minutes') - 1)->minutes();
         $this->update($page->fresh(), ['pinned' => true], $user);
 
         $this->actingAs($user)
@@ -163,7 +163,7 @@ class WikiPageAuditTest extends TestCase
         $page = WikiPage::factory()->create(['text' => 'eins']);
 
         $this->update($page, ['text' => 'zwei'], $user);
-        $this->travel(10)->minutes();
+        $this->travel(config('audit.squash_minutes'))->minutes();
         $this->update($page->fresh(), ['text' => 'drei'], $user);
 
         $this->actingAs($user)

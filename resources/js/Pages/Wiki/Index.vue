@@ -2,10 +2,16 @@
 import Card from '@/Components/General/Card.vue';
 import AppLayout from '@/Components/Layout/AppLayout.vue';
 import CategoryDialog from '@/Components/Wiki/CategoryDialog.vue';
+import ChangelogLink from '@/Components/Wiki/ChangelogLink.vue';
 import WikiTree from '@/Components/Wiki/WikiTree.vue';
 import useAlert from '@/Composables/use-alerts';
 import { trans } from '@/Composables/use-translations';
-import { WikiCategoryNode, WikiCategoryOption, WikiPageLink } from '@/Types/wiki';
+import {
+  WikiCategoryNode,
+  WikiCategoryOption,
+  WikiChangelogLink,
+  WikiPageLink
+} from '@/Types/wiki';
 import { Link, router } from '@inertiajs/vue3';
 import { IconField, InputIcon, Menu, MenuItem, useConfirm } from 'primevue';
 import { computed, ref, watch } from 'vue';
@@ -15,6 +21,7 @@ const props = defineProps<{
   categories: WikiCategoryNode[];
   rootPages: WikiPageLink[];
   pinned: WikiPageLink[];
+  changelog: WikiChangelogLink | null;
   results: WikiPageLink[] | null;
   filters: { search: string };
   categoryOptions: WikiCategoryOption[];
@@ -204,6 +211,8 @@ const menuItems = computed<MenuItem[]>(() =>
             />
           </div>
           <WikiTree v-else :categories="categories" :pages="rootPages" @menu="showCategoryMenu" />
+
+          <ChangelogLink v-if="changelog" :changelog="changelog" />
         </section>
       </div>
     </Card>
