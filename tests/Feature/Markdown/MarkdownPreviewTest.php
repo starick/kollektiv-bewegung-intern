@@ -29,7 +29,7 @@ class MarkdownPreviewTest extends TestCase
     {
         $html = $this->actingAs($this->teamMember())
             ->postJson(route('markdown.preview'), [
-                'text' => "<script>alert(1)</script>\n\n[x](javascript:alert(1)) ![img](https://example.com/a.png)",
+                'text' => "<script>alert(1)</script>\n\n[x](javascript:alert(1)) ![img](data:image/png;base64,iVBORw0KGgo=)",
             ])
             ->assertOk()
             ->json('html');

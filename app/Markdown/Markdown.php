@@ -3,6 +3,7 @@
 namespace App\Markdown;
 
 use Illuminate\Support\Str;
+use League\CommonMark\Extension\Footnote\FootnoteExtension;
 
 /**
  * Renders Markdown the same way for protocol and wiki pages and the edit preview.
@@ -15,6 +16,6 @@ class Markdown
         return Str::markdown($markdown, [
             'html_input' => 'escape',
             'allow_unsafe_links' => false,
-        ], [new DropImagesExtension, new VideoEmbedExtension]);
+        ], [new FootnoteExtension, new ExternalImageExtension, new VideoEmbedExtension]);
     }
 }

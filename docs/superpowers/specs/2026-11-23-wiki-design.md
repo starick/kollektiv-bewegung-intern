@@ -131,7 +131,7 @@ Wiki                                   [+ Page] [+ Category]
 
 ### Shared Markdown parts (refactor)
 - `App\Markdown\ProtocolMarkdown` becomes a neutral `App\Markdown\Markdown`, same
-  rules (raw HTML escaped, unsafe links dropped, images dropped). Protocol and wiki
+  rules (raw HTML escaped, unsafe links dropped, only external https images rendered). Protocol and wiki
   both use it.
 - The preview endpoint becomes a neutral `markdown.preview` route used by both editors.
 - The edit/preview toggle, the text area and the preview logic move out of

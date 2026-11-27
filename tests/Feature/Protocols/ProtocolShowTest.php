@@ -69,7 +69,7 @@ class ProtocolShowTest extends TestCase
             );
     }
 
-    public function test_images_are_not_rendered(): void
+    public function test_only_external_images_are_rendered(): void
     {
         $user = $this->teamMember();
         $protocol = Protocol::factory()->create([
@@ -79,8 +79,8 @@ class ProtocolShowTest extends TestCase
         $this->actingAs($user)
             ->get(route('protocols.show', $protocol))
             ->assertInertia(fn (Assert $page) => $page
-                ->where('html', fn (string $html) => ! str_contains($html, '<img')
-                    && ! str_contains($html, 'logo')
+                ->where('html', fn (string $html) => substr_count($html, '<img') === 1
+                    && str_contains($html, 'src="https://example.com/logo.png"')
                     && ! str_contains($html, 'base64')
                     && str_contains($html, 'Before')
                     && str_contains($html, 'after'))
