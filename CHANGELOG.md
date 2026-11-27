@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.2](https://github.com/starick/kollektiv-bewegung-intern/compare/v1.8.1...v1.8.2) (2026-11-27)
+
+
+### Bug Fixes
+
+* squash Audit Trail Entries close to each other ([646315a](https://github.com/starick/kollektiv-bewegung-intern/commit/646315adaf7084a34c67334f37eb6067fcc12889))
+
 ### [1.8.1](https://github.com/starick/kollektiv-bewegung-intern/compare/v1.8.0...v1.8.1) (2026-11-27)
 
 
